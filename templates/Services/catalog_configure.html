@@ -1,0 +1,42 @@
+{% extends 'Services/base_configure.html' %} {% load static %}
+{% load bootstrap4 %}
+{% bootstrap_javascript jquery='full' %}
+{% block table %}
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Fotos</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if service.items.all %} {% for item in service.items.all %}
+            <tr>
+                <td>
+                    {{ item.title }}
+                </td>
+                <td>
+                    {{ item.description }}
+                </td>
+                <td>
+                    {{ item.photo }}
+                </td>
+                <td>
+                    <a type="button" class="btn btn-primary" data-toggle="modal" 
+                        data-target="#modal" onclick="return get_url('{% url 'item-edit' item.id %}')">
+                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar
+                     </a> 
+                     <a type="button" class="btn btn-danger" data-toggle="modal" 
+                        data-target="#modal" onclick="return get_url('{% url 'item-delete' item.id %}')">
+                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eliminar
+                     </a>
+                </td>
+            </tr>
+            {% endfor %} {% else %}
+            <h1>Este catalogo esta vacio.</h1>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

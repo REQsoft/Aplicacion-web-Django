@@ -108,6 +108,9 @@ class MissingItem(models.Model):
     
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse('service-configure', kwargs={'service_id': service.id})
 
 class Office(models.Model):
     service = models.ForeignKey(Service, on_delete="CASCADE",
@@ -119,6 +122,9 @@ class Office(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('service-configure', kwargs={'service_id': service.id})
 
 class Location(models.Model):
     service = models.ForeignKey(Service, on_delete="CASCADE",
@@ -132,6 +138,9 @@ class Location(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
 
 
 
