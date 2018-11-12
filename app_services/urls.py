@@ -3,33 +3,30 @@ from .views import *
 
 urlpatterns = [
     # Servicio
-    path('services/', base_service, name='base-service'),
-    path('services/list', ServiceListView.as_view(), name='service-list'),
-    path('services/create/', ServiceCreateView.as_view(), name='service-create'),
-    path('services/edit/<int:service_id>/', ServiceUpdateView.as_view(), name='service-edit'),   
-    path('services/delete/<int:service_id>/', ServiceDeleteView.as_view(), name='service-delete'),
-    path('services/<int:service_id>/', service_configure, name='service-configure'), 
-    path('services/<int:service_id>/add_element/', add_element, name='add-element'), 
+    path('service/', base_service, name='base-service'),
+    path('services/', ServiceListView.as_view(), name='service-list'),
+    path('service/create/', ServiceCreateView.as_view(), name='service-create'),
+    path('service/<int:service_id>/', service_configure, name='service-configure'), 
+    path('service/<int:service_id>/edit/', ServiceUpdateView.as_view(), name='service-edit'),   
+    path('service/<int:service_id>/delete/', ServiceDeleteView.as_view(), name='service-delete'),
+    path('service/<int:service_id>/add-element/', add_element, name='add-element'), 
 
     # Catalogo de objetos perdidos
-    #path('services/items/<int:service_id>/create', item_create, name='item-create'),
-    path('services/items/<int:pk>/edit', MissingItemUpdateView.as_view(), name='item-edit'),   
-    path('services/items/<int:pk>/delete', MissingItemDeleteView.as_view(), name='item-delete'),
+    path('service/item/<int:pk>/edit', MissingItemUpdateView.as_view(), name='item-edit'),   
+    path('service/item/<int:pk>/delete', MissingItemDeleteView.as_view(), name='item-delete'),
 
     # Directorio de dependencias
-    #path('services/offices/<int:service_id>/create', office_create, name='office-create'),
-    path('services/offices/<int:pk>/edit', OfficeUpdateView.as_view(), name='office-edit'),   
-    path('services/offices/<int:pk>/delete', OfficeDeleteView.as_view(), name='office-delete'),
+    path('service/office/<int:pk>/edit', OfficeUpdateView.as_view(), name='office-edit'),   
+    path('service/office/<int:pk>/delete', OfficeDeleteView.as_view(), name='office-delete'),
 
     # Mapa de Bloques
-    #path('services/locations/<int:service_id>/create', location_create, name='location-create'),
-    path('services/locations/<int:pk>/edit', LocationUpdateView.as_view(), name='location-edit'),   
-    path('services/locations/<int:pk>/delete', LocationDeleteView.as_view(), name='location-delete'),
+    path('service/location/<int:pk>/edit', LocationUpdateView.as_view(), name='location-edit'),   
+    path('service/location/<int:pk>/delete', LocationDeleteView.as_view(), name='location-delete'),
 
     # Consulta SQL
-    path('services/query/<int:service_id>/configure', QueryCreateView.as_view(), name='query-configure'),
+    path('service/query/<int:service_id>/configure', QueryCreateView.as_view(), name='query-configure'),
     path(
-        'services/query/fields',
+        'service/query/fields',
         get_fields_service,
         name='fields-service'
     )

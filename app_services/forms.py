@@ -43,10 +43,11 @@ class MissingItemForm(forms.ModelForm):
     class Meta:
         model = MissingItem
         fields = ["title", "description", "photo"]
-        labels = {
-            "title": "Nombre",
-            "description": "Descripcion",
-            "photo": "Foto",
+        labels = {"title": "", "description": "", "photo": "Foto del objeto: "}
+        widgets = {
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo'}),
+            'description':forms.Textarea(attrs={'class':'form-control','placeholder':'Descripcion'}),
+            'photo':forms.FileInput(attrs={'class':'form-control-file'})
         }
         error_messages = {"title": {"unique": "El nombre del objeto ya existe."}}
 
@@ -58,13 +59,13 @@ class OfficeForm(forms.ModelForm):
 
         fields = ["title", "extension", "phone"]
 
-        labels = {"title": "Nombre", "extension": "Extension", "phone": "Telefono"}
+        labels = {"title": "", "extension": "", "phone": ""}
 
-        """widget={
-            'name':forms.TextInput(attrs={'class':'form-control'}),
-            'extension':forms.TextInput(attrs={'class':'form-control'}),
-            'phone':forms.TextInput(attrs={'class':'form-control'}),
-        }"""
+        widgets = {
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre de la dependencia'}),
+            'extension':forms.NumberInput(attrs={'class':'form-control','placeholder':'Extención'}),
+            'phone':forms.NumberInput(attrs={'class':'form-control','placeholder':'Número de Telefono'})
+        }
 
 
 # Formulario para gestionar locaclizaciones.
@@ -72,14 +73,15 @@ class LocationForm(forms.ModelForm):
     class Meta:
         model = Location
 
-        fields = ["title", "longitude", "latitude"]
+        fields = ["title", "description", "icon", "longitude", "latitude"]
 
-        labels = {"title": "Nombre", "longitude": "Longitud", "latitude": "Latitud"}
+        labels = {"title": "", "description": "", "icon": "", "longitude": "", "latitude": ""}
 
-        """
-        widget={
-            'name':forms.TextInput(attrs={'class':'form-control'}),
-            'longitude':forms.TextInput(attrs={'class':'form-control'}),
-            'latitude':forms.TextInput(attrs={'class':'form-control'}),
-        }"""
+        widgets = {
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre de la ubicación'}),
+            'description':forms.Textarea(attrs={'class':'form-control','placeholder':'Descripción'}),
+            #'icon':forms.FileInput(attrs={'class':'form-control'}),
+            'longitude':forms.NumberInput(attrs={'class':'form-control','placeholder':'Longitud'}),
+            'latitude':forms.NumberInput(attrs={'class':'form-control','placeholder':'Latitud'})
+        }
 

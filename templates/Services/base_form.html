@@ -2,18 +2,13 @@
 {% block content %}
 <div class="modal-dialog" role="document">
     {% if object %}
-        {% if object.service.kind.id == 'directory' %}
-            <form action="{% url 'office-edit' object.id %}" method="post">
-        {% elif object.service.kind.id == 'catalog' %}
-            <form action="{% url 'item-edit' object.id %}" enctype="multipart/form-data" method="post">
-        {% elif object.service.kind.id == 'map' %}  
-            <form action="{% url 'location-edit' object.id %}" method="post">
-        {% else %} 
-            <form method="post"><h3 class="modal-title">Formulario no implementado!</h3></form>
-        {% endif %} 
+        {% block config %}
+            <form method="post"><h2 class="modal-title">Formulario no implementado!</h2>
+        {% endblock %}
     {% else %}
         <form action="{% url 'add-element' service.id %}" enctype="multipart/form-data" method="post">
     {% endif %}
+    
             {% csrf_token %}
             <div class="modal-content">
                 <div class="modal-header">
@@ -35,14 +30,14 @@
                     {% endblock %}
                 </div>
                 <div class="modal-footer">
-                    <div id="button_save">
+                    {% buttons %}
                         <button type="submit" class="btn btn-success">
                             <span class="glyphicon glyphicon-save"></span> Guardar
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">
                             <span class="glyphicon glyphicon-circle-arrow-left"></span> Cerrar
                         </button>
-                    </div>
+                    {% endbuttons %}
                 </div>
             </div><!-- /.modal-content -->
         </form>

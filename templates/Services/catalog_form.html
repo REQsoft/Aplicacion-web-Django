@@ -1,2 +1,24 @@
 {% extends 'Services/base_form.html' %}{% load static %}
+{% block config %} 
+    <form action="{% url 'item-edit' object.id %}" method="post">
+{% endblock %} 
+{% block form %}
+    <div class="form-group">
+        {{ form.title }}
+    </div>
+    <div class="form-group">
+        {{ form.description }}
+    </div>
+
+    <div class="form-group"><label for="id_photo">Foto del objeto: </label>
+        <div class="form-row">
+            <div class="col-12">
+                Actualmente: 
+                <a href="{{ object.photo.url }}">{{ object.photo }}</a><br>
+                Modificar:
+                {{ form.photo }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
 

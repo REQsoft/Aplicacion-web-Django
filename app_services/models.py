@@ -32,7 +32,7 @@ class Service(models.Model):
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     kind = models.ForeignKey(Kind, on_delete="PROTECTED")
-    groups = models.ManyToManyField(Group, related_name='get_groups')
+    groups = models.ManyToManyField(Group, related_name='get_services')
     state = models.BooleanField(default=False)
     description = models.CharField(max_length=300, blank=True)
     

@@ -1,12 +1,30 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views.generic import CreateView, DeleteView, UpdateView, ListView, DetailView
 from django.urls import reverse_lazy,reverse
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 from .models import *
 from .forms import *
 from django.http import JsonResponse
 
 def base_service(request):
     return render(request, "Services/base.html")
+
+class StaffRequiredMixin(object):
+    """
+    Este mixin requerirá que el usuario sea miembro del staff.
+    """
+    @method_decorator(staff_member_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(StaffRequiredMixin, self).dispatch(request, *args, **kwargs)
+
+class GetUrlMixin(object):
+    """
+    Este mixin redireccionara a la pagina de configuracion de cada servicio.
+    """
+    def get_success_url(self):
+        service = self.object.service
+        return reverse( 'service-configure', kwargs={'service_id': service.id})
 
 # Servicio
 def service_configure(request,service_id):
@@ -20,40 +38,26 @@ def add_element(request,service_id):
         form = MissingItemForm()
         if request.method == 'POST':
             form = MissingItemForm(request.POST, request.FILES)
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.service = service
-                post.save()
-                return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
-
-        #return render(request, 'Services/'+str(service.kind.id)+'_form.html', {'form':form, 'service_id':service_id})
 
     elif(service.kind.id=='directory'):
         form = OfficeForm()
         if request.method == 'POST':
             form = OfficeForm(request.POST)
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.service = service
-                post.save()
-                return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
-
-        #return render(request, 'Services/'+str(service.kind.id)+'_form.html', {'form':form, 'service_id':service_id})
 
     elif(service.kind.id=='map'):
         form = LocationForm()
         if request.method == 'POST':
             form = LocationForm(request.POST)
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.service = service
-                post.save()
-                return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
-
-        #return render(request, 'Services/'+str(service.kind.id)+'_form.html', {'form':form, 'service_id':service_id})
     
-    #else:
-        #return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
+    else:
+        return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
+
+    if request.method == 'POST':
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.service = service
+            post.save()
+            return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
     return render(request, 'Services/'+str(service.kind.id)+'_form.html', {'form':form, 'service':service})
 
     
@@ -75,66 +79,38 @@ class ServiceDeleteView(DeleteView):
     model = Service
     success_url = reverse_lazy('service-list')
 
-# Catalogo de objetos perdidos
 
-class MissingItemUpdateView(UpdateView):
+# Catalogo de objetos perdidos
+class MissingItemUpdateView(GetUrlMixin, UpdateView):
     model = MissingItem
     form_class = MissingItemForm
-    template_name = "Services/base_form.html"
-    def get_success_url(self):
-        service = self.object.service
-        return reverse_lazy( 'service-configure', kwargs={'service_id': service.id})
+    template_name = "Services/catalog_form.html"
 
-class MissingItemDeleteView(DeleteView):
+class MissingItemDeleteView(GetUrlMixin, DeleteView):
     model = MissingItem
-    template_name = "Services/confirm.html"
-    def get_success_url(self):
-        service = self.object.service
-        return reverse_lazy( 'service-configure', kwargs={'service_id': service.id})
+    template_name = "Services/confirm_delete.html"
 
 
 # Directorio de dependencias
-
-class OfficeCreateView(CreateView):
-    model = Service
-    form_class = ServiceForm
-    template_name = "Services/form.html"
-
-class OfficeUpdateView(UpdateView):
+class OfficeUpdateView(GetUrlMixin, UpdateView):
     model = Office
     form_class = OfficeForm
-    template_name = "Services/base_form.html"
-    def get_success_url(self):
-        service = self.object.service
-        return reverse_lazy( 'service-configure', kwargs={'service_id': service.id})
+    template_name = "Services/directory_form.html"
 
-class OfficeDeleteView(DeleteView):
+class OfficeDeleteView(GetUrlMixin, DeleteView):
     model = Office
-    template_name = "Services/confirm.html"
-    def get_success_url(self):
-        service = self.object.service
-        return reverse_lazy( 'service-configure', kwargs={'service_id': service.id})
+    template_name = "Services/confirm_delete.html"
+
 
 # Mapa de bloques
-class LocationCreateView(CreateView):
-    model = Service
-    form_class = ServiceForm
-    template_name = "Services/service_form.html"
-
-class LocationUpdateView(UpdateView):
+class LocationUpdateView(GetUrlMixin, UpdateView):
     model = Location
     form_class = LocationForm
-    template_name = "Services/base_form.html"
-    def get_success_url(self):
-        service = self.object.service
-        return reverse_lazy( 'service-configure', kwargs={'service_id': service.id})
+    template_name = "Services/map_form.html"
 
-class LocationDeleteView(DeleteView):
+class LocationDeleteView(GetUrlMixin, DeleteView):
     model = Location
-    template_name = "Services/confirm.html"
-    def get_success_url(self):
-        service = self.object.service
-        return reverse_lazy( 'service-configure', kwargs={'service_id': service.id})
+    template_name = "Services/confirm_delete.html"
 
 
 # Consulta SQL
