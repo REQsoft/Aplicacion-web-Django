@@ -3,8 +3,8 @@
     <div class="box-header with-border">
         <h3 class="box-title">Lista de servicios</h3><br>
     </div>
-    <a type="button" class="btn btn-primary" href="{% url 'service-create' %}"> <!---->
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar
+    <a type="button" class="btn btn-primary" title="Agregar nuevo servicio" href="{% url 'service-create' %}"> <!---->
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
     </a> 
     <table class="table table-bordered table-hover">
         <thead>
@@ -32,20 +32,20 @@
                     {{ service.state }}
                 </td>
                 <td>
-                    <a type="button" class="btn btn-primary" href="{% url 'service-edit' service.id %}"> <!---->
-                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar
-                    </a> 
                     {% if service.kind.id == 'query' %}
-                    <a type="button" class="btn btn-primary" href="{% url 'query-configure' service.id %}"> 
-                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Configurar
+                    <a type="button" class="btn btn-info" title="Configurar" href="{% url 'query-configure' service.id %}"> 
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                     </a> 
                     {% else %}
-                    <a type="button" class="btn btn-primary" href="{% url 'service-configure' service.id %}"> 
-                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Configurar
+                    <a type="button" class="btn btn-info" title="Configurar" href="{% url 'service-configure' service.id %}"> 
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                     </a> 
                     {% endif %}
-                    <button type="button" class="btn btn-danger" href="{% url 'service-delete' service.id %}"> 
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eliminar
+                    <a type="button" class="btn btn-primary" title="Editar" href="{% url 'service-edit' service.id %}"> <!---->
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </a> 
+                    <button type="button" class="btn btn-danger" title="Eliminar" href="{% url 'service-delete' service.id %}"> 
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                     </button>
                 </td>
             </tr>

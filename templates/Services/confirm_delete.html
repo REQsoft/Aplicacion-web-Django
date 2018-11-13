@@ -1,4 +1,4 @@
-{% load static %}{% load bootstrap4 %}{% bootstrap_javascript jquery='full' %}
+{% load static %}
 {% block content %}
 <div class="modal-dialog" role="document">
     {% if object.service.kind.id == 'directory' %}
@@ -23,28 +23,28 @@
             <div class="modal-body">
                 <p>Esta seguro de <b style="color:red;">eliminar</b> el elemento "<b>{{ object }}</b>"?</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-lg btn-block" data-dismiss="modal" data-toggle="tooltip" title="Cancelar">
-                    <span class="glyphicon glyphicon-circle-arrow-left"></span>
-                </button>
-                <button type="submit" class="btn btn-danger btn-lg btn-block" data-toggle="tooltip" title="Confirmar">
-                    <span class="glyphicon glyphicon-trash"></span>
-                </button>
-            </div>
             <!--<div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-circle-arrow-left">Cancelar</span>
+                </button>
+                <button type="submit" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-trash">Confirmar</span>
+                </button>
+            </div>-->
+            <div class="modal-footer">
                 <div class="row">
-                    <div class="col-lg-2">
+                    <div class="col-md-2">
                         <button type="button" class="btn btn-secondary btn-lg btn-block" data-dismiss="modal" data-toggle="tooltip" title="Cancelar">
                             <span class="glyphicon glyphicon-circle-arrow-left"></span>
                         </button>
                     </div>
-                    <div class="col-lg-10">
+                    <div class="col-md-10">
                         <button type="submit" class="btn btn-danger btn-lg btn-block" data-toggle="tooltip" title="Confirmar">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </div>
                 </div>
-            </div>-->
+            </div>
         </div><!-- /.modal-content -->
     </form>
 </div><!-- /.modal-dialog -->

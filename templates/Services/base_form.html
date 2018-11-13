@@ -1,4 +1,4 @@
-{% load static %}{% load bootstrap4 %}{% bootstrap_javascript jquery='full' %}
+{% load static %}
 {% block content %}
 <div class="modal-dialog" role="document">
     {% block config %}
@@ -22,18 +22,18 @@
                 </div>
                 <div class="modal-body">
                     {% block form %}
-                        {% bootstrap_form form %}
+                    {{ form.as_p }}
                     {% endblock %}
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-lg btn-block" data-dismiss="modal" data-toggle="tooltip" title="Cancelar">
-                        <span class="glyphicon glyphicon-circle-arrow-left"></span>
-                    </button>
-                    <button type="submit" class="btn btn-success btn-lg btn-block" data-toggle="tooltip" title="Guardar">
-                        <span class="glyphicon glyphicon-save"></span>
-                    </button>
-                </div>
                 <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-circle-arrow-left">Cancelar</span>
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <span class="glyphicon glyphicon-save">Guardar</span>
+                    </button>
+                </div>-->
+                <div class="modal-footer">
                     <div class="row">                    
                         <div class="col-md-2">
                             <button type="button" class="btn btn-secondary btn-lg btn-block" data-dismiss="modal" data-toggle="tooltip" title="Cancelar">
@@ -42,11 +42,11 @@
                         </div>
                         <div class="col-md-10">
                             <button type="submit" class="btn btn-success btn-lg btn-block" data-toggle="tooltip" title="Guardar">
-                                <span class="glyphicon glyphicon-save"></span>
+                                <span class="glyphicon glyphicon-floppy-disk"></span>Guardar
                             </button>
                         </div>
                     </div>
-                </div>-->
+                </div>
             </div><!-- /.modal-content -->
         </form>
 </div><!-- /.modal-dialog -->

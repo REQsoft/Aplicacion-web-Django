@@ -1,8 +1,7 @@
 {% extends 'Services/base_configure.html' %} {% load static %}
-{% load bootstrap4 %}
-{% bootstrap_javascript jquery='full' %}
 {% block table %}
     <table class="table table-bordered table-hover">
+        <caption>Lista de Ubicaciones</caption>
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -24,13 +23,13 @@
                     {{ location.latitude }}
                 </td>
                 <td>
-                    <a type="button" class="btn btn-primary" data-toggle="modal" 
+                    <a type="button" class="btn btn-primary btn-sm" title="Editar" data-toggle="modal" 
                         data-target="#modal" onclick="return get_url('{% url 'location-edit' location.id %}')">
-                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar
+                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                      </a> 
-                     <a type="button" class="btn btn-danger" data-toggle="modal" 
+                     <a type="button" class="btn btn-danger btn-sm" title="Eliminar" data-toggle="modal" 
                         data-target="#modal" onclick="return get_url('{% url 'location-delete' location.id %}')">
-                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eliminar
+                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                      </a>
                 </td>
             </tr>
