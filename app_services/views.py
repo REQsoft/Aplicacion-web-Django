@@ -24,15 +24,15 @@ class GetUrlMixin(object):
     """
     def get_success_url(self):
         service = self.object.service
-        return reverse( 'service-configure', kwargs={'service_id': service.id})
+        return reverse( 'service-configure', kwargs={'pk': service.id})
 
 # Servicio
-def service_configure(request,service_id):
-    service = get_object_or_404(Service, id=service_id)
+def service_configure(request,pk):
+    service = get_object_or_404(Service, id=pk)
     return render(request, 'Services/'+str(service.kind.id)+'_configure.html', {'service':service})
 
-def add_element(request,service_id):
-    service = get_object_or_404(Service, id=service_id)
+def add_element(request,pk):
+    service = get_object_or_404(Service, id=pk)
     
     if(service.kind.id=='catalog'):
         form = MissingItemForm()
@@ -50,14 +50,14 @@ def add_element(request,service_id):
             form = LocationForm(request.POST)
     
     else:
-        return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
+        return redirect(reverse('service-configure', kwargs={'pk': service.id}))
 
     if request.method == 'POST':
         if form.is_valid():
             post = form.save(commit=False)
             post.service = service
             post.save()
-            return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
+            return redirect(reverse('service-configure', kwargs={'pk': service.id}))
     return render(request, 'Services/'+str(service.kind.id)+'_form.html', {'form':form, 'service':service})
 
     
@@ -122,7 +122,7 @@ class QueryCreateView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.service = Service.objects.get(id=self.kwargs["service_id"])
+        self.object.service = Service.objects.get(id=self.kwargs["pk"])
         self.object.save()
         return super(QueryCreateView, self).form_valid(form)
 

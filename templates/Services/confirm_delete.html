@@ -13,27 +13,38 @@
         {% csrf_token %}
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                    <span class="sr-only">Close</span>
+                <button type="button" class="close" data-dismiss="modal" data-toggle="tooltip" title="Cerrar">
+                    <span class="glyphicon glyphicon-remove"></span>
                 </button>
                 {% block title %}
-                <h3 class="modal-title">Eliminar elemento</h3>
+                <h2 class="modal-title">Eliminar elemento</h2>
                 {% endblock %}
             </div>
             <div class="modal-body">
-                <p>Esta seguro de eliminar el elemento "{{ object }}"?</p>
+                <p>Esta seguro de <b style="color:red;">eliminar</b> el elemento "<b>{{ object }}</b>"?</p>
             </div>
             <div class="modal-footer">
-                <div id="button_save">
-                    <button type="submit" class="btn btn-danger">
-                        <span class="glyphicon glyphicon-save"></span> Eliminar
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        <span class="glyphicon glyphicon-circle-arrow-left"></span> Cancelar
-                    </button>
-                </div>
+                <button type="button" class="btn btn-secondary btn-lg btn-block" data-dismiss="modal" data-toggle="tooltip" title="Cancelar">
+                    <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                </button>
+                <button type="submit" class="btn btn-danger btn-lg btn-block" data-toggle="tooltip" title="Confirmar">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
             </div>
+            <!--<div class="modal-footer">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <button type="button" class="btn btn-secondary btn-lg btn-block" data-dismiss="modal" data-toggle="tooltip" title="Cancelar">
+                            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                        </button>
+                    </div>
+                    <div class="col-lg-10">
+                        <button type="submit" class="btn btn-danger btn-lg btn-block" data-toggle="tooltip" title="Confirmar">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>-->
         </div><!-- /.modal-content -->
     </form>
 </div><!-- /.modal-dialog -->

@@ -6,10 +6,10 @@ urlpatterns = [
     path('service/', base_service, name='base-service'),
     path('services/', ServiceListView.as_view(), name='service-list'),
     path('service/create/', ServiceCreateView.as_view(), name='service-create'),
-    path('service/<int:service_id>/', service_configure, name='service-configure'), 
-    path('service/<int:service_id>/edit/', ServiceUpdateView.as_view(), name='service-edit'),   
-    path('service/<int:service_id>/delete/', ServiceDeleteView.as_view(), name='service-delete'),
-    path('service/<int:service_id>/add-element/', add_element, name='add-element'), 
+    path('service/<int:pk>/', service_configure, name='service-configure'), 
+    path('service/<int:pk>/edit/', ServiceUpdateView.as_view(), name='service-edit'),   
+    path('service/<int:pk>/delete/', ServiceDeleteView.as_view(), name='service-delete'),
+    path('service/<int:pk>/add-element/', add_element, name='add-element'), 
 
     # Catalogo de objetos perdidos
     path('service/item/<int:pk>/edit', MissingItemUpdateView.as_view(), name='item-edit'),   
@@ -24,7 +24,7 @@ urlpatterns = [
     path('service/location/<int:pk>/delete', LocationDeleteView.as_view(), name='location-delete'),
 
     # Consulta SQL
-    path('service/query/<int:service_id>/configure', QueryCreateView.as_view(), name='query-configure'),
+    path('service/query/<int:pk>/configure', QueryCreateView.as_view(), name='query-configure'),
     path(
         'service/query/fields',
         get_fields_service,

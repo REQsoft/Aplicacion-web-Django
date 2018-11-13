@@ -1,4 +1,8 @@
 {% extends 'Services/base_form.html' %} {% load static %} 
 {% block config %} 
-    <form action="{% url 'location-edit' object.id %}" method="post">
-{% endblock %} 
+    {% if object %}
+        <form action="{% url 'location-edit' object.id %}" method="post">
+    {% else %}
+        <form action="{% url 'add-element' service.id %}" enctype="multipart/form-data" method="post">
+    {% endif %} 
+{% endblock %}

@@ -35,7 +35,7 @@ class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
         fields = ["title", "icon", "kind", "state", "description"]
-        error_messages = {"title": {"unique": "El nombre del servicio ya existe."}}
+        error_messages = {"title": {"unique": "Ya existe un servicio con ese titulo."}}
 
 
 # Formulario para gestionar artículos perdidos.
@@ -46,10 +46,10 @@ class MissingItemForm(forms.ModelForm):
         labels = {"title": "", "description": "", "photo": "Foto del objeto: "}
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo'}),
-            'description':forms.Textarea(attrs={'class':'form-control','placeholder':'Descripcion'}),
+            'description':forms.Textarea(attrs={'class':'form-control','rows':3,'placeholder':'Descripcion'}),
             'photo':forms.FileInput(attrs={'class':'form-control-file'})
         }
-        error_messages = {"title": {"unique": "El nombre del objeto ya existe."}}
+        error_messages = {"title": {"unique": "Ya existe un objeto con ese titulo."}}
 
 
 # Formulario para gestionar directorio de names.
@@ -67,6 +67,7 @@ class OfficeForm(forms.ModelForm):
             'phone':forms.NumberInput(attrs={'class':'form-control','placeholder':'Número de Telefono'})
         }
 
+        error_messages = {"title": {"unique": "Ya existe una dependencia con ese nombre."}}
 
 # Formulario para gestionar locaclizaciones.
 class LocationForm(forms.ModelForm):
@@ -79,9 +80,11 @@ class LocationForm(forms.ModelForm):
 
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre de la ubicación'}),
-            'description':forms.Textarea(attrs={'class':'form-control','placeholder':'Descripción'}),
+            'description':forms.Textarea(attrs={'class':'form-control','rows':3,'placeholder':'Descripción'}),
             #'icon':forms.FileInput(attrs={'class':'form-control'}),
             'longitude':forms.NumberInput(attrs={'class':'form-control','placeholder':'Longitud'}),
             'latitude':forms.NumberInput(attrs={'class':'form-control','placeholder':'Latitud'})
         }
+
+        error_messages = {"title": {"unique": "Ya existe una ubicacion con ese titulo."}}
 
