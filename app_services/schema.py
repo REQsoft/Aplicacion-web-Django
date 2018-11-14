@@ -2,6 +2,7 @@ import graphene
 from graphene_django.types import DjangoObjectType
 from .models import *
 
+
 class LocationType(DjangoObjectType):
     class Meta:
         model = Location
@@ -57,6 +58,28 @@ class ServiceType(graphene.ObjectType):
     def resolve_description(self, info, **kwargs):
         return self.description
     
+    
+class ItemType(graphene.ObjectType):
+    service = graphene.Field(ServiceType)
+
+    def resolve_service(self, info, **kwargs):
+        return self.service
+
+
+class MenuType(graphene.ObjectType):
+    title = graphene.String()
+    icon = graphene.String()
+    services = graphene.List(ServiceType)
+
+    def resolve_tittle(self, info, **kwargs):
+        return self.title
+    
+    def resolve_icon(self, info, **kwargs):
+        return self.icon.image
+    
+    def resolve_services(self, info, **kwargs):
+        return self.service.all()
+    
 class Directory(graphene.ObjectType):
     id = graphene.Int()
     title = graphene.String()
@@ -95,6 +118,7 @@ class Directories(graphene.ObjectType):
 class Query(graphene.AbstractType):
     directories = graphene.List(Directories, title=graphene.String())
     services = graphene.List(ServiceType)
+    menus = graphene.List(MenuType)
 
     map = graphene.List(LocationType,id=graphene.Int())
     catalog = graphene.List(MissingItemType,id=graphene.Int())
@@ -173,3 +197,6 @@ class Query(graphene.AbstractType):
 
     def resolve_services(self, info, **kwargs):
         return Service.objects.all()
+
+    def resolve_menus(self, info, **kwargs):
+        return Menu.objects.all()

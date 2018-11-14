@@ -30,18 +30,35 @@ class Kind(models.Model):
 # Modelo principal de servicios.
 class Service(models.Model):
     title = models.CharField(max_length=100, unique=True)
-    icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     kind = models.ForeignKey(Kind, on_delete="PROTECTED")
-    groups = models.ManyToManyField(Group, related_name='get_services')
-    state = models.BooleanField(default=False)
+    icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     description = models.CharField(max_length=300, blank=True)
     
-    
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse('service-list')
+
+
+# Modelos de widgets para mostrar los servicios en la app movil
+class Menu(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    icon = models.ForeignKey(Icon, on_delete="PROTECTED")
+    services = models.ManyToManyField(Service)
+    groups = models.ManyToManyField(Group)
+        
+    def __str__(self):
+        return self.title
+
+class Button(models.Model):
+    service = models.OneToOneField(Service, on_delete="CASCADE")
+    groups = models.ManyToManyField(Group)
+    state = models.BooleanField(default=False)
+        
+    def __str__(self):
+        return self.service.title    
 
 # Modelo de configuracion de servicios de consulta SQL
 class SQLQuery(models.Model):
