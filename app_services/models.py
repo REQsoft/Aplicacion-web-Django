@@ -46,7 +46,7 @@ class Service(models.Model):
 class Menu(models.Model):
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
-    services = models.ManyToManyField(Service)
+    service = models.ManyToManyField(Service)
     groups = models.ManyToManyField(Group)
         
     def __str__(self):
