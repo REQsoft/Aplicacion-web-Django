@@ -2,15 +2,8 @@ from django.db import models
 from django.urls import reverse
 from global_.manager_connection import ManagerConnection
 from app_connection.models import Connection
+from app_admin.models import Group
 import ast
-
-# Create your models here.
-class Group(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    sql_auth = models.CharField(max_length=300)
-
-    def __str__(self):
-        return self.name
 
 class Icon(models.Model):
     title = models.CharField(max_length=100, unique=True)
