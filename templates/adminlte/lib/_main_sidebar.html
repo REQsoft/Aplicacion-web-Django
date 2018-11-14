@@ -21,16 +21,21 @@
         {% block nav_links_ul %}
         <ul class="sidebar-menu">
             {% block nav_links_outer %}
-            <li class="header">{% block nav_heading %}MAIN NAVIGATION{% endblock %}</li>
+            <li class="header">{% block nav_heading %}MAIN NAVIGATION{% endblock %}</li>base
 
             {% block nav_links %}
+            <li>
+                <a href="{% url 'base-main' %}">
+                    <i class="fa fa-database"></i> <span>Principal</span>
+                </a>
+            </li>
             <li>
                 <a href="{% url 'base-connection' %}">
                     <i class="fa fa-database"></i> <span>Bases de datos</span>
                 </a>
             </li>
             <li>
-                <a href="{% url 'service-list' %}">
+                <a href="{% url 'base-service' %}">
                     <i class="fa fa-tablet"></i> <span>Servicios</span>
                 </a>
             </li>

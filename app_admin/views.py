@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import auth
+from django.views.generic import CreateView, DeleteView, UpdateView, ListView
+from .models import Group, Authentication
+from .forms import GroupForm, AuthenticationForm
 
 # Create your views here.
 
@@ -15,3 +18,21 @@ def login(request):
             # Redirect to a success page.
             return render(request, '00Login/base.html')
     return render(request, '00Login/login.html')
+
+def base_main(request):
+    return render(request, "main/base.html")
+
+
+
+class AuthenticationCreateView(CreateView):
+    model = Authentication
+    form_class = AuthenticationForm
+    template_name = "main/auth_form.html"
+
+
+class GroupCreateView(CreateView):
+    model = Group
+    form_class = GroupForm
+    template_name = "main/group_form.html"
+
+

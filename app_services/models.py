@@ -158,7 +158,3 @@ class Location(models.Model):
 
     def get_absolute_url(self):
         return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
-
-
-
-
