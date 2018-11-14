@@ -39,7 +39,7 @@ class Service(models.Model):
 class Menu(models.Model):
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
-    service = models.ManyToManyField(Service)
+    services = models.ManyToManyField(Service)
         
     def __str__(self):
         return self.title
