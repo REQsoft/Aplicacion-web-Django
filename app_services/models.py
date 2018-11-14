@@ -40,14 +40,12 @@ class Menu(models.Model):
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     service = models.ManyToManyField(Service)
-    groups = models.ManyToManyField(Group)
         
     def __str__(self):
         return self.title
 
 class Button(models.Model):
     service = models.OneToOneField(Service, on_delete="CASCADE")
-    groups = models.ManyToManyField(Group)
     state = models.BooleanField(default=False)
         
     def __str__(self):
