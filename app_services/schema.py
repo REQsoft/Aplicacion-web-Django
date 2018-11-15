@@ -10,9 +10,20 @@ class MissingItemType(DjangoObjectType):
     class Meta:
         model = MissingItem
 
-class OfficeType(DjangoObjectType):
-    class Meta:
-        model = Office
+class OfficeType(graphene.ObjectType):
+    title = graphene.String()
+    extension = graphene.String()
+    phone = graphene.String()
+
+    def resolve_title(self, info, **kwargs):
+        return self.title
+
+    def resolve_extension(self, info, **kwargs):
+        return self.extension
+    
+    def resolve_phone(self, info, **kwargs):
+        return self.phone
+
 
 class ServiceType(graphene.ObjectType):
     title = graphene.String()

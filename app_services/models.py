@@ -49,7 +49,7 @@ class Menu(models.Model):
     state = models.BooleanField(default=False)
     description = models.CharField(max_length=300, blank=True)
     services = models.ManyToManyField(Service)
-    container = model.ForeignKey(WidgetContainer, on_delete="PROTECTED")
+    container = models.ForeignKey(Container, on_delete="PROTECTED")
 
         
     def __str__(self):
@@ -58,7 +58,7 @@ class Menu(models.Model):
 class Button(models.Model):
     service = models.OneToOneField(Service, on_delete="CASCADE")
     state = models.BooleanField(default=False)
-    container = model.ForeignKey(WidgetContainer, on_delete="PROTECTED")
+    container = models.ForeignKey(Container, on_delete="PROTECTED")
         
     def __str__(self):
         return self.service.title    
