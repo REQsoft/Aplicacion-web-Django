@@ -63,7 +63,7 @@ class Buttontype(graphene.ObjectType):
         return self.service.title
     
     def resolve_icon(self, info, **kwargs):
-        return self.service.icon.image
+        return self.service.icon.image.url
     
     def resolve_state(self, info, **kwargs):
         return self.state

@@ -2,7 +2,6 @@ from django.db import models
 from django.urls import reverse
 from global_.manager_connection import ManagerConnection
 from app_connection.models import Connection
-from app_admin.models import Group
 import ast
 
 class Icon(models.Model):
@@ -34,6 +33,14 @@ class Service(models.Model):
     def get_absolute_url(self):
         return reverse('service-list')
 
+class Container(models.Model):
+    id = models.SlugField(primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+    description = models.CharField(max_length=300, blank=True)
+
+    def __str__(self):
+        return self.name
+
 
 # Modelos de widgets para mostrar los servicios en la app movil
 class Menu(models.Model):
@@ -42,6 +49,8 @@ class Menu(models.Model):
     state = models.BooleanField(default=False)
     description = models.CharField(max_length=300, blank=True)
     services = models.ManyToManyField(Service)
+    container = model.ForeignKey(WidgetContainer, on_delete="PROTECTED")
+
         
     def __str__(self):
         return self.title
@@ -49,6 +58,7 @@ class Menu(models.Model):
 class Button(models.Model):
     service = models.OneToOneField(Service, on_delete="CASCADE")
     state = models.BooleanField(default=False)
+    container = model.ForeignKey(WidgetContainer, on_delete="PROTECTED")
         
     def __str__(self):
         return self.service.title    
@@ -151,3 +161,4 @@ class Location(models.Model):
 
     def get_absolute_url(self):
         return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
+

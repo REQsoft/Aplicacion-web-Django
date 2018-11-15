@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from global_.manager_connection import ManagerConnection
-from app_admin.models import Group, Authentication
+from main.models import Group, Authentication
 from graphql_jwt.utils import get_credentials, get_payload
 from graphql_jwt.settings import jwt_settings
 
