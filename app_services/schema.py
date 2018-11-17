@@ -40,36 +40,6 @@ class ServiceType(graphene.ObjectType):
         return self.description
 
 
-class MenuType(graphene.ObjectType):
-    services = graphene.List(ServiceType)
-    
-    def resolve_services(self, info, **kwargs):
-        return self.services.all()
-
-
-class Buttontype(graphene.ObjectType):
-    title = graphene.String()
-    icon = graphene.String()
-    state = graphene.Boolean()
-    description = graphene.String()
-    service = graphene.Field(ServiceType)
-
-    def resolve_title(self, info, **kwargs):
-        return self.service.title
-    
-    def resolve_icon(self, info, **kwargs):
-        return self.service.icon.image.url
-    
-    def resolve_state(self, info, **kwargs):
-        return self.state
-    
-    def resolve_description(self, info, **kwargs):
-        return self.service.description
-    
-    def resolve_services(self, info, **kwargs):
-        return self.service
-
-
 class WidgetType(graphene.ObjectType):
     id = graphene.Int()
     ofType = graphene.String()
