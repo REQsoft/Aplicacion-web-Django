@@ -46,7 +46,7 @@ class Widget(models.Model):
         ('button', 'Botón')
     )
 
-    ofType = model.CharField(max_length=20)
+    ofType = models.CharField(max_length=20)
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     state = models.BooleanField(default=False)
@@ -66,19 +66,19 @@ class Widget(models.Model):
 
 # Modelos de widgets para mostrar los servicios en la app movil
 class Menu(models.Model):
-    widget = models.OneToOneField(Widget, limit_choices_to={'ofType':'menu'})
+    widget = models.OneToOneField(Widget, on_delete=models.CASCADE, limit_choices_to={'ofType':'menu'})
     services = models.ManyToManyField(Service)
     
     def __str__(self):
-        return self.title
+        return self.widget.title
 
 
 class Button(models.Model):
-    widget = models.OneToOneField(Widget, limit_choices_to={'ofType':'button'})
+    widget = models.OneToOneField(Widget, on_delete=models.CASCADE, limit_choices_to={'ofType':'button'})
     services = models.OneToOneField(Service, on_delete=models.CASCADE)
         
     def __str__(self):
-        return self.service.title    
+        return self.widget.title    
 
 # Modelo de configuracion de servicios de consulta SQL
 class SQLQuery(models.Model):
@@ -178,4 +178,3 @@ class Location(models.Model):
 
     def get_absolute_url(self):
         return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
-
