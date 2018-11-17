@@ -23,7 +23,6 @@ class Kind(models.Model):
 class Service(models.Model):
     title = models.CharField(max_length=100, unique=True)
     kind = models.ForeignKey(Kind, on_delete="PROTECTED")
-    icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     description = models.CharField(max_length=300, blank=True)
     
 
@@ -41,24 +40,42 @@ class Container(models.Model):
     def __str__(self):
         return self.name
 
+class Widget(models.Model):
+    widgetsType  = (
+        ('menu', 'Menu'),
+        ('button', 'Botón')
+    )
 
-# Modelos de widgets para mostrar los servicios en la app movil
-class Menu(models.Model):
+    ofType = model.CharField(max_length=20)
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     state = models.BooleanField(default=False)
     description = models.CharField(max_length=300, blank=True)
-    services = models.ManyToManyField(Service)
     container = models.ForeignKey(Container, on_delete="PROTECTED")
 
-        
+    class Meta:
+        """Meta definition for Widget."""
+
+        verbose_name = 'Widget'
+        verbose_name_plural = 'Widgets'
+
+    def __str__(self):
+        """Unicode representation of Widget."""
+        pass
+
+
+# Modelos de widgets para mostrar los servicios en la app movil
+class Menu(models.Model):
+    widget = models.OneToOneField(Widget, limit_choices_to={'ofType':'menu'})
+    services = models.ManyToManyField(Service)
+    
     def __str__(self):
         return self.title
 
+
 class Button(models.Model):
-    service = models.OneToOneField(Service, on_delete="CASCADE")
-    state = models.BooleanField(default=False)
-    container = models.ForeignKey(Container, on_delete="PROTECTED")
+    widget = models.OneToOneField(Widget, limit_choices_to={'ofType':'button'})
+    services = models.OneToOneField(Service, on_delete=models.CASCADE)
         
     def __str__(self):
         return self.service.title    
