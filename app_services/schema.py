@@ -41,23 +41,7 @@ class ServiceType(graphene.ObjectType):
 
 
 class MenuType(graphene.ObjectType):
-    title = graphene.String()
-    icon = graphene.String()
-    state = graphene.Boolean()
-    description = graphene.String()
     services = graphene.List(ServiceType)
-
-    def resolve_tittle(self, info, **kwargs):
-        return self.title
-    
-    def resolve_icon(self, info, **kwargs):
-        return self.icon.image
-    
-    def resolve_state(self, info, **kwargs):
-        return self.state
-    
-    def resolve_description(self, info, **kwargs):
-        return self.description
     
     def resolve_services(self, info, **kwargs):
         return self.services.all()
@@ -86,18 +70,52 @@ class Buttontype(graphene.ObjectType):
         return self.service
 
 
-
+class WidgetType(graphene.ObjectType):
+    ofType = graphene.String()
+    title = graphene.String()
+    icon = graphene.String()
+    state = graphene.Boolean()
+    description = graphene.String()
     
+
+    def resolve_ofType(self, info, **kwargs):
+        return self.ofType
+    
+    def resolve_title(self, info, **kwargs):
+        return self.title
+    
+    def resolve_icon(self, info, **kwargs):
+        return self.icon.url
+    
+    def resolve_state(self, info, **kwargs):
+        return self.state
+    
+    def resolve_description(self, info, **kwargs):
+        return self.description
+
+class ContainerType(graphene.ObjectType):
+    name = graphene.String()
+    widgets = graphene.List()
+
+    def resolve_name(self, info, **kwargs):
+        return self.name
+    
+    def resolve_widgets(self, info, **kwargs):
+        return self.widget_set
 
 class Query(graphene.AbstractType):
-    menus = graphene.List(MenuType)
-    buttons = graphene.List(Buttontype)
+    containers = graphene.List(ContainerType)
 
+    menu = graphene.Field(MenuType, id=graphene.Int(required=True))
+    button = graphene.Field(Buttontype, id=graphene.Int(required=True))
 
-    def resolve_menus(self, info, **kwargs):
-        return Menu.objects.all()
+    def resolve_containers(self, info, **kwargs):
+        return Container.objects.all()
+
+    def resolve_menu(self, info, **kwargs):
+        return Menu
     
-    def resolve_buttons(self, info, **kwargs):
+    def resolve_button(self, info, **kwargs):
         for i in Button.objects.all():
             print(i.service.title)
         return Button.objects.all()

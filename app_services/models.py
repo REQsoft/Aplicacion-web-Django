@@ -22,6 +22,7 @@ class Kind(models.Model):
 # Modelo principal de servicios.
 class Service(models.Model):
     title = models.CharField(max_length=100, unique=True)
+    icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     kind = models.ForeignKey(Kind, on_delete="PROTECTED")
     description = models.CharField(max_length=300, blank=True)
     
