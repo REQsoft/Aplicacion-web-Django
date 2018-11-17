@@ -34,7 +34,6 @@ class Service(models.Model):
         return reverse('service-list')
 
 class Container(models.Model):
-    id = models.SlugField(primary_key=True)
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=300, blank=True)
 
@@ -47,7 +46,7 @@ class Widget(models.Model):
         ('button', 'Botón')
     )
 
-    ofType = models.CharField(max_length=20)
+    ofType = models.CharField(choices=widgetsType, max_length=20)
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     state = models.BooleanField(default=False)
@@ -61,13 +60,12 @@ class Widget(models.Model):
         verbose_name_plural = 'Widgets'
 
     def __str__(self):
-        """Unicode representation of Widget."""
-        pass
+        return self.title
 
 
 # Modelos de widgets para mostrar los servicios en la app movil
 class Menu(models.Model):
-    widget = models.OneToOneField(Widget, on_delete=models.CASCADE, limit_choices_to={'ofType':'menu'})
+    widget = models.OneToOneField(Widget, on_delete=models.CASCADE, limit_choices_to={'ofType':'menu'}, related_name='menus')
     services = models.ManyToManyField(Service)
     
     def __str__(self):
@@ -76,7 +74,7 @@ class Menu(models.Model):
 
 class Button(models.Model):
     widget = models.OneToOneField(Widget, on_delete=models.CASCADE, limit_choices_to={'ofType':'button'})
-    services = models.OneToOneField(Service, on_delete=models.CASCADE)
+    service = models.OneToOneField(Service, on_delete=models.CASCADE)
         
     def __str__(self):
         return self.widget.title    

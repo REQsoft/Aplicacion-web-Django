@@ -71,12 +71,16 @@ class Buttontype(graphene.ObjectType):
 
 
 class WidgetType(graphene.ObjectType):
+    id = graphene.Int()
     ofType = graphene.String()
     title = graphene.String()
     icon = graphene.String()
     state = graphene.Boolean()
     description = graphene.String()
-    
+    services = graphene.List(ServiceType)
+
+    def resolve_id(self, info, **kwargs):
+        return self.id
 
     def resolve_ofType(self, info, **kwargs):
         return self.ofType
@@ -85,37 +89,37 @@ class WidgetType(graphene.ObjectType):
         return self.title
     
     def resolve_icon(self, info, **kwargs):
-        return self.icon.url
+        return self.icon.image.url
     
     def resolve_state(self, info, **kwargs):
         return self.state
     
     def resolve_description(self, info, **kwargs):
         return self.description
+    
+    def resolve_services(self, info, **kwargs):
+        if self.ofType == 'menu':
+            return self.menus.services.all()
+
+        if self.ofType == 'button':
+            return [self.button.service]
 
 class ContainerType(graphene.ObjectType):
     name = graphene.String()
-    widgets = graphene.List()
+    widgets = graphene.List(WidgetType)
 
     def resolve_name(self, info, **kwargs):
         return self.name
     
     def resolve_widgets(self, info, **kwargs):
-        return self.widget_set
+        return self.widget_set.all()
+
 
 class Query(graphene.AbstractType):
-    containers = graphene.List(ContainerType)
-
-    menu = graphene.Field(MenuType, id=graphene.Int(required=True))
-    button = graphene.Field(Buttontype, id=graphene.Int(required=True))
+    containers = graphene.List(ContainerType, name=graphene.String())
 
     def resolve_containers(self, info, **kwargs):
+        name = kwargs.get('name')
+        if name is not None:
+            return Container.objects.get(name=name)
         return Container.objects.all()
-
-    def resolve_menu(self, info, **kwargs):
-        return Menu
-    
-    def resolve_button(self, info, **kwargs):
-        for i in Button.objects.all():
-            print(i.service.title)
-        return Button.objects.all()
