@@ -16,7 +16,7 @@ class Authentication(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse("list-connections")
+        return reverse("base-main")
 
 
 class Group(models.Model):

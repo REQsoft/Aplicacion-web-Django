@@ -8,15 +8,13 @@ from graphql_jwt.settings import jwt_settings
 
 def get_user_by_natural_key(user_id):
     try:
-        groups = Group.objects.all()
-        for group in groups:
-            data_connection = group.authentication.connection.get_data_connection()
-            data_connection.update({"dbname": group.authentication.connection.dbname})
-            conn = ManagerConnection(**data_connection)
-            data = conn.managerSQL(group.sql_get_user % (user_id))
-            if len(data) > 0:
-                user = User(username=user_id)
-                return user
+        auth = Authentication.objects.all()[0]
+        data_connection = auth.connection.get_data_connection()
+        data_connection.update({"dbname": auth.connection.dbname})
+        conn = ManagerConnection(**data_connection)
+        data = conn.managerSQL("select nombre from estudiante where nombre='%s'" % (user_id))
+        if data is not None:
+            return User(username=user_id)
         return None
     except User.DoesNotExist:
         return None
@@ -35,18 +33,19 @@ def get_user_by_payload(payload):
     return user
 
 
-def validate(username, password):
+def check_user(username, password):
     auth = Authentication.objects.all()[0]
     data_connection = auth.connection.get_data_connection()
     data_connection.update({"dbname": auth.connection.dbname})
     conn = ManagerConnection(**data_connection)
     data = conn.managerSQL(auth.sql_auth % (username, password))
-    if len(data) > 0:
+    if data is not None:
         return True
     return False
-        
+
 
 class CustomBackend(object):
+    
     def authenticate(self, request=None, **kwargs):
         if request is None:
             return None
@@ -54,9 +53,8 @@ class CustomBackend(object):
         try:
             username = kwargs[get_user_model().USERNAME_FIELD]
             password = kwargs["password"]
-            if validate(username, password):
-                user = User(username=username)
-                return user
+            if check_user(username, password):
+                return User(username=username)
             return None
         except:
             return None
@@ -69,6 +67,7 @@ class CustomBackend(object):
 
 
 class JSONWebTokenBackend(object):
+
     def authenticate(self, request=None, **kwargs):
         if request is None:
             return None

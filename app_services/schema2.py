@@ -138,18 +138,16 @@ class Query(graphene.ObjectType):
             type("SQLServices", (graphene.ObjectType,), dict_clsattr_SQLServicesType)
         )
 
-    user = graphene.String(token=graphene.String(required=True))
+    user = graphene.String(token=graphene.String())
 
     def resolve_SQLServices(self, info, **kwargs):
         print(info.context.user)
         return SQLQuery.objects.all()
 
-    @login_required
     def resolve_user(self, info, **kwargs):
-        try:
-            from django.contrib.auth.models import User
-            user = User.objects.get(username=info.context.user)
-        except:
-            print("Error")
+        '''token = kwargs.get('token')
+        from django.contrib import auth
+        user = auth.authenticate(request=info.context, token=token)
+        print(user)'''
         return info.context.user
 

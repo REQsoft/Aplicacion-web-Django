@@ -65,7 +65,7 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     'administracion.backends.CustomBackend',
-    'graphql_jwt.backends.JSONWebTokenBackend',
+    'administracion.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 

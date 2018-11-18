@@ -1,6 +1,7 @@
 import graphene
 from graphene_django.types import DjangoObjectType
 from .models import *
+from django.contrib import auth
 
 class LocationType(DjangoObjectType):
     class Meta:
@@ -91,5 +92,5 @@ class Query(graphene.AbstractType):
     def resolve_containers(self, info, **kwargs):
         name = kwargs.get('name')
         if name is not None:
-            return Container.objects.get(name=name)
+            return [Container.objects.get(name=name)]
         return Container.objects.all()

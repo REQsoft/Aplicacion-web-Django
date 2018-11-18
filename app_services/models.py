@@ -53,6 +53,7 @@ class Widget(models.Model):
     description = models.CharField(max_length=300, blank=True)
     container = models.ForeignKey(Container, on_delete="PROTECTED")
 
+
     class Meta:
         """Meta definition for Widget."""
 
@@ -61,7 +62,6 @@ class Widget(models.Model):
 
     def __str__(self):
         return self.title
-
 
 # Modelos de widgets para mostrar los servicios en la app movil
 class Menu(models.Model):
