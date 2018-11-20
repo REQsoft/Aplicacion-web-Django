@@ -22,9 +22,14 @@ class Kind(models.Model):
 
 # Modelo principal de servicios.
 class Service(models.Model):
+    types = (
+        ('query', 'Generico'),
+        ('directory', 'Directorio')
+    )
+
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
-    kind = models.ForeignKey(Kind, on_delete="PROTECTED")
+    kind = models.CharField(choices=types, max_length=20)
     description = models.CharField(max_length=300, blank=True)
     
 
@@ -83,13 +88,20 @@ class Button(models.Model):
 
 # Modelo de configuracion de servicios de consulta SQL
 class SQLQuery(models.Model):
+    themes = (
+        ('generic', 'Generico'),
+        ('directory', 'Directorio')
+    )
+
     service = models.OneToOneField(Service, primary_key=True, on_delete="CASCADE",
                                     limit_choices_to={'kind': 'query'},
                                     related_name="query", related_query_name="query")
-    connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
-    type_name = models.CharField(max_length=50, unique=True)
-    query_sql = models.CharField(max_length=300)
+    connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True)
+    type_name = models.CharField(max_length=50, unique=True, blank=True)
+    query_sql = models.CharField(max_length=300, blank=True)
+    theme = models.CharField(choices=themes, max_length=20, blank=True)
     description_fields = models.CharField(max_length=300, blank=True)
+
 
     class Meta:
         verbose_name = "Query"

@@ -115,16 +115,10 @@ class LocationDeleteView(GetUrlMixin, DeleteView):
 
 # Consulta SQL
 
-class QueryCreateView(CreateView):
+class QueryUpdateView(UpdateView):
     model = SQLQuery
     form_class = QueryForm
     template_name = "Services/query_configure.html"
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.service = Service.objects.get(id=self.kwargs["pk"])
-        self.object.save()
-        return super(QueryCreateView, self).form_valid(form)
 
 
 def get_fields_service(request):

@@ -24,7 +24,7 @@ urlpatterns = [
     path('service/location/<int:pk>/delete', LocationDeleteView.as_view(), name='location-delete'),
 
     # Consulta SQL
-    path('service/query/<int:pk>/configure', QueryCreateView.as_view(), name='query-configure'),
+    path('service/query/<int:pk>/configure', QueryUpdateView.as_view(), name='query-configure'),
     path(
         'service/query/fields',
         get_fields_service,

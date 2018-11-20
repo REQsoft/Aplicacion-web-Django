@@ -3,6 +3,7 @@ from graphene_django.types import DjangoObjectType
 from .models import *
 from django.contrib import auth
 from global_.manager_connection import ManagerConnection
+from .schema3 import Query
 
 class LocationType(DjangoObjectType):
     class Meta:
@@ -28,9 +29,17 @@ class OfficeType(graphene.ObjectType):
 
 
 class ServiceType(graphene.ObjectType):
+    id = graphene.Int()
     title = graphene.String()
     icon = graphene.String()
+    kind = graphene.String()
     description = graphene.String()
+
+    def resolve_id(self, info, **kwargs):
+        return self.id
+    
+    def resolve_kind(self, info, **kwargs):
+        return self.kind
 
     def resolve_title(self, info, **kwargs):
         return self.title
@@ -114,11 +123,21 @@ class ContainerType(graphene.ObjectType):
 
 
 
-class Query(graphene.AbstractType):
+class Query(graphene.AbstractType, Query):
     containers = graphene.List(ContainerType, name=graphene.String())
+    directory = graphene.List(OfficeType, id=graphene.Int(required=True))
 
     def resolve_containers(self, info, **kwargs):
         name = kwargs.get('name')
         if name is not None:
             return [Container.objects.get(name=name)]
+        return 
         return Container.objects.all()
+
+    def resolve_direcotry(self, info, **kwargs):
+        id = kwargs.get('id')
+        service = Service.objects.get(id=id)
+        if service.data == "sql":
+            return service.sql
+        if service.data == "manual":
+            return Office.objects.filter(service=service)
