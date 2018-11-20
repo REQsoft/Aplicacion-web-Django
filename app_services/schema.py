@@ -70,11 +70,14 @@ class WidgetType(graphene.ObjectType):
         return self.description
     
     def resolve_services(self, info, **kwargs):
-        if self.ofType == 'menu':
-            return self.menus.services.all()
+        try:
+            if self.ofType == 'menu':
+                return self.menus.services.all()
 
-        if self.ofType == 'button':
-            return [self.button.service]
+            if self.ofType == 'button':
+                return [self.button.service]
+        except:
+            return []
 
 def check_user_group(group, username):
     data_connection = group.connection.get_data_connection()
@@ -94,7 +97,7 @@ class ContainerType(graphene.ObjectType):
     def resolve_widgets(self, info, **kwargs):
         user = info.context.user
         widgets = []
-        
+
         if str(user) == 'AnonymousUser':
             return self.widget_set.filter(groups=None)
             
