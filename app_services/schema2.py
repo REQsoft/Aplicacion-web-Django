@@ -145,9 +145,10 @@ class Query(graphene.ObjectType):
         return SQLQuery.objects.all()
 
     def resolve_user(self, info, **kwargs):
-        '''token = kwargs.get('token')
+        """token = kwargs.get('token')
         from django.contrib import auth
         user = auth.authenticate(request=info.context, token=token)
-        print(user)'''
+        print(user)"""
         return info.context.user
+
 

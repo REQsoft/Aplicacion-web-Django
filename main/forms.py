@@ -10,32 +10,22 @@ class AuthenticationForm(forms.ModelForm):
         model = Authentication 
 
         fields = [
-            'name',
             'connection',
             'sql_auth',
             'description'
         ]
 
         labels = {
-            'name':'Nombre',
             'connection':'Conexción a base de datos',
             'sql_auth':'Consulta de autenticacion',
-            'description':'Descripción'
-            
+            'description':'Descripción'            
         }
-
-        error_messages = {
-            'name': {
-                'unique':"El nombre del grupo ya existe.",
-            },
-        }
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control','required':'required'})
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
 class GroupForm(forms.ModelForm):
@@ -46,14 +36,14 @@ class GroupForm(forms.ModelForm):
         model = Group 
 
         fields = [
+            'connection',
             'name',
-            'authentication',
             'sql_get_user',
         ]
 
         labels = {
+            'connection':'Conexion a base de datos',
             'name':'Nombre',
-            'authentication':'Autenticación',
             'sql_get_user':'Consulta de busqueda',
             
         }

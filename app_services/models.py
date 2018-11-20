@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from global_.manager_connection import ManagerConnection
+from main.models import Group
 from app_connection.models import Connection
 import ast
 
@@ -52,6 +53,7 @@ class Widget(models.Model):
     state = models.BooleanField(default=False)
     description = models.CharField(max_length=300, blank=True)
     container = models.ForeignKey(Container, on_delete="PROTECTED")
+    groups = models.ManyToManyField(Group, blank=True)
 
 
     class Meta:

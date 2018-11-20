@@ -36,12 +36,11 @@ def get_user_by_payload(payload):
 def check_user(username, password):
     auth = Authentication.objects.all()[0]
     data_connection = auth.connection.get_data_connection()
-    data_connection.update({"dbname": auth.connection.dbname})
     conn = ManagerConnection(**data_connection)
-    data = conn.managerSQL(auth.sql_auth % (username, password))
-    if data is not None:
-        return True
-    return False
+    data = conn.managerSQL(auth.sql_auth, input={'username':username, 'password':password})
+    if data is None or len(data) == 0:
+        return False
+    return True
 
 
 class CustomBackend(object):

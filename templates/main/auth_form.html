@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %} {% load static %} {% block content %}
 <div class="box box-info">
     <div class="box-header with-border">
-        <h3 class="box-title">Nueva autenticación</h3>
+        <h3 class="box-title">Autenticación</h3>
     </div>
     <div class="box-body">
         <div id="div_form">
@@ -16,14 +16,6 @@
                     {% csrf_token %}
                     <tr>
                         <td width="25%">
-                            <span class="input-group-addon label-info form-control">Nombre</span>
-                        </td>
-                        <td>
-                            {{ form.name }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
                             <span class="input-group-addon label-info form-control">Conexión</span>
                         </td>
                         <td>

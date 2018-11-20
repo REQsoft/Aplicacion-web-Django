@@ -24,10 +24,15 @@ def base_main(request):
 
 
 
-class AuthenticationCreateView(CreateView):
+class AuthenticationUpdateView(UpdateView):
     model = Authentication
     form_class = AuthenticationForm
     template_name = "main/auth_form.html"
+
+
+class GroupListView(ListView):
+    model = Group
+    template_name = "main/group_list.html"
 
 
 class GroupCreateView(CreateView):

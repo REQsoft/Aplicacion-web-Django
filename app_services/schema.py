@@ -2,6 +2,7 @@ import graphene
 from graphene_django.types import DjangoObjectType
 from .models import *
 from django.contrib import auth
+from global_.manager_connection import ManagerConnection
 
 class LocationType(DjangoObjectType):
     class Meta:
@@ -75,6 +76,14 @@ class WidgetType(graphene.ObjectType):
         if self.ofType == 'button':
             return [self.button.service]
 
+def check_user_group(group, username):
+    data_connection = group.connection.get_data_connection()
+    conn = ManagerConnection(**data_connection)
+    data = conn.managerSQL(group.sql_get_user, input={'username':username})
+    if data is None or len(data) == 0:
+        return False
+    return True
+
 class ContainerType(graphene.ObjectType):
     name = graphene.String()
     widgets = graphene.List(WidgetType)
@@ -83,7 +92,23 @@ class ContainerType(graphene.ObjectType):
         return self.name
     
     def resolve_widgets(self, info, **kwargs):
-        return self.widget_set.all()
+        user = info.context.user
+        widgets = []
+        
+        if str(user) == 'AnonymousUser':
+            return self.widget_set.filter(groups=None)
+            
+        for widget in self.widget_set.all():
+            groups = widget.groups.all()
+            if len(groups) == 0:
+                widgets.append(widget)
+            else:
+                for group in groups:
+                    if check_user_group(group, user):
+                        widgets.append(widget)
+                        break           
+        return widgets
+
 
 
 class Query(graphene.AbstractType):

@@ -16,18 +16,18 @@
                     {% csrf_token %}
                     <tr>
                         <td width="25%">
-                            <span class="input-group-addon label-info form-control">Nombre del grupo</span>
+                            <span class="input-group-addon label-info form-control">{{ form.connection.label }}</span>
                         </td>
                         <td>
-                            {{ form.name }}
+                            {{ form.connection }}
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <span class="input-group-addon label-info form-control">Autenticación</span>
+                            <span class="input-group-addon label-info form-control">Nombre del grupo</span>
                         </td>
                         <td>
-                            {{ form.authentication }}
+                            {{ form.name }}
                         </td>
                     </tr>
                     <tr>

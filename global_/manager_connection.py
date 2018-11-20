@@ -2,7 +2,6 @@ import psycopg2, psycopg2.extras
 import pymysql
 import cx_Oracle
 
-
 class ManagerConnection:
     # Constructor
     def __init__(self, manager_db, user, passwd, port, host, dbname=None):
@@ -95,26 +94,26 @@ class ManagerConnection:
         return None
 
     # Ejecuta consultas para una conexion
-    def managerSQL(self, query):
+    def managerSQL(self, query, input=None):
         if self.manager_db == "mysql":
             if self.check_connection():
                 try:
                     conn = pymysql.connect(**self.config_connection)
                     cursor = conn.cursor(pymysql.cursors.DictCursor)
-                    cursor.execute(query)
+                    cursor.execute(query, input)
                     data = cursor.fetchall()
                     conn.close()
                     return data
                 except:
-                    pass
-            return None
+                    return None
 
         if self.manager_db == "postgresql":
             try:
                 conn = psycopg2.connect(**self.config_connection)
                 cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-                cursor.execute(query)
+                cursor.execute(query, input)
                 data = cursor.fetchall()
+                print(cursor.query)
                 conn.close()
                 return data
             except:
@@ -157,4 +156,3 @@ class ManagerConnection:
         cursor.close()
         return cursor.fetchall()
 
-    

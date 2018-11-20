@@ -1,11 +1,12 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import User
 from app_connection.models import Connection
 
 class Authentication(models.Model):
-    name = models.CharField(max_length=20, unique=True)
-    connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
-    sql_auth = models.TextField()
+    name = models.SlugField(primary_key=True)
+    connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True, default=None, null=True)
+    sql_auth = models.TextField(blank=True)
     description = models.TextField(blank=True)
 
     class Meta:
@@ -20,8 +21,8 @@ class Authentication(models.Model):
 
 
 class Group(models.Model):
+    connection = models.ForeignKey(Connection, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=100, unique=True)
-    authentication = models.ForeignKey(Authentication, on_delete=models.CASCADE)
     sql_get_user = models.TextField(blank=True)
 
     class Meta:
