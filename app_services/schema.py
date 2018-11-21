@@ -147,18 +147,9 @@ class ContainerType(graphene.ObjectType):
 
 class Query(graphene.ObjectType):
     containers = graphene.List(ContainerType, name=graphene.String())
-    directory = graphene.List(OfficeType, id=graphene.Int(required=True))
 
     def resolve_containers(self, info, **kwargs):
         name = kwargs.get('name')
         if name is not None:
             return [Container.objects.get(name=name)] 
         return Container.objects.all()
-
-    def resolve_direcotry(self, info, **kwargs):
-        id = kwargs.get('id')
-        service = Service.objects.get(id=id)
-        if service.data == "sql":
-            return service.sql
-        if service.data == "manual":
-            return Office.objects.filter(service=service)
