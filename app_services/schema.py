@@ -54,9 +54,9 @@ class ServiceType(graphene.ObjectType):
 class WidgetType(graphene.ObjectType):
     id = graphene.Int()
     ofType = graphene.String()
+    state = graphene.Boolean()
     title = graphene.String()
     icon = graphene.String()
-    state = graphene.Boolean()
     description = graphene.String()
     services = graphene.List(ServiceType)
 
@@ -66,22 +66,44 @@ class WidgetType(graphene.ObjectType):
     def resolve_ofType(self, info, **kwargs):
         return self.ofType
     
-    def resolve_title(self, info, **kwargs):
-        return self.title
-    
-    def resolve_icon(self, info, **kwargs):
-        return self.icon.image.url
-    
     def resolve_state(self, info, **kwargs):
         return self.state
     
+    def resolve_title(self, info, **kwargs):
+        try:
+            if self.ofType == 'menu':
+                return self.menu.title
+
+            if self.ofType == 'button':
+                return self.button.service.title
+        except:
+            return None
+    
+    def resolve_icon(self, info, **kwargs):
+        try:
+            if self.ofType == 'menu':
+                return self.menu.icon
+
+            if self.ofType == 'button':
+                return self.button.service.icon
+        except:
+            return None
+    
     def resolve_description(self, info, **kwargs):
-        return self.description
+        try:
+            if self.ofType == 'menu':
+                return self.menu.description
+
+            if self.ofType == 'button':
+                return self.button.service.description
+        except:
+            return None
+
     
     def resolve_services(self, info, **kwargs):
         try:
             if self.ofType == 'menu':
-                return self.menus.services.all()
+                return self.menu.services.all()
 
             if self.ofType == 'button':
                 return [self.button.service]
@@ -98,7 +120,7 @@ def check_user_group(group, username):
 
 class ContainerType(graphene.ObjectType):
     name = graphene.String()
-    widgets = graphene.List(WidgetType)
+    widgets = graphene.List(WidgetType, id=graphene.Int())
 
     def resolve_name(self, info, **kwargs):
         return self.name
@@ -123,15 +145,14 @@ class ContainerType(graphene.ObjectType):
 
 
 
-class Query(graphene.AbstractType, Query):
+class Query(graphene.ObjectType):
     containers = graphene.List(ContainerType, name=graphene.String())
     directory = graphene.List(OfficeType, id=graphene.Int(required=True))
 
     def resolve_containers(self, info, **kwargs):
         name = kwargs.get('name')
         if name is not None:
-            return [Container.objects.get(name=name)]
-        return 
+            return [Container.objects.get(name=name)] 
         return Container.objects.all()
 
     def resolve_direcotry(self, info, **kwargs):

@@ -23,7 +23,7 @@ class Kind(models.Model):
 # Modelo principal de servicios.
 class Service(models.Model):
     types = (
-        ('query', 'Generico'),
+        ('query', 'Consulta sql'),
         ('directory', 'Directorio')
     )
 
@@ -53,13 +53,9 @@ class Widget(models.Model):
     )
 
     ofType = models.CharField(choices=widgetsType, max_length=20)
-    title = models.CharField(max_length=100, unique=True)
-    icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     state = models.BooleanField(default=False)
-    description = models.CharField(max_length=300, blank=True)
     container = models.ForeignKey(Container, on_delete="PROTECTED")
     groups = models.ManyToManyField(Group, blank=True)
-
 
     class Meta:
         """Meta definition for Widget."""
@@ -68,15 +64,18 @@ class Widget(models.Model):
         verbose_name_plural = 'Widgets'
 
     def __str__(self):
-        return self.title
+        return str(self.id)
 
 # Modelos de widgets para mostrar los servicios en la app movil
 class Menu(models.Model):
-    widget = models.OneToOneField(Widget, on_delete=models.CASCADE, limit_choices_to={'ofType':'menu'}, related_name='menus')
+    widget = models.OneToOneField(Widget, on_delete=models.CASCADE, limit_choices_to={'ofType':'menu'})
+    title = models.CharField(max_length=100, unique=True)
+    icon = models.ForeignKey(Icon, on_delete="PROTECTED", default=None)
+    description = models.CharField(max_length=300, blank=True)
     services = models.ManyToManyField(Service)
     
     def __str__(self):
-        return self.widget.title
+        return self.title
 
 
 class Button(models.Model):
@@ -84,7 +83,7 @@ class Button(models.Model):
     service = models.OneToOneField(Service, on_delete=models.CASCADE)
         
     def __str__(self):
-        return self.widget.title    
+        return self.service.title    
 
 # Modelo de configuracion de servicios de consulta SQL
 class SQLQuery(models.Model):
