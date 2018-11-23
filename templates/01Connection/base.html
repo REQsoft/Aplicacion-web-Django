@@ -1,0 +1,95 @@
+{% extends 'adminlte/base.html' %}
+
+{% load staticfiles %}
+
+{% block page_name %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+        aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Conexiones</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+        <li><a href="{% url 'create-connection' %}">Agregar</a></li>
+        <li><a href="{% url 'list-connections' %}">Listar</a></li>
+        <li><a href="{% url 'test-connection' %}">Pruebas</a></li>
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+{% endblock %}
+
+
+{% block content %}
+<!-- Info boxes -->
+<div class="row">
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <span class="info-box-icon bg-aqua"><i class="fa fa-database"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">CPU Traffic</span>
+        <span class="info-box-number">90<small>%</small></span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+  </div>
+  <!-- /.col -->
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">Likes</span>
+        <span class="info-box-number">41,410</span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+  </div>
+  <!-- /.col -->
+
+  <!-- fix for small devices only -->
+  <div class="clearfix visible-sm-block"></div>
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">Sales</span>
+        <span class="info-box-number">760</span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+  </div>
+  <!-- /.col -->
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">New Members</span>
+        <span class="info-box-number">2,000</span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+  </div>
+  <!-- /.col -->
+</div>
+{% endblock %}

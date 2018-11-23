@@ -1,0 +1,35 @@
+{% extends '01Connection/base.html' %} {% load static %} {% block content %}
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">Probar conexión</h3>
+    </div>
+    <div class="box-body">
+        <form id="form_test">
+            {% csrf_token %}
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <select name="connection" class="form-control" id="select_connection" required>
+                        <option value="" selected disabled>Seleccione una conexion</option>
+                        {% if object_list %} {% for connection in object_list %}
+                        <option value="{{ connection.id }}">{{ connection.connection_name }}</option>
+                        {% endfor %} {% endif %}
+                    </select>
+                    <div id="info_connection"></div>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="comment">Escriba la(s) consulta(s) SQL que desea ejecutar:</label>
+                        <textarea class="form-control" rows="5" name="query"></textarea>
+                    </div>
+                    <input type="hidden" id="url" value="{% url 'run-test' %}">
+                    <button type="submit" class="btn btn-info">
+                        <span class="glyphicon glyphicon-delete" aria-hidden="true"></span> Continuar
+                    </button>
+                </div>
+                <div id="result_query"></div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{% static 'js/codigo.js' %}"></script> {% endblock %}

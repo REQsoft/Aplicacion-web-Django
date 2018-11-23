@@ -1,0 +1,16 @@
+{% extends 'Services/base.html' %} {% load static %} {% block content %}
+<div class="box box-info">
+    <a type="button" class="btn btn-default" href="{% url 'service-list' %}"> <!---->
+        <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Atras
+    </a> 
+
+    <div class="box-header with-border">
+        <h3 class="box-title">Consulta SQL</h3><br>
+    </div>
+
+    {{ object_list.query }}
+    <a type="button" class="btn btn-primary" href=#> <!---->
+        <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
+    </a>
+</div>
+{% endblock %}

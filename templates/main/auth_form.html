@@ -1,0 +1,62 @@
+{% extends 'main/base.html' %} {% load static %} {% block content %}
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">Autenticación</h3>
+    </div>
+    <div class="box-body">
+        <div id="div_form">
+            <table class="table">
+                {% if form.name.errors %}
+                <div id="alert_error_connection_name" class="alert alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong>{{ form.name.errors }}</strong>
+                </div>
+                {% endif %}
+                <form method="post" id="form_connection">
+                    {% csrf_token %}
+                    <tr>
+                        <td width="25%">
+                            <span class="input-group-addon label-info form-control">Conexión</span>
+                        </td>
+                        <td>
+                            {{ form.connection }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="input-group-addon label-info form-control">Consulta sql de autenticación</span>
+                        </td>
+                        <td>
+                            {{ form.sql_auth }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div id="button_save">
+                                <button type="submit" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </form>
+            </table>
+            <div id="loader" hidden>
+                <center>
+                    <img src="{% static 'images/loader.gif' %}" width="40px" height="40px">
+                </center>
+            </div>
+            <div id="alert_success" class="alert alert-success" hidden>
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>La conexion es correcta! </strong>
+            </div>
+            <div id="alert_error" class="alert alert-danger" hidden>
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>ERROR! </strong>
+                No se ha establecido la conexion.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

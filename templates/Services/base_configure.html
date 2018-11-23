@@ -1,0 +1,45 @@
+{% extends 'Services/base.html' %} {% load static %} {% block content %}
+
+<div class="modal fade" id="modal">
+    <div class="modal-dialog" role="document">
+        
+    </div>
+</div>
+<div id="container" class="box box-info">
+    <a type="button" class="btn btn-default btn-lg" title="Atras" href="{% url 'service-list' %}">
+        <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
+    </a> 
+    
+    <div class="box-header with-border">
+        <h3 class="box-title">{{ service.title }}</h3><br>
+    </div>
+
+    <a type="button" class="btn btn-primary btn-sm" title="Agregar" data-toggle="modal" 
+       data-target="#modal" onclick="return get_url('{% url 'add-element' service.id %}')">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </a>
+
+    {% block table %}
+    
+    {% endblock %}
+</div>
+<script>
+function get_url(url){   
+    $('#modal').on('show.bs.modal', function(event){
+        var modal = $(this);
+        $.ajax({
+            url: url,
+            context: document.body
+        }).done(function(response) {
+            modal.html(response);
+        });
+    });
+    var originalModal = $('#modal').clone();
+    $('#modal').on('hidden.bs.modal', function(event){
+        $('#modal').remove();
+        var myClone = originalModal.clone();
+        $('#container').append(myClone);
+    });
+}
+</script>
+{% endblock %}

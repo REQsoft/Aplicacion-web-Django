@@ -1,0 +1,73 @@
+{% extends 'Services/base.html' %} {% load static %} {% block content %}
+<div class="modal fade" id="modal">
+    <div class="modal-dialog" role="document">
+        
+    </div>
+</div>
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">Lista de servicios</h3><br>
+    </div>
+    <a type="button" class="btn btn-primary btn-sm" title="Agregar" data-toggle="modal" 
+       data-target="#modal" onclick="return get_url('{% url 'service-create' %}')">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </a>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Icono</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if object_list %} {% for service in object_list %}
+            <tr>
+                <td>
+                    <img src="{{ service.icon.image.url }}" height="42" width="42" alt="{{ service.icon.title }}">
+                </td>
+                <td>
+                    {{ service.title }}
+                </td>
+                <td>
+                    {{ service.kind }}
+                </td>
+                <td>
+                    <a type="button" class="btn btn-info" title="Configurar" href="{% url 'service-configure' service.id %}"> 
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    </a>
+                    <a type="button" class="btn btn-primary" title="Editar" href="{% url 'service-edit' service.id %}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </a> 
+                    <button type="button" class="btn btn-danger" title="Eliminar" href="{% url 'service-delete' service.id %}"> 
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %} {% else %}
+            <h1>No hay servicios</h1>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+<script>
+    function get_url(url){   
+        $('#modal').on('show.bs.modal', function(event){
+            var modal = $(this);
+            $.ajax({
+                url: url,
+                context: document.body
+            }).done(function(response) {
+                modal.html(response);
+            });
+        });
+        var originalModal = $('#modal').clone();
+        $('#modal').on('hidden.bs.modal', function(event){
+            $('#modal').remove();
+            var myClone = originalModal.clone();
+            $('#container').append(myClone);
+        });
+    }
+</script>
+{% endblock %}

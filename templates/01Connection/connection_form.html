@@ -1,0 +1,113 @@
+{% extends '01Connection/base.html' %} {% load static %} {% block content %}
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">Nueva conexion</h3>
+    </div>
+    <div class="box-body">
+        <div id="div_form">
+            <table class="table">
+                {% if form.connection_name.errors %}
+                <div id="alert_error_connection_name" class="alert alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong>{{ form.connection_name.errors }}</strong>
+                </div>
+                {% endif %}
+                <form method="post" id="form_connection">
+                    {% csrf_token %}
+                    <tr>
+                        <td width="25%">
+                            <span class="input-group-addon label-info form-control">Nombre de la conexion</span>
+                        </td>
+                        <td>
+                            {{ form.connection_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="input-group-addon label-info form-control">Gestor de base datos</span>
+                        </td>
+                        <td>
+                            {{ form.manager_db }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="input-group-addon label-info form-control">Puerto</span>
+                        </td>
+                        <td>
+                            {{ form.port }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span class="input-group-addon label-info form-control" id="sizing-addon1">IP Servidor</span>
+                        </td>
+                        <td>
+                            {{ form.host }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span class="input-group-addon label-info form-control" id="sizing-addon1">Usuario</span>
+                        </td>
+                        <td>
+                            {{ form.user }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span class="input-group-addon label-info form-control" id="sizing-addon1">Contraseña</span>
+                        </td>
+                        <td>
+                            {{ form.passwd }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if form.dbname.value %}
+                            <select name="dbname" class="form-control" id="id_dbname" required>
+                                <option value="{{ form.dbname.value }}" selected>{{ form.dbname.value }}</option>
+                            </select>
+                            {% else %}
+                            <select name="dbname" class="form-control" id="id_dbname" required>
+                                <option value="" selected disabled>Selecione una base de datos</option>
+                            </select>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div id="button_list">
+                                <input type="hidden" id="url" value="{% url 'list-db' %}">
+                                <button type="button" id="list_db" class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Listar bases de datos
+                                </button>
+                            </div>
+                            <div id="button_save" hidden>
+                                <button type="submit" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </form>
+            </table>
+            <div id="loader" hidden>
+                <center>
+                    <img src="{% static 'images/loader.gif' %}" width="40px" height="40px">
+                </center>
+            </div>
+            <div id="alert_success" class="alert alert-success" hidden>
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>La conexion es correcta! </strong>
+            </div>
+            <div id="alert_error" class="alert alert-danger" hidden>
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>ERROR! </strong>
+                No se ha establecido la conexion.
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/codigo.js' %}"></script> {% endblock %}
