@@ -3,7 +3,7 @@ from graphene_django.types import DjangoObjectType
 from .models import *
 from django.contrib import auth
 from global_.manager_connection import ManagerConnection
-from .schema3 import Query
+from . import schema3
 
 class LocationType(DjangoObjectType):
     class Meta:
@@ -145,7 +145,7 @@ class ContainerType(graphene.ObjectType):
 
 
 
-class Query(graphene.ObjectType):
+class Query(schema3.Query, graphene.ObjectType):
     containers = graphene.List(ContainerType, name=graphene.String())
 
     def resolve_containers(self, info, **kwargs):

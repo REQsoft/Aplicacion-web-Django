@@ -114,7 +114,6 @@ class LocationDeleteView(GetUrlMixin, DeleteView):
 
 
 # Consulta SQL
-
 class QueryUpdateView(UpdateView):
     model = SQLQuery
     form_class = QueryForm

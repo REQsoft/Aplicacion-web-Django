@@ -1,17 +1,18 @@
 import graphene
-from .models import SQLQuery, Service
+from .models import Service, SQLQuery
 from .resolve import *
 from promise import Promise
 from promise.dataloader import DataLoader
 from graphql_jwt.decorators import login_required
 
-queries = SQLQuery.objects.all()
-dict_types = {}
-build_clsattr_GenericType = {}
+sql_queries = SQLQuery.objects.all()
 
-def build_type(service):
+#Funcion que construye una clase con los campos de una consulta sql como atributos y crea
+#sus respectivos resolvedores
+
+def build_type_data_service(query):
     clsattr_service = {}
-    fields_service = service.get_fields_service()
+    fields_service = query.get_fields_service()
 
     if fields_service is not None:
         for field in fields_service:
@@ -20,70 +21,69 @@ def build_type(service):
             clsattr_service.update(
                 {"resolve_" + field: lambda self, info, **kwargs: self[info.field_name]}
             )
-        """
-        links = service.get_links()
-        if links is not None:
-            for key, value in links.items():
-                linked_service = Service.objects.get(service_name=key)
-                clsattr_service.update(
-                    {
-                        key: graphene.List(
-                            build_service(linked_service),
-                            dict.fromkeys(
-                                linked_service.get_fields_service(), graphene.String()
-                            ),
-                        )
-                    }
-                )
 
-                attr = {}
-                exec(resolve_service_loader(key, value), globals(), attr)
-                clsattr_service.update(attr)
-
-                build_loader(linked_service)
-                """
-
-    return type(service.type_name, (graphene.ObjectType,), clsattr_service)
+    return type(query.type_name+"Data", (graphene.ObjectType,), clsattr_service)
 
 
-def build_clsattr_SQLServicesType():
-    for query in queries:
-        if query.is_active():
-            try:
-                build_clsattr_GenericType.update(
-                    {query.type_name: graphene.Field(build_type(query))}
-                )
+def build_dict_fields(service):
+    clsattr_service = {}
 
-                build_clsattr_GenericType.update(
-                    {
-                        "resolve_"
-                        + query.type_name: lambda self, info, **kwargs: self.get(type_name=info.field_name).get_list_search(kwargs)
-                    }
-                )
-            except:
-                print("Algo salio mal")
+    clsattr_service.update({"theme": graphene.String()})
+    clsattr_service.update(
+        {
+            "data": graphene.List(
+                build_type_data_service(service),
+                dict.fromkeys(service.get_fields_service(), graphene.String()),
+            )
+        }
+    )
+
+    clsattr_service.update(
+        {"resolve_theme": lambda self, info, **kwargs: self.service.title}
+    )
+    clsattr_service.update(
+        {"resolve_data": lambda self, info, **kwargs: self.get_list_search(kwargs)}
+    )
+
+    return clsattr_service
 
 
-build_clsattr_SQLServicesType()
+def build_clsattr_sqltype():
+    dict_clsattr_sqltype = {}
+
+    for query in sql_queries:
+        if query.is_online():
+            dict_clsattr_sqltype.update(
+                {
+                    query.type_name: 
+                    graphene.Field(type(
+                        query.type_name,
+                        (graphene.ObjectType,),
+                        build_dict_fields(query),
+                    ))
+                }
+            )
+
+            dict_clsattr_sqltype.update(
+                {
+                    "resolve_" + query.type_name: 
+                    lambda self, info, **kwargs:
+                    self.get(type_name=info.field_name)
+                }
+            )
+    return dict_clsattr_sqltype
 
 
-class Query(graphene.ObjectType):
-    if len(queries) != 0:
-        SQLServices = graphene.Field(
-            type("SQLServices", (graphene.ObjectType,), build_clsattr_GenericType)
+if len(sql_queries) > 0:
+    class Query(graphene.ObjectType):
+        sql = graphene.Field(
+            type("SqlType", (graphene.ObjectType,), build_clsattr_sqltype())
         )
 
-    user = graphene.String(token=graphene.String())
+        def resolve_sql(self, info, **kwargs):
+            return sql_queries
+else:
 
-    def resolve_SQLServices(self, info, **kwargs):
-        print(info.context.user)
-        return SQLQuery.objects.all()
-
-    def resolve_user(self, info, **kwargs):
-        """token = kwargs.get('token')
-        from django.contrib import auth
-        user = auth.authenticate(request=info.context, token=token)
-        print(user)"""
-        return info.context.user
-
+    class Query(graphene.ObjectType):
+        pass
 
