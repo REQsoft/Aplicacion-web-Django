@@ -3,6 +3,7 @@ from django.urls import reverse
 from global_.manager_connection import ManagerConnection
 from main.models import Group
 from app_connection.models import Connection
+from django.template.defaultfilters import slugify
 import ast
 
 class Icon(models.Model):
@@ -24,7 +25,9 @@ class Kind(models.Model):
 class Service(models.Model):
     types = (
         ('query', 'Consulta sql'),
-        ('directory', 'Directorio')
+        ('directory', 'Directorio'),
+        ('map', 'Mapa'),
+        ('catalog', 'Catalogo'),
     )
 
     title = models.CharField(max_length=100, unique=True)
