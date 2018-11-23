@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from global_.manager_connection import ManagerConnection
 from main.models import Group
-from app_connection.models import Connection
+from connections.models import Connection
 from django.template.defaultfilters import slugify
 import ast
 

@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-from app_connection.models import Connection
+from connections.models import Connection
 
 class Authentication(models.Model):
     name = models.SlugField(primary_key=True)

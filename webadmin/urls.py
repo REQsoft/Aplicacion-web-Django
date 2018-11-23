@@ -22,8 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
-    path('', include('app_connection.urls')),
-    path('', include('app_services.urls')),
+    path('', include('connections.urls')),
+    path('', include('services.urls')),
     path('graphql', GraphQLView.as_view(graphiql=True)),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
