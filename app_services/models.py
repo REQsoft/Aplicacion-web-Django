@@ -44,11 +44,12 @@ class Service(models.Model):
     
     def save(self):
         super(Service, self).save()
-        query_sql = SQLQuery(
-            service=self,
-            type_name = 'S' + str(self.id)
-        )
-        query_sql.save()
+        if self.kind == 'query':
+            query_sql = SQLQuery(
+                service=self,
+                type_name = 'S' + str(self.id)
+            )
+            query_sql.save()
 
 
 # Modelo de configuracion de servicios de consulta SQL
@@ -77,6 +78,8 @@ class SQLQuery(models.Model):
         return reverse("base-service")
 
     def is_online(self):
+        if self.connection is None:
+            return False
         connection = ManagerConnection(**self.connection.get_data_connection())
         return connection.check_connection()
 
@@ -114,8 +117,6 @@ class SQLQuery(models.Model):
                     )
                     field.save()
                 return
-        
-        SQLQuery.field.all().delete()
         
                 
 
