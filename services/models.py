@@ -117,6 +117,8 @@ class SQLQuery(models.Model):
                     )
                     field.save()
                 return
+                
+        Field.objects.filter(sql_query=self).delete()
         
                 
 

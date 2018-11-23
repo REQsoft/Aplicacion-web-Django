@@ -111,7 +111,7 @@ def build_type(service):
 
 def build_clsattr_SQLServicesType():
     for query in queries:
-        if query.is_active():
+        if query.is_online():
             try:
                 dict_clsattr_SQLServicesType.update(
                     {query.type_name: graphene.Field(build_service(query))}

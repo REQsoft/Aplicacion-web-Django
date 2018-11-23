@@ -12,15 +12,14 @@ sql_queries = SQLQuery.objects.all()
 
 def build_type_data_service(query):
     clsattr_service = {}
-    fields_service = query.get_fields_service()
+    fields_service = query.fields.all()
 
-    if fields_service is not None:
-        for field in fields_service:
-            clsattr_service.update({field: graphene.String()})
-            attr = {}
-            clsattr_service.update(
-                {"resolve_" + field: lambda self, info, **kwargs: self[info.field_name]}
-            )
+    for field in fields_service:
+        clsattr_service.update({field.name: graphene.String()})
+        attr = {}
+        clsattr_service.update(
+            {"resolve_" + field.name: lambda self, info, **kwargs: self[info.field_name]}
+        )
 
     return type(query.type_name+"Data", (graphene.ObjectType,), clsattr_service)
 
@@ -39,7 +38,7 @@ def build_dict_fields(service):
     )
 
     clsattr_service.update(
-        {"resolve_theme": lambda self, info, **kwargs: self.service.title}
+        {"resolve_theme": lambda self, info, **kwargs: self.theme}
     )
     clsattr_service.update(
         {"resolve_data": lambda self, info, **kwargs: self.get_list_search(kwargs)}

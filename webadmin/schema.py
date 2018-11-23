@@ -1,6 +1,6 @@
 import graphene
 import graphql_jwt
-from app_services import schema, schema2
+from services import schema, schema2
 
 
 class Query(schema.Query, graphene.ObjectType):
