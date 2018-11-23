@@ -3,6 +3,7 @@ from django.urls import reverse
 from global_.manager_connection import ManagerConnection
 from main.models import Group
 from app_connection.models import Connection
+from django.template.defaultfilters import slugify
 import ast
 
 class Icon(models.Model):
@@ -24,7 +25,9 @@ class Kind(models.Model):
 class Service(models.Model):
     types = (
         ('query', 'Consulta sql'),
-        ('directory', 'Directorio')
+        ('directory', 'Directorio'),
+        ('map', 'Mapa'),
+        ('catalog', 'Catalogo'),
     )
 
     title = models.CharField(max_length=100, unique=True)
@@ -95,12 +98,15 @@ class SQLQuery(models.Model):
     service = models.OneToOneField(Service, primary_key=True, on_delete="CASCADE",
                                     limit_choices_to={'kind': 'query'},
                                     related_name="query", related_query_name="query")
-    connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True)
-    type_name = models.CharField(max_length=50, unique=True, blank=True)
+    connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True, null=True, default=None)
+    type_name = models.CharField(max_length=50, blank=True)
     query_sql = models.CharField(max_length=300, blank=True)
     theme = models.CharField(choices=themes, max_length=20, blank=True)
     description_fields = models.CharField(max_length=300, blank=True)
 
+    def save(self, *args, **kwargs):
+        self.type_name = slugify(self.service.title)
+        super(SQLQuery, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Query"

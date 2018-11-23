@@ -1,84 +1,9 @@
-{% extends 'Services/base.html' %} {% load static %} {% block content %}
-<div class="box box-info">
-    <a type="button" class="btn btn-default" href="{% url 'service-list' %}"> <!---->
-        <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> Atras
-    </a> 
-    <div class="box-header with-border">
-        <h3 class="box-title">Servicio</h3>
-    </div>
-    <div class="box-body">
-        <div id "div_form">
-            <table class="table">
-                {% if form.title.errors %}
-                <div id="alert_error_title" class="alert alert-warning">
-                    <button type="button" class="close" data-dismiss="alert">x</button>
-                    <strong>{{ form.title.errors }}</strong>
-                </div>
-                {% endif %}
-                <form method="post" id="form_service">
-                    {% csrf_token %}
-                    <tr>
-                        <td width="25%">
-                            <span class="input-group-addon label-info form-control">Titulo del Servicio</span>
-                        </td>
-                        <td>
-                            {{ form.title }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control">Icono</span>
-                        </td>
-                        <td>
-                            {{ form.icon }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control">Tipo de servicio</span>
-                        </td>
-                        <td>
-                            {{ form.kind }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control">Permisos</span>
-                        </td>
-                        <td>
-                            {{ form.permits }}
-                        </td>
-                    </tr>
+{% extends 'Services/base_form.html' %} {% load static %} 
 
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control" id="sizing-addon1">Estado</span>
-                        </td>
-                        <td>
-                            {{ form.state }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control">Descripción</span>
-                        </td>
-                        <td>
-                            {{ form.description }}
-                        </td>
-                    </tr>
+{% block config %}
+    <form action="{% url 'service-create' %}" method="post">
+{% endblock %}
 
-                    <tr>
-                        <td>
-                            <div id="button_save">
-                                <button type="submit" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-save"></span> Guardar
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </form>
-            </table>
-        </div>
-    </div>
-</div>
+{% block title %}
+    <h3 class="modal-title">Nuevo Servicio</h3>
 {% endblock %}

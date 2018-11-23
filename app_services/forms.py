@@ -34,7 +34,12 @@ class QueryForm(forms.ModelForm):
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
-        fields = ["title", "kind", "description"]
+        fields = ["title", "icon", "kind", "description"]
+        labels = {"title": "", "description": "", "kind": "Seleccione el tipo de servicio: ", "icon": "Seleccione un icono para el servicio:"}
+        widgets = {
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo'}),
+            'description':forms.Textarea(attrs={'class':'form-control','rows':3,'placeholder':'Descripcion'}),
+        }
         error_messages = {"title": {"unique": "Ya existe un servicio con ese titulo."}}
 
 

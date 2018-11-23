@@ -29,22 +29,27 @@ class GetUrlMixin(object):
 # Servicio
 def service_configure(request,pk):
     service = get_object_or_404(Service, id=pk)
+
+    if(service.kind=='query'):
+        query,state=SQLQuery.objects.get_or_create(service=service)
+        return redirect(reverse('query-configure', kwargs={'pk': query.service.id}))
+
     return render(request, 'Services/'+str(service.kind)+'_configure.html', {'service':service})
 
 def add_element(request,pk):
     service = get_object_or_404(Service, id=pk)
     
-    if(service.kind.id=='catalog'):
+    if(service.kind=='catalog'):
         form = MissingItemForm()
         if request.method == 'POST':
             form = MissingItemForm(request.POST, request.FILES)
 
-    elif(service.kind.id=='directory'):
+    elif(service.kind=='directory'):
         form = OfficeForm()
         if request.method == 'POST':
             form = OfficeForm(request.POST)
 
-    elif(service.kind.id=='map'):
+    elif(service.kind=='map'):
         form = LocationForm()
         if request.method == 'POST':
             form = LocationForm(request.POST)
@@ -58,7 +63,7 @@ def add_element(request,pk):
             post.service = service
             post.save()
             return redirect(reverse('service-configure', kwargs={'pk': service.id}))
-    return render(request, 'Services/'+str(service.kind.id)+'_form.html', {'form':form, 'service':service})
+    return render(request, 'Services/'+str(service.kind)+'_form.html', {'form':form, 'service':service})
 
     
 class ServiceListView(ListView):
@@ -115,7 +120,7 @@ class LocationDeleteView(GetUrlMixin, DeleteView):
 
 # Consulta SQL
 
-class QueryUpdateView(UpdateView):
+class QueryUpdateView(GetUrlMixin, UpdateView):
     model = SQLQuery
     form_class = QueryForm
     template_name = "Services/query_configure.html"

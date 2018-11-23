@@ -19,6 +19,7 @@
                     {% if object %}
                         Actualmente: 
                         <a href="{{ object.photo.url }}">{{ object.photo }}</a><br>
+                        <img src="{{ object.photo.url }}"><br>
                         Modificar:
                     {% endif %}
                     {{ form.photo }}
