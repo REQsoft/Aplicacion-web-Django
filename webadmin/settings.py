@@ -70,7 +70,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 GRAPHQL_JWT = {
-    'JWT_ALLOW_ARGUMENT': True,
+    'JWT_ALLOW_ARGUMENT': False,
 }
 
 ROOT_URLCONF = "webadmin.urls"

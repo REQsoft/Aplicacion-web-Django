@@ -113,6 +113,7 @@ class WidgetType(graphene.ObjectType):
 def check_user_group(group, username):
     data_connection = group.connection.get_data_connection()
     conn = ManagerConnection(**data_connection)
+    print("######################################")
     data = conn.managerSQL(group.sql_get_user, input={'username':username})
     if data is None or len(data) == 0:
         return False
@@ -148,8 +149,46 @@ class ContainerType(graphene.ObjectType):
 class Query(schema3.Query, graphene.ObjectType):
     containers = graphene.List(ContainerType, name=graphene.String())
 
+    directory = graphene.List(OfficeType, service=graphene.Int(required=True))
+
+
     def resolve_containers(self, info, **kwargs):
         name = kwargs.get('name')
         if name is not None:
             return [Container.objects.get(name=name)] 
         return Container.objects.all()
+    
+    def resolve_directory(self, info, **kwargs):
+        user = info.context.user
+        print(user)
+        service_id = kwargs.get('service')
+        try:
+            service = Service.objects.get(id=service_id)
+            widget = None
+            try:
+                button = service.button
+                widget = button.widget  
+            except:
+                pass
+            
+            try:
+                menu = service.menu
+                widget = menu.widget  
+            except:
+                pass
+            
+            if widget is not None:
+                if str(user) == 'AnonymousUser':
+                    if widget.group is None:
+                        return Office.objects.filter(service=service)
+                
+                groups = widget.groups.all()
+                if len(groups) == 0:
+                    return Office.objects.filter(service=service)
+
+                for group in groups:
+                    if check_user_group(group, user):
+                        return Office.objects.filter(service=service)                       
+        except:
+            return []  
+        return []
