@@ -82,10 +82,10 @@ class WidgetType(graphene.ObjectType):
     def resolve_icon(self, info, **kwargs):
         try:
             if self.ofType == 'menu':
-                return self.menu.icon
+                return self.menu.icon.image.url
 
             if self.ofType == 'button':
-                return self.button.service.icon
+                return self.button.service.icon.image.url
         except:
             return None
     
