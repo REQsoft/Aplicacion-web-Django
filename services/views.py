@@ -5,7 +5,9 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.decorators import method_decorator
 from .models import *
 from .forms import *
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.core import serializers
+import json
 
 def base_service(request):
     return render(request, "Services/base.html")
@@ -120,11 +122,46 @@ class LocationDeleteView(GetUrlMixin, DeleteView):
 
 
 # Consulta SQL
+class AjaxableResponseMixin:
+    """
+    Mixin to add AJAX support to a form.
+    Must be used with an object-based FormView (e.g. CreateView)
+    """
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if self.request.is_ajax():
+            print(form.errors)
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
 
-class QueryUpdateView(UpdateView):
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if self.request.is_ajax():
+            fields = []
+            try:
+                queryset = Field.objects.filter(sql_query=self.object)
+            except:
+                pass
+
+            qs_json = serializers.serialize('json', queryset)
+    
+            return HttpResponse(qs_json, content_type='application/json')
+        else:
+            return response
+
+class QueryUpdateView(AjaxableResponseMixin, UpdateView):
     model = SQLQuery
     form_class = QueryForm
     template_name = "Services/query_configure.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(QueryUpdateView, self).get_context_data(**kwargs)
+        try:
+            context['fields'] = Field.objects.filter(sql_query=self.object)
+        except:
+            pass
+        return context
 
 
 def get_fields_service(request):

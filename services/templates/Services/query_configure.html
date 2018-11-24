@@ -57,40 +57,28 @@
             </table>
     </form>
 
-    <form method="POST" id="form_fields" hidden>
+    <div id="fields_type" hidden>
         <div class="row">
                 <div class="col-md-6">
-                    <div class="panel panel-default" id="table_type" hidden>
+                    <div class="panel panel-default">
                         <div class="panel-heading">
                             <center id="name_type"></center>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table">
-                                <tr>
-                                    <td>
-                                        <span class="input-group-addon label-info form-control" id="sizing-addon1">Theme</span>
-                                    </td>
-                                    <td>
-                                        <select class="form-control" name="unique_key" id="id_theme"></select>
-                                    </td>
-                                </tr>
-                            </table>
                         </div>
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>
-                                        Campos de consulta
+                                        Esquema
                                     </th>
                                     <th>
-                                        Nombre de etiqueta
+                                        Etiqueta
                                     </th>
                                     <th>
-                                        Nombre de etiqueta
+                                        Ocultar
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody id="fields_type"></tbody>
+                            <tbody id="fields"></tbody>
                         </table>
                     </div>
                 </div>
@@ -102,7 +90,7 @@
                 </button>
             </div>
         </div>
-    </form>
+    </div>
     <div id="loader" hidden>
         <center>
             <img src="{% static 'images/loader.gif' %}" width="40px" height="40px">

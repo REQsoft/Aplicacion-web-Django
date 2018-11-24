@@ -3,7 +3,7 @@ from graphene_django.types import DjangoObjectType
 from .models import *
 from django.contrib import auth
 from global_.manager_connection import ManagerConnection
-from . import schema3
+from . import schema3 as schema
 
 class LocationType(DjangoObjectType):
     class Meta:
@@ -113,7 +113,6 @@ class WidgetType(graphene.ObjectType):
 def check_user_group(group, username):
     data_connection = group.connection.get_data_connection()
     conn = ManagerConnection(**data_connection)
-    print("######################################")
     data = conn.managerSQL(group.sql_get_user, input={'username':username})
     if data is None or len(data) == 0:
         return False
@@ -146,7 +145,7 @@ class ContainerType(graphene.ObjectType):
 
 
 
-class Query(schema3.Query, graphene.ObjectType):
+class Query(schema.Query, graphene.ObjectType):
     containers = graphene.List(ContainerType, name=graphene.String())
 
     directory = graphene.List(OfficeType, service=graphene.Int(required=True))
