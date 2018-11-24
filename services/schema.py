@@ -9,9 +9,19 @@ class LocationType(DjangoObjectType):
     class Meta:
         model = Location
 
-class MissingItemType(DjangoObjectType):
-    class Meta:
-        model = MissingItem
+class MissingItemType(graphene.ObjectType):
+    title = graphene.String()
+    description = graphene.String()
+    photo = graphene.String()
+
+    def resolve_title(self, info, **kwargs):
+        return self.title
+
+    def resolve_description(self, info, **kwargs):
+        return self.description
+    
+    def resolve_photo(self, info, **kwargs):
+        return self.photo.url
 
 class OfficeType(graphene.ObjectType):
     title = graphene.String()
@@ -150,6 +160,8 @@ class Query(schema3.Query, graphene.ObjectType):
     containers = graphene.List(ContainerType, name=graphene.String())
 
     directory = graphene.List(OfficeType, service=graphene.Int(required=True))
+    map = graphene.List(LocationType, service=graphene.Int(required=True))
+    catalog = graphene.List(MissingItemType, service=graphene.Int(required=True))
 
 
     def resolve_containers(self, info, **kwargs):
@@ -189,6 +201,76 @@ class Query(schema3.Query, graphene.ObjectType):
                 for group in groups:
                     if check_user_group(group, user):
                         return Office.objects.filter(service=service)                       
+        except:
+            return []  
+        return []
+
+    def resolve_map(self, info, **kwargs):
+        user = info.context.user
+        print(user)
+        service_id = kwargs.get('service')
+        try:
+            service = Service.objects.get(id=service_id)
+            widget = None
+            try:
+                button = service.button
+                widget = button.widget  
+            except:
+                pass
+            
+            try:
+                menu = service.menu
+                widget = menu.widget  
+            except:
+                pass
+            
+            if widget is not None:
+                if str(user) == 'AnonymousUser':
+                    if widget.group is None:
+                        return Location.objects.filter(service=service)
+                
+                groups = widget.groups.all()
+                if len(groups) == 0:
+                    return Location.objects.filter(service=service)
+
+                for group in groups:
+                    if check_user_group(group, user):
+                        return Location.objects.filter(service=service)                       
+        except:
+            return []  
+        return []
+
+    def resolve_catalog(self, info, **kwargs):
+        user = info.context.user
+        print(user)
+        service_id = kwargs.get('service')
+        try:
+            service = Service.objects.get(id=service_id)
+            widget = None
+            try:
+                button = service.button
+                widget = button.widget  
+            except:
+                pass
+            
+            try:
+                menu = service.menu
+                widget = menu.widget  
+            except:
+                pass
+            
+            if widget is not None:
+                if str(user) == 'AnonymousUser':
+                    if widget.group is None:
+                        return MissingItem.objects.filter(service=service)
+                
+                groups = widget.groups.all()
+                if len(groups) == 0:
+                    return MissingItem.objects.filter(service=service)
+
+                for group in groups:
+                    if check_user_group(group, user):
+                        return MissingItem.objects.filter(service=service)                       
         except:
             return []  
         return []
