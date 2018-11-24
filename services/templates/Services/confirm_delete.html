@@ -1,14 +1,14 @@
 {% load static %}
 {% block content %}
 <div class="modal-dialog" role="document">
-    {% if object.service.kind.id == 'directory' %}
-    <form action="{% url 'office-delete' object.id %}" method="post">
-    {% elif object.service.kind.id == 'catalog' %}
-    <form action="{% url 'item-delete' object.id %}" enctype="multipart/form-data" method="post">
-    {% elif object.service.kind.id == 'map' %}  
-    <form action="{% url 'location-delete' object.id %}" method="post">
+    {% if object.service.kind == 'directory' %}
+        <form action="{% url 'office-delete' object.id %}" method="post">
+    {% elif object.service.kind == 'catalog' %}
+        <form action="{% url 'item-delete' object.id %}" enctype="multipart/form-data" method="post">
+    {% elif object.service.kind == 'map' %}  
+        <form action="{% url 'location-delete' object.id %}" method="post">
     {% else %} 
-    <form method="post"><h3 class="modal-title">Formulario no implementado!</h3></form>
+        <form action="{% url 'service-delete' object.id %}" method="post">
     {% endif %}
         {% csrf_token %}
         <div class="modal-content">
