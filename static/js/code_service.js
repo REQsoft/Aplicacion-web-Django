@@ -9,6 +9,7 @@ $(document).ready(function () {
                 $("#loader").show();
             },
             success: function (data) {
+                alert(data)
                 $("#loader").hide();
                 $("#button_schema").hide();
                 $("#table_type").show();

@@ -25,10 +25,5 @@ urlpatterns = [
 
     # Consulta SQL
     path('service/query/<int:pk>/configure', QueryUpdateView.as_view(), name='query-configure'),
-    path(
-        'service/query/fields',
-        get_fields_service,
-        name='fields-service'
-    )
-
+    path('service/query/fields', get_fields_service, name='fields-service')
 ]

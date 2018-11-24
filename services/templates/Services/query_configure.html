@@ -1,15 +1,25 @@
 {% extends 'Services/base.html' %} {% load static %} {% block content %}
 <div class="box box-info">
-    <div class="box-header with-border">
-        <h3 class="box-title">Nuevo servicio</h3>
-    </div>
-    <div class="box-body">
-        <form method="post" id="form_service">
+    <form method="post" id="form_service">
+        <div class="box-header with-border">
+            <h3 class="box-title">Configuración del servicio "{{ object.service }}"</h3>
+        </div>
+        <div class="box-body">
+
             <table class="table">
                 {% csrf_token %}
                 <tr>
                     <td width="25%">
-                        <span class="input-group-addon label-info form-control">Seleccione la conexion</span>
+                        <span class="input-group-addon label-info form-control" id="sizing-addon1">{{ form.type_name.label }}</span>
+                    </td>
+                    <td>
+                        {{ form.type_name }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="input-group-addon label-info form-control">{{ form.connection.label }}</span>
                     </td>
                     <td>
                         {{ form.connection }}
@@ -27,29 +37,28 @@
 
                 <tr>
                     <td>
-                        <span class="input-group-addon label-info form-control" id="sizing-addon1">Nombre del tipo</span>
+                        <span class="input-group-addon label-info form-control" id="sizing-addon1">{{ form.theme.label }}</span>
                     </td>
                     <td>
-                        {{ form.type_name }}
+                        {{ form.theme }}
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div id="button_schema">
-                            <button type="button" class="btn btn-warning">
-                                <input type="hidden" id="url" value="{% url 'fields-service' %}">
-                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Esquematizar
-                                servicio
-                            </button>
-                        </div>
-
+                        <button type="button" id="button_schema" class="btn btn-warning">
+                            <input type="hidden" id="url" value="{% url 'query-configure' object.pk %}">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Esquematizar
+                            servicio
+                        </button>
                     </td>
                 </tr>
 
             </table>
+    </form>
 
-            <div class="row">
+    <form method="POST" id="form_fields" hidden>
+        <div class="row">
                 <div class="col-md-6">
                     <div class="panel panel-default" id="table_type" hidden>
                         <div class="panel-heading">
@@ -59,30 +68,10 @@
                             <table class="table">
                                 <tr>
                                     <td>
-                                        <span class="input-group-addon label-info form-control" id="sizing-addon1">Nombre
-                                            del servicio</span>
+                                        <span class="input-group-addon label-info form-control" id="sizing-addon1">Theme</span>
                                     </td>
                                     <td>
-                                        <span class="input-group-addon label-info form-control" id="sizing-addon1" id="name"></span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <span class="input-group-addon label-info form-control" id="sizing-addon1">Llave
-                                            primaria</span>
-                                    </td>
-                                    <td>
-                                        <select class="form-control" name="unique_key" id="id_unique_key"></select>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <span class="input-group-addon label-info form-control" id="sizing-addon1">Icono(url)</span>
-                                    </td>
-                                    <td>
-                                        {{ form.icon }}
+                                        <select class="form-control" name="unique_key" id="id_theme"></select>
                                     </td>
                                 </tr>
                             </table>
@@ -94,7 +83,10 @@
                                         Campos de consulta
                                     </th>
                                     <th>
-                                        Nombre representacional
+                                        Nombre de etiqueta
+                                    </th>
+                                    <th>
+                                        Nombre de etiqueta
                                     </th>
                                 </tr>
                             </thead>
@@ -106,26 +98,15 @@
             <input type="hidden" name="description_fields" id="id_description_fields">
             <div id="button_save" hidden>
                 <button type="submit" class="btn btn-success">
-                    <input type="hidden" id="url" value="{% url 'fields-service' %}">
                     <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
                 </button>
             </div>
-        </form>
-
-        <div id="loader" hidden>
-            <center>
-                <img src="{% static 'images/loader.gif' %}" width="40px" height="40px">
-            </center>
         </div>
-        <div id="alert_success" class="alert alert-success" hidden>
-            <button type="button" class="close" data-dismiss="alert">x</button>
-            <strong>La conexion es correcta! </strong>
-        </div>
-        <div id="alert_error" class="alert alert-danger" hidden>
-            <button type="button" class="close" data-dismiss="alert">x</button>
-            <strong>ERROR! </strong>
-            No se ha establecido la conexion.
-        </div>
+    </form>
+    <div id="loader" hidden>
+        <center>
+            <img src="{% static 'images/loader.gif' %}" width="40px" height="40px">
+        </center>
     </div>
 </div>
 <script src="{% static 'js/code_service.js' %}"></script> {% endblock %}

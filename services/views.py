@@ -121,7 +121,7 @@ class LocationDeleteView(GetUrlMixin, DeleteView):
 
 # Consulta SQL
 
-class QueryUpdateView(GetUrlMixin, UpdateView):
+class QueryUpdateView(UpdateView):
     model = SQLQuery
     form_class = QueryForm
     template_name = "Services/query_configure.html"

@@ -63,7 +63,7 @@ class SQLQuery(models.Model):
                                     limit_choices_to={'kind': 'query'},
                                     related_name="query", related_query_name="query")
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True, null=True)
-    type_name = models.CharField(max_length=50, unique=True, blank=True)
+    type_name = models.CharField(max_length=50, unique=True)
     query_sql = models.CharField(max_length=300, blank=True)
     theme = models.CharField(choices=themes, max_length=20, blank=True)
 
@@ -75,7 +75,7 @@ class SQLQuery(models.Model):
         return self.type_name
 
     def get_absolute_url(self):
-        return reverse("base-service")
+        return reverse("service-list")
 
     def is_online(self):
         if self.connection is None:
@@ -104,6 +104,8 @@ class SQLQuery(models.Model):
     
     def save(self):
         super(SQLQuery, self).save()
+        
+        Field.objects.filter(sql_query=self).delete()
 
         if self.is_online():
             fields_service = self.get_fields_service()
@@ -113,18 +115,18 @@ class SQLQuery(models.Model):
                     field = Field(
                         sql_query = self,
                         name = field,
+                        label = field,
                         ofType = 'String'
                     )
                     field.save()
                 return
-                
-        Field.objects.filter(sql_query=self).delete()
         
                 
 
 class Field(models.Model):
     sql_query = models.ForeignKey(SQLQuery, on_delete=models.CASCADE, related_name='fields')
     name = models.CharField(max_length=20)
+    label = models.CharField(max_length=20)
     ofType = models.CharField(max_length=10)
     hidden = models.BooleanField(default=False)
 
