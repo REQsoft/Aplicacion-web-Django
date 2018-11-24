@@ -11,12 +11,14 @@ class QueryForm(forms.ModelForm):
             "connection",
             "type_name",
             "query_sql",
+            "theme"
         ]
 
         labels = {
-            "connection": "Conexión a la base de datos",
+            "connection": "Conexión a base de datos",
             "type_name": "Nombre de clase",
             "query_sql": "Sentencia de datos sql",
+            "theme":"Tema"
         }
 
         error_messages = {
@@ -29,6 +31,28 @@ class QueryForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
 
+class FieldForm(forms.ModelForm):
+    class Meta:
+
+        model = Field
+
+        fields = [
+            'name',
+            'label',
+            'hidden'
+        ]
+
+        labels = {
+            'name':'Nombre',
+            'label':'Nobre de etiqueta',
+            'hidden':'Estado'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
 
 # Formulario para gestionar conexión.
 class ServiceForm(forms.ModelForm):
