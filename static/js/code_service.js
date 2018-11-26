@@ -10,14 +10,13 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $("#loader").hide();
-                $("#button_schema").hide();
+                $("#div_schema").hide();
                 $("#fields_type").show();
 
-                $("#name_type").html($("#id_type_name").val());
                 $("#fields").empty();
 
                 data.forEach(element => {
-                    if (element.fields.hidden) {
+                    if (element.fields.visible) {
                         checkbox = "<input type='checkbox' checked>"
                     } else {
                         checkbox = "<input type='checkbox'>"
@@ -25,9 +24,9 @@ $(document).ready(function () {
 
                     $("#fields").append(
                         "<tr>\
-                            <td>"+ element.fields.name + "</td>\
+                            <td>"+checkbox+ "</td>\
+                            <td>"+element.fields.name + "</td>\
                             <td><input type='text' class='form-control' value='"+ element.fields.label + "'></td>\
-                            <td>"+checkbox+"</td>\
                         </tr>"
                     );
                 });
@@ -44,17 +43,17 @@ $(document).ready(function () {
 
     $("#id_type_name").keydown(function () {
         $("#fields_type").hide();
-        $("#button_schema").show();
+        $("#div_schema").show();
     });
 
     $("#id_query_sql").keydown(function () {
         $("#fields_type").hide();
-        $("#button_schema").show();
+        $("#div_schema").show();
     });
 
     $("#id_connection").change(function () {
         $("#fields_type").hide();
-        $("#button_schema").show();
+        $("#div_schema").show();
     });
 
     $("#form_service").submit(function (evt) {
@@ -68,3 +67,14 @@ $(document).ready(function () {
     });
 
 });
+
+function edit_field(url, name, label, visible) {
+    $("#title").html(name);
+    $("#spn_name").val(name);
+    $("#spn_label").val(label);
+    if (visible == true) {
+        $("#spn_visible").prop("checked",true);
+    }
+    $("#form_edit_field").attr('action', url);
+    $("#modal_edit_field").modal("show");
+}

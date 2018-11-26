@@ -123,10 +123,6 @@ class LocationDeleteView(GetUrlMixin, DeleteView):
 
 # Consulta SQL
 class AjaxableResponseMixin:
-    """
-    Mixin to add AJAX support to a form.
-    Must be used with an object-based FormView (e.g. CreateView)
-    """
     def form_invalid(self, form):
         response = super().form_invalid(form)
         if self.request.is_ajax():
@@ -162,6 +158,13 @@ class QueryUpdateView(AjaxableResponseMixin, UpdateView):
         except:
             pass
         return context
+
+
+class FieldUpdateView(UpdateView):
+    model = Field
+    form_class = FieldForm
+    template_name = "Services/query_configure.html"
+
 
 
 def get_fields_service(request):

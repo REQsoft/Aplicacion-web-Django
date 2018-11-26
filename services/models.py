@@ -63,7 +63,7 @@ class SQLQuery(models.Model):
                                     limit_choices_to={'kind': 'query'},
                                     related_name="query", related_query_name="query")
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True, null=True)
-    type_name = models.CharField(max_length=50, unique=True)
+    type_name = models.SlugField(max_length=50, unique=True)
     query_sql = models.CharField(max_length=300, blank=True)
     theme = models.CharField(choices=themes, max_length=20, blank=True)
 
@@ -137,7 +137,7 @@ class Field(models.Model):
     name = models.CharField(max_length=20)
     label = models.CharField(max_length=20)
     ofType = models.CharField(max_length=10)
-    hidden = models.BooleanField(default=False)
+    visible = models.BooleanField(default=True)
 
 
     class Meta:
@@ -146,6 +146,9 @@ class Field(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('query-configure', kwargs={'pk':'1'})
 
 
 # Modelos de items individuales, asociados a un servicio general de Objetos Perdidos, Directorio y Geolocalizacion

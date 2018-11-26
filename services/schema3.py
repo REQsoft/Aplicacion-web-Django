@@ -15,12 +15,15 @@ def build_type_data_service(query):
     fields_service = query.fields.all()
 
     for field in fields_service:
-        clsattr_service.update({field.name: graphene.String()})
-        attr = {}
-        clsattr_service.update(
-            {"resolve_" + field.name: lambda self, info, **kwargs: self[info.field_name]}
-        )
-
+        if field.visible:           
+            clsattr_service.update({field.name: graphene.String(description=field.label)})
+            attr = {}
+            clsattr_service.update(
+                {"resolve_" + field.name: lambda self, info, **kwargs: self[info.field_name]}
+            )
+    
+    if len(clsattr_service) == 0:
+        return None
     return type(query.type_name+"Data", (graphene.ObjectType,), clsattr_service)
 
 
