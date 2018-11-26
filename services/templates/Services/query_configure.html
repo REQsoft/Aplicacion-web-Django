@@ -97,7 +97,7 @@
                                 {% for field in fields %}
                                 <tr>
                                     <td>
-                                        {% if field.visible %}
+                                        {% if field.visible == True %}
                                         <input type="checkbox" id="id_visible" checked disabled>
                                         {% else %}
                                         <input type="checkbox" id="id_visible" disabled>

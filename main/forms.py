@@ -12,12 +12,14 @@ class AuthenticationForm(forms.ModelForm):
         fields = [
             'connection',
             'sql_auth',
+            'sql_auth_user',
             'description'
         ]
 
         labels = {
             'connection':'Conexción a base de datos',
-            'sql_auth':'Consulta de autenticacion',
+            'sql_auth':'Consulta sql de autenticacion',
+            'sql_auth_user':'Consulta de usuario',
             'description':'Descripción'            
         }
 

@@ -72,7 +72,7 @@ function edit_field(url, name, label, visible) {
     $("#title").html(name);
     $("#spn_name").val(name);
     $("#spn_label").val(label);
-    if (visible == true) {
+    if (visible == 'True') {
         $("#spn_visible").prop("checked",true);
     }
     $("#form_edit_field").attr('action', url);

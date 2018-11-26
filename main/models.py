@@ -7,6 +7,7 @@ class Authentication(models.Model):
     name = models.SlugField(primary_key=True)
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True, default=None, null=True)
     sql_auth = models.TextField(blank=True)
+    sql_auth_user = models.TextField(blank=True)
     description = models.TextField(blank=True)
 
     class Meta:
