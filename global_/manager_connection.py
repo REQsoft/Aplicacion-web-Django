@@ -102,6 +102,7 @@ class ManagerConnection:
                     cursor = conn.cursor(pymysql.cursors.DictCursor)
                     cursor.execute(query, input)
                     data = cursor.fetchone()
+                    print(cursor._last_executed)
                     conn.close()
                     return data
                 except Exception as e:
@@ -117,8 +118,9 @@ class ManagerConnection:
                 print(cursor.query)
                 conn.close()
                 return data
-            except:
-                return None
+            except Exception as e:
+                    print(e)
+                    return None
 
         if self.manager_db == "oracle":
             pass

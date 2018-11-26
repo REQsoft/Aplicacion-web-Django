@@ -136,10 +136,10 @@ class ContainerType(graphene.ObjectType):
         return self.name
     
     def resolve_widgets(self, info, **kwargs):
-        user = info.context.user
+        user = info.context.user.username
         widgets = []
 
-        if str(user) == 'AnonymousUser':
+        if user == 'AnonymousUser':
             return self.widget_set.filter(groups=None)
             
         for widget in self.widget_set.all():
