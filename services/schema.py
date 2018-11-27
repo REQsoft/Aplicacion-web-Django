@@ -23,20 +23,6 @@ class MissingItemType(graphene.ObjectType):
     def resolve_photo(self, info, **kwargs):
         return self.photo.url
 
-class OfficeType(graphene.ObjectType):
-    title = graphene.String()
-    extension = graphene.String()
-    phone = graphene.String()
-
-    def resolve_title(self, info, **kwargs):
-        return self.title
-
-    def resolve_extension(self, info, **kwargs):
-        return self.extension
-    
-    def resolve_phone(self, info, **kwargs):
-        return self.phone
-
 
 class ServiceType(graphene.ObjectType):
     id = graphene.Int()
@@ -44,6 +30,7 @@ class ServiceType(graphene.ObjectType):
     icon = graphene.String()
     kind = graphene.String()
     description = graphene.String()
+    
 
     def resolve_id(self, info, **kwargs):
         return self.id
@@ -157,8 +144,7 @@ class ContainerType(graphene.ObjectType):
 
 class Query(schema.Query, graphene.ObjectType):
     containers = graphene.List(ContainerType, name=graphene.String())
-
-    directory = graphene.List(OfficeType, service=graphene.Int(required=True))
+    
     map = graphene.List(LocationType, service=graphene.Int(required=True))
     catalog = graphene.List(MissingItemType, service=graphene.Int(required=True))
 

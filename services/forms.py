@@ -9,16 +9,12 @@ class QueryForm(forms.ModelForm):
 
         fields = [
             "connection",
-            "type_name",
             "query_sql",
-            "theme"
         ]
 
         labels = {
             "connection": "Conexión a base de datos",
-            "type_name": "Nombre de clase",
             "query_sql": "Sentencia de datos sql",
-            "theme":"Tema"
         }
 
         error_messages = {
@@ -58,7 +54,7 @@ class FieldForm(forms.ModelForm):
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
-        fields = ["title", "icon", "kind", "description"]
+        fields = ["title", "icon", "theme", "description"]
         labels = {"title": "", "description": "", "kind": "Seleccione el tipo de servicio: ", "icon": "Seleccione un icono para el servicio:"}
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo'}),
