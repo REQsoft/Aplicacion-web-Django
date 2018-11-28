@@ -1,0 +1,33 @@
+{% extends 'config/base.html' %} {% load static %} {% block content %}
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">Lista de contenedores</h3><br>
+    </div>
+    <a type="button" class="btn btn-primary btn-sm" title="Agregar" data-toggle="modal" 
+       data-target="#modal" onclick="">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </a>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Ver</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for component in object_list %}
+            <tr>
+                <td>
+                    {{ component.name }}
+                </td>
+                <td>
+                    <a type="button" class="btn btn-info btn-sm" title="Configurar" href="{% url 'component-configure' component.id %}"> 
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

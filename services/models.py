@@ -2,29 +2,19 @@ from django.db import models
 from django.urls import reverse
 from global_.manager_connection import ManagerConnection
 from main.models import Group
+from config.models import Component,Icon
 from connections.models import Connection
 from django.template.defaultfilters import slugify
 import ast
 
-class Icon(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    image = models.ImageField(upload_to='icons')
-
-    def __str__(self):
-        return self.title
-
-class Kind(models.Model):
-    id = models.SlugField(primary_key=True)
-    title = models.CharField(max_length=100, unique=True)
-    description = models.CharField(max_length=300, blank=True)
-
-    def __str__(self):
-        return self.title
-
 # Modelo principal de servicios.
 class Service(models.Model):
-    types = (
-        ('query', 'Consulta sql'),
+    sources = (
+        ('sql','Consulta SQL'),
+        ('model','Manual'),
+    )
+    themes = (
+        ('generic', 'Generico'),
         ('directory', 'Directorio'),
         ('map', 'Mapa'),
         ('catalog', 'Catalogo'),
@@ -32,9 +22,12 @@ class Service(models.Model):
 
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
-    kind = models.CharField(choices=types, max_length=20)
+    theme = models.CharField(choices=themes, max_length=20)
+    component = models.ForeignKey(Component, on_delete='PROTECTED')
+    groups = models.ManyToManyField(Group)
+    source = models.CharField(choices=sources, max_length=20)
+    type_name = models.CharField(max_length=20, unique=True, blank=True)
     description = models.CharField(max_length=300, blank=True)
-    
 
     def __str__(self):
         return self.title
@@ -43,29 +36,26 @@ class Service(models.Model):
         return reverse('service-list')
     
     def save(self):
+
         super(Service, self).save()
-        if self.kind == 'query':
+        type_name = "S" + str(self.id)
+
+        if self.source == 'sql':
             query_sql = SQLQuery(
                 service=self,
-                type_name = 'S' + str(self.id)
             )
             query_sql.save()
+        
+        self.save()
 
 
 # Modelo de configuracion de servicios de consulta SQL
 class SQLQuery(models.Model):
-    themes = (
-        ('generic', 'Generico'),
-        ('directory', 'Directorio')
-    )
-
     service = models.OneToOneField(Service, primary_key=True, on_delete="CASCADE",
-                                    limit_choices_to={'kind': 'query'},
+                                    limit_choices_to={'source': 'sql'},
                                     related_name="query", related_query_name="query")
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True, null=True)
-    type_name = models.CharField(max_length=50, unique=True)
     query_sql = models.CharField(max_length=300, blank=True)
-    theme = models.CharField(choices=themes, max_length=20, blank=True)
 
     class Meta:
         verbose_name = "Query"
@@ -142,7 +132,7 @@ class Field(models.Model):
 # Modelos de items individuales, asociados a un servicio general de Objetos Perdidos, Directorio y Geolocalizacion
 class MissingItem(models.Model):
     service = models.ForeignKey(Service, on_delete="CASCADE",
-                                limit_choices_to={'kind': 'catalog'},
+                                limit_choices_to={'theme': 'catalog'},
                                 related_name="items", related_query_name="item")
     title = models.CharField(max_length=100, unique=True) 
     description = models.CharField(max_length=200) 
@@ -157,7 +147,7 @@ class MissingItem(models.Model):
 
 class Office(models.Model):
     service = models.ForeignKey(Service, on_delete="CASCADE",
-                                limit_choices_to={'kind': 'directory'},
+                                limit_choices_to={'theme': 'directory'},
                                 related_name="offices", related_query_name="office")
     title = models.CharField(max_length=100, unique=True)
     extension = models.CharField(max_length=50, blank=True)
@@ -171,7 +161,7 @@ class Office(models.Model):
 
 class Location(models.Model):
     service = models.ForeignKey(Service, on_delete="CASCADE",
-                                limit_choices_to={'kind': 'map'},
+                                limit_choices_to={'theme': 'map'},
                                 related_name="locations", related_query_name="location")
     title = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=300, blank=True)
@@ -185,48 +175,3 @@ class Location(models.Model):
     def get_absolute_url(self):
         return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
 
-class Container(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.CharField(max_length=300, blank=True)
-
-    def __str__(self):
-        return self.name
-
-class Widget(models.Model):
-    widgetsType  = (
-        ('menu', 'Menu'),
-        ('button', 'Botón')
-    )
-
-    ofType = models.CharField(choices=widgetsType, max_length=20)
-    state = models.BooleanField(default=False)
-    container = models.ForeignKey(Container, on_delete="PROTECTED")
-    groups = models.ManyToManyField(Group, blank=True)
-
-    class Meta:
-        """Meta definition for Widget."""
-
-        verbose_name = 'Widget'
-        verbose_name_plural = 'Widgets'
-
-    def __str__(self):
-        return str(self.id)
-
-# Modelos de widgets para mostrar los servicios en la app movil
-class Menu(models.Model):
-    widget = models.OneToOneField(Widget, on_delete=models.CASCADE, limit_choices_to={'ofType':'menu'})
-    title = models.CharField(max_length=100, unique=True)
-    icon = models.ForeignKey(Icon, on_delete="PROTECTED", default=None)
-    description = models.CharField(max_length=300, blank=True)
-    services = models.ManyToManyField(Service)
-    
-    def __str__(self):
-        return self.title
-
-
-class Button(models.Model):
-    widget = models.OneToOneField(Widget, on_delete=models.CASCADE, limit_choices_to={'ofType':'button'})
-    service = models.OneToOneField(Service, on_delete=models.CASCADE)
-        
-    def __str__(self):
-        return self.service.title    

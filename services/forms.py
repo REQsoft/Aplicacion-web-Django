@@ -9,20 +9,11 @@ class QueryForm(forms.ModelForm):
 
         fields = [
             "connection",
-            "type_name",
-            "query_sql",
-            "theme"
-        ]
+            "query_sql",        ]
 
         labels = {
             "connection": "Conexión a base de datos",
-            "type_name": "Nombre de clase",
             "query_sql": "Sentencia de datos sql",
-            "theme":"Tema"
-        }
-
-        error_messages = {
-            "type_name": {"unique": "El nombre de la clase ya existe"},
         }
 
     def __init__(self, *args, **kwargs):
@@ -58,8 +49,8 @@ class FieldForm(forms.ModelForm):
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
-        fields = ["title", "icon", "kind", "description"]
-        labels = {"title": "", "description": "", "kind": "Seleccione el tipo de servicio: ", "icon": "Seleccione un icono para el servicio:"}
+        fields = ["title", "icon", "theme", "description"]
+        labels = {"title": "", "description": "", "theme": "Seleccione el tipo de servicio: ", "icon": "Seleccione un icono para el servicio:"}
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo'}),
             'description':forms.Textarea(attrs={'class':'form-control','rows':3,'placeholder':'Descripcion'}),

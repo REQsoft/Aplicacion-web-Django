@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "connections",
     "services",
     "main",
+    "config",
 ]
 
 GRAPHENE = {

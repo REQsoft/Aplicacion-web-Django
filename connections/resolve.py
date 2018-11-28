@@ -1,4 +1,4 @@
-from .models import Service
+from services.models import Service
 
 def resolve_field(field):
     method_str = """def resolve_"""+field+"""(self, info, **kwargs):

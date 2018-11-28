@@ -1,5 +1,5 @@
 import graphene
-from .models import Service, SQLQuery
+from services.models import Service, SQLQuery
 from .resolve import *
 from promise import Promise
 from promise.dataloader import DataLoader
