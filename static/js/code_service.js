@@ -9,32 +9,31 @@ $(document).ready(function () {
                 $("#loader").show();
             },
             success: function (data) {
-                alert(data)
                 $("#loader").hide();
-                $("#button_schema").hide();
-                $("#table_type").show();
-                $("#button_save").show();
+                $("#div_schema").hide();
+                $("#fields_type").show();
 
-                $("#name_type").html($("#id_type_name").val());
-                $("#fields_type").empty();
-                $("#id_unique_key").empty();
-                $("#id_unique_key").append(
-                    "<option value='' selected>-----------</option>"
-                );
-                data.object_list.forEach(element => {
-                    $("#fields_type").append(
+                $("#fields").empty();
+
+                data.forEach(element => {
+                    if (element.fields.visible) {
+                        checkbox = "<input type='checkbox' checked>"
+                    } else {
+                        checkbox = "<input type='checkbox'>"
+                    }
+
+                    $("#fields").append(
                         "<tr>\
-                            <td>"+ element + "</td>\
-                            <td><input type='text' class='form-control' id='"+ element + "'></td>\
+                            <td>"+checkbox+ "</td>\
+                            <td>"+element.fields.name + "</td>\
+                            <td><input type='text' class='form-control' value='"+ element.fields.label + "'></td>\
                         </tr>"
-                    );
-                    $("#id_unique_key").append(
-                        "<option value=" + element + ">" + element + "</option>"
                     );
                 });
             },
 
-            error: function () {
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest.responseText)
                 $("#loader").hide();
                 $("#alert_error").show().hide(2000);
             }
@@ -43,21 +42,18 @@ $(document).ready(function () {
     });
 
     $("#id_type_name").keydown(function () {
-        $("#table_type").hide();
-        $("#button_save").hide();
-        $("#button_schema").show();
+        $("#fields_type").hide();
+        $("#div_schema").show();
     });
 
     $("#id_query_sql").keydown(function () {
-        $("#table_type").hide();
-        $("#button_save").hide();
-        $("#button_schema").show();
+        $("#fields_type").hide();
+        $("#div_schema").show();
     });
 
     $("#id_connection").change(function () {
-        $("#table_type").hide();
-        $("#button_save").hide();
-        $("#button_schema").show();
+        $("#fields_type").hide();
+        $("#div_schema").show();
     });
 
     $("#form_service").submit(function (evt) {
@@ -71,3 +67,14 @@ $(document).ready(function () {
     });
 
 });
+
+function edit_field(url, name, label, visible) {
+    $("#title").html(name);
+    $("#spn_name").val(name);
+    $("#spn_label").val(label);
+    if (visible == 'True') {
+        $("#spn_visible").prop("checked",true);
+    }
+    $("#form_edit_field").attr('action', url);
+    $("#modal_edit_field").modal("show");
+}

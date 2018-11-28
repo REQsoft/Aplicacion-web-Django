@@ -55,8 +55,17 @@ class SQLQuery(models.Model):
                                     limit_choices_to={'source': 'sql'},
                                     related_name="query", related_query_name="query")
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True, null=True)
+    type_name = models.SlugField(max_length=50, unique=True)
     query_sql = models.CharField(max_length=300, blank=True)
 
+    __current_query_sql = None
+    __current_connection = None
+
+    def __init__(self, *args, **kwargs):
+        super(SQLQuery, self).__init__(*args, **kwargs)
+        self.__current_query_sql = self.query_sql
+        self.__current_connection = self.connection
+    
     class Meta:
         verbose_name = "Query"
         verbose_name_plural = "Queries"
@@ -65,7 +74,7 @@ class SQLQuery(models.Model):
         return self.type_name
 
     def get_absolute_url(self):
-        return reverse("service-list")
+        return reverse('service-list')
 
     def is_online(self):
         if self.connection is None:
@@ -93,23 +102,24 @@ class SQLQuery(models.Model):
         return None
     
     def save(self):
+        if (self.__current_query_sql != self.query_sql) or (self.__current_connection != self.connection):
+            Field.objects.filter(sql_query=self).delete()
+            self.__current_query_sql = self.query_sql
+
+            if self.is_online():
+                fields_service = self.get_fields_service()
+
+                if fields_service is not None:
+                    for field in fields_service:
+                        field = Field(
+                            sql_query = self,
+                            name = field,
+                            label = field,
+                            ofType = 'String'
+                        )
+                        field.save()  
+
         super(SQLQuery, self).save()
-        
-        Field.objects.filter(sql_query=self).delete()
-
-        if self.is_online():
-            fields_service = self.get_fields_service()
-
-            if fields_service is not None:
-                for field in fields_service:
-                    field = Field(
-                        sql_query = self,
-                        name = field,
-                        label = field,
-                        ofType = 'String'
-                    )
-                    field.save()
-                return
         
                 
 
@@ -118,7 +128,7 @@ class Field(models.Model):
     name = models.CharField(max_length=20)
     label = models.CharField(max_length=20)
     ofType = models.CharField(max_length=10)
-    hidden = models.BooleanField(default=False)
+    visible = models.BooleanField(default=True)
 
 
     class Meta:
@@ -127,6 +137,9 @@ class Field(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('query-configure', kwargs={'pk':'1'})
 
 
 # Modelos de items individuales, asociados a un servicio general de Objetos Perdidos, Directorio y Geolocalizacion

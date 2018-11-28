@@ -30,13 +30,13 @@ class FieldForm(forms.ModelForm):
         fields = [
             'name',
             'label',
-            'hidden'
+            'visible'
         ]
 
         labels = {
             'name':'Nombre',
             'label':'Nobre de etiqueta',
-            'hidden':'Estado'
+            'visible':'visible'
         }
 
     def __init__(self, *args, **kwargs):

@@ -16,7 +16,7 @@
                     {% csrf_token %}
                     <tr>
                         <td width="25%">
-                            <span class="input-group-addon label-info form-control">Conexión</span>
+                            <span class="input-group-addon label-info form-control">{{ form.connection.label }}</span>
                         </td>
                         <td>
                             {{ form.connection }}
@@ -24,10 +24,19 @@
                     </tr>
                     <tr>
                         <td>
-                            <span class="input-group-addon label-info form-control">Consulta sql de autenticación</span>
+                            <span class="input-group-addon label-info form-control">{{ form.sql_auth.label }}</span>
                         </td>
                         <td>
                             {{ form.sql_auth }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span class="input-group-addon label-info form-control">{{ form.sql_auth_user.label }}</span>
+                        </td>
+                        <td>
+                            {{ form.sql_auth_user }}
                         </td>
                     </tr>
 

@@ -12,7 +12,7 @@ def get_user_by_natural_key(user_id):
         data_connection = auth.connection.get_data_connection()
         data_connection.update({"dbname": auth.connection.dbname})
         conn = ManagerConnection(**data_connection)
-        data = conn.managerSQL("select nombre from estudiante where nombre='%s'" % (user_id))
+        data = conn.managerSQL(auth.sql_auth_user, input={'username':user_id})
         if data is not None:
             return User(username=user_id)
         return None

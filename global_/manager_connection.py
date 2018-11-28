@@ -101,10 +101,12 @@ class ManagerConnection:
                     conn = pymysql.connect(**self.config_connection)
                     cursor = conn.cursor(pymysql.cursors.DictCursor)
                     cursor.execute(query, input)
-                    data = cursor.fetchall()
+                    data = cursor.fetchone()
+                    print(cursor._last_executed)
                     conn.close()
                     return data
-                except:
+                except Exception as e:
+                    print(e)
                     return None
 
         if self.manager_db == "postgresql":
@@ -116,8 +118,9 @@ class ManagerConnection:
                 print(cursor.query)
                 conn.close()
                 return data
-            except:
-                return None
+            except Exception as e:
+                    print(e)
+                    return None
 
         if self.manager_db == "oracle":
             pass
