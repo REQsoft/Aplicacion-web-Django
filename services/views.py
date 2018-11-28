@@ -32,11 +32,11 @@ class GetUrlMixin(object):
 def service_configure(request,pk):
     service = get_object_or_404(Service, id=pk)
 
-    if(service.kind=='query'):
+    if(service.theme=='generic'):
         query,state=SQLQuery.objects.get_or_create(service=service)
         return redirect(reverse('query-configure', kwargs={'pk': query.service.id}))
 
-    return render(request, 'Services/'+str(service.kind)+'_configure.html', {'service':service})
+    return render(request, 'Services/'+str(service.theme)+'_configure.html', {'service':service})
 
 def add_element(request,pk):
     service = get_object_or_404(Service, id=pk)

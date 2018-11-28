@@ -17,7 +17,7 @@ class Icon(models.Model):
 
 # Modelo principal de servicios.
 class Service(models.Model):
-    data_types = (("query", "Consulta sql"), ("models", "Modelo django"))
+    data_types = (("sql", "Consulta sql"), ("models", "Modelo django"))
 
     themes = (
         ("generic", "Generic"),
@@ -30,8 +30,8 @@ class Service(models.Model):
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     theme = models.CharField(choices=themes, max_length=20, default=None)
     description = models.TextField(blank=True)
-    data_type = models.CharField(choices=data_types, max_length=20, default=None)
-    name_type = models.CharField(max_length=20, blank=True, default=None)
+    source = models.CharField(choices=data_types, max_length=20, default=None)
+    type_name = models.CharField(max_length=20, blank=True, default=None)
     
 
     def __str__(self):
@@ -43,11 +43,11 @@ class Service(models.Model):
     def save(self):
 
         super(Service, self).save()
-        if self.data_type == "query":
+        if self.source == "sql":
             query_sql = SQLQuery(service=self)
             query_sql.save()
         
-        self.name_type = "S" + str(self.id)
+        self.type_name = "S" + str(self.id)
         super(Service, self).save()
 
 
@@ -57,7 +57,7 @@ class SQLQuery(models.Model):
         Service,
         primary_key=True,
         on_delete="CASCADE",
-        limit_choices_to={"data_type": "query"},
+        limit_choices_to={"source": "sql"},
         related_name="query",
         related_query_name="query",
     )
@@ -213,52 +213,22 @@ class Location(models.Model):
 
 
 class Container(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    father = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
-    description = models.CharField(max_length=300, blank=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Widget(models.Model):
-    widgetsType = (("menu", "Menu"), ("button", "Botón"))
-
-    ofType = models.CharField(choices=widgetsType, max_length=20)
-    state = models.BooleanField(default=False)
-    container = models.ForeignKey(Container, on_delete="PROTECTED")
-    groups = models.ManyToManyField(Group, blank=True)
-
-    class Meta:
-        """Meta definition for Widget."""
-
-        verbose_name = "Widget"
-        verbose_name_plural = "Widgets"
-
-    def __str__(self):
-        return str(self.id)
-
-
-# Modelos de widgets para mostrar los servicios en la app movil
-class Menu(models.Model):
-    widget = models.OneToOneField(
-        Widget, on_delete=models.CASCADE, limit_choices_to={"ofType": "menu"}
-    )
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED", default=None)
+    description = models.TextField(blank=True)
+    container = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True, related_name='containers')
     description = models.CharField(max_length=300, blank=True)
-    services = models.ManyToManyField(Service)
+    type_name = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
         return self.title
 
+    def save(self):
 
-class Button(models.Model):
-    widget = models.OneToOneField(
-        Widget, on_delete=models.CASCADE, limit_choices_to={"ofType": "button"}
-    )
-    service = models.OneToOneField(Service, on_delete=models.CASCADE)
+        super(Container, self).save()
+        if self.type_name is None:
+            self.type_name = "C" + str(self.id)
+            self.save()
 
-    def __str__(self):
-        return self.service.title
+
 

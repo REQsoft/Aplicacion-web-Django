@@ -3,7 +3,7 @@ from graphene_django.types import DjangoObjectType
 from .models import *
 from django.contrib import auth
 from global_.manager_connection import ManagerConnection
-from . import schema3 as schema
+from . import schema_home as schema
 
 class LocationType(DjangoObjectType):
     class Meta:
