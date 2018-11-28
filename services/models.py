@@ -2,37 +2,32 @@ from django.db import models
 from django.urls import reverse
 from global_.manager_connection import ManagerConnection
 from main.models import Group
+from config.models import Component,Icon
 from connections.models import Connection
 from django.template.defaultfilters import slugify
 import ast
 
-
-class Icon(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    image = models.ImageField(upload_to="icons")
-
-    def __str__(self):
-        return self.title
-
-
 # Modelo principal de servicios.
 class Service(models.Model):
-    data_types = (("sql", "Consulta sql"), ("models", "Modelo django"))
-
+    sources = (
+        ('sql','Consulta SQL'),
+        ('model','Manual'),
+    )
     themes = (
-        ("generic", "Generic"),
-        ("directory", "Directorio"),
-        ("map", "Mapa"),
-        ("catalog", "Catalogo"),
+        ('generic', 'Generico'),
+        ('directory', 'Directorio'),
+        ('map', 'Mapa'),
+        ('catalog', 'Catalogo'),
     )
 
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
-    theme = models.CharField(choices=themes, max_length=20, default=None)
-    description = models.TextField(blank=True)
-    source = models.CharField(choices=data_types, max_length=20, default=None)
-    type_name = models.CharField(max_length=20, blank=True, default=None)
-    
+    theme = models.CharField(choices=themes, max_length=20)
+    component = models.ForeignKey(Component, on_delete='PROTECTED')
+    groups = models.ManyToManyField(Group)
+    source = models.CharField(choices=sources, max_length=20)
+    type_name = models.CharField(max_length=20, unique=True, blank=True)
+    description = models.CharField(max_length=300, blank=True)
 
     def __str__(self):
         return self.title
@@ -43,29 +38,24 @@ class Service(models.Model):
     def save(self):
 
         super(Service, self).save()
-        if self.source == "sql":
-            query_sql = SQLQuery(service=self)
+        type_name = "S" + str(self.id)
+
+        if self.source == 'sql':
+            query_sql = SQLQuery(
+                service=self,
+            )
             query_sql.save()
         
-        self.type_name = "S" + str(self.id)
-        super(Service, self).save()
+        self.save()
 
 
 # Modelo de configuracion de servicios de consulta SQL
 class SQLQuery(models.Model):
-    service = models.OneToOneField(
-        Service,
-        primary_key=True,
-        on_delete="CASCADE",
-        limit_choices_to={"source": "sql"},
-        related_name="query",
-        related_query_name="query",
-    )
-
-    connection = models.ForeignKey(
-        Connection, on_delete=models.CASCADE, blank=True, null=True
-    )
-
+    service = models.OneToOneField(Service, primary_key=True, on_delete="CASCADE",
+                                    limit_choices_to={'source': 'sql'},
+                                    related_name="query", related_query_name="query")
+    connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True, null=True)
+    type_name = models.SlugField(max_length=50, unique=True)
     query_sql = models.CharField(max_length=300, blank=True)
 
     __current_query_sql = None
@@ -153,15 +143,11 @@ class Field(models.Model):
 
 # Modelos de items individuales, asociados a un servicio general de Objetos Perdidos, Directorio y Geolocalizacion
 class MissingItem(models.Model):
-    service = models.ForeignKey(
-        Service,
-        on_delete="CASCADE",
-        limit_choices_to={"theme": "catalog"},
-        related_name="items",
-        related_query_name="item",
-    )
-    title = models.CharField(max_length=100, unique=True)
-    description = models.CharField(max_length=200)
+    service = models.ForeignKey(Service, on_delete="CASCADE",
+                                limit_choices_to={'theme': 'catalog'},
+                                related_name="items", related_query_name="item")
+    title = models.CharField(max_length=100, unique=True) 
+    description = models.CharField(max_length=200) 
     date = models.DateField(auto_now_add=True)
     photo = models.ImageField(upload_to="photos")
 
@@ -173,13 +159,9 @@ class MissingItem(models.Model):
 
 
 class Office(models.Model):
-    service = models.ForeignKey(
-        Service,
-        on_delete="CASCADE",
-        limit_choices_to={"theme": "directory"},
-        related_name="offices",
-        related_query_name="office",
-    )
+    service = models.ForeignKey(Service, on_delete="CASCADE",
+                                limit_choices_to={'theme': 'directory'},
+                                related_name="offices", related_query_name="office")
     title = models.CharField(max_length=100, unique=True)
     extension = models.CharField(max_length=50)
     phone = models.CharField(max_length=50)
@@ -192,13 +174,9 @@ class Office(models.Model):
 
 
 class Location(models.Model):
-    service = models.ForeignKey(
-        Service,
-        on_delete="CASCADE",
-        limit_choices_to={"theme": "map"},
-        related_name="locations",
-        related_query_name="location",
-    )
+    service = models.ForeignKey(Service, on_delete="CASCADE",
+                                limit_choices_to={'theme': 'map'},
+                                related_name="locations", related_query_name="location")
     title = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=300)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED", default=None)
@@ -210,25 +188,5 @@ class Location(models.Model):
 
     def get_absolute_url(self):
         return redirect(reverse("service-configure", kwargs={"service_id": service.id}))
-
-
-class Container(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    icon = models.ForeignKey(Icon, on_delete="PROTECTED", default=None)
-    description = models.TextField(blank=True)
-    container = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True, related_name='containers')
-    description = models.CharField(max_length=300, blank=True)
-    type_name = models.CharField(max_length=20, blank=True)
-
-    def __str__(self):
-        return self.title
-
-    def save(self):
-
-        super(Container, self).save()
-        if self.type_name is None:
-            self.type_name = "C" + str(self.id)
-            self.save()
-
 
 

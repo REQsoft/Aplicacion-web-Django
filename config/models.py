@@ -1,3 +1,28 @@
 from django.db import models
+from main.models import Group
 
-# Create your models here.
+# Modelos de widgets para mostrar los servicios en la app movil
+class Icon(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    image = models.ImageField(upload_to='icons')
+
+    def __str__(self):
+        return self.title
+
+class Component(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    icon = models.ForeignKey(Icon, on_delete="PROTECTED", default=None)
+    container = models.ForeignKey("self", on_delete="PROTECTED")
+    state = models.BooleanField(default=False)
+    groups = models.ManyToManyField(Group, blank=True)
+    description = models.CharField(max_length=300, blank=True)
+    type_name = models.CharField(max_length=20, unique=True, blank=True)
+    
+    
+    def __str__(self):
+        return self.title
+
+    def save(self):
+        super(Component, self).save()
+        type_name = "C" + str(self.id)
+        self.save()
