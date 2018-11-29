@@ -4,8 +4,6 @@ import services.schema, config.schema, connections.schema
 
 
 class Query(services.schema.Query, 
-            config.schema.Query,
-            connections.schema.Query,
             graphene.ObjectType):
     '''This class will inherit from multiple Queries
     as we begin to add more apps to our project'''

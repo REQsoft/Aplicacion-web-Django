@@ -1,6 +1,5 @@
 import graphene
 from .models import *
-from .resolve import *
 from promise import Promise
 from promise.dataloader import DataLoader
 from graphql_jwt.decorators import login_required
@@ -31,25 +30,6 @@ class OfficeType(graphene.ObjectType):
 
 # ===============================================================================
 
-def build_type_container(container):
-    dict_clsattr = {}
-
-    dict_clsattr.update({"title": graphene.String()})
-    dict_clsattr.update({"icon": graphene.String()})
-    dict_clsattr.update({"description": graphene.String()})
-
-    type_component = build_type_components(container)
-    if type_component is not None:
-        dict_clsattr.update( {"components": graphene.Field()})
-
-        dict_clsattr.update({
-            "resolve_components": 
-            lambda self, info, **kwargs:{'services':self.services.all(),
-                                        'containers':self.containers.all()}
-         })
-
-    return type(container.type_name+"Component", (graphene.ObjectType, ), dict_clsattr)
-
 
 def build_generic_type(service):
     dict_clsattr = {}
@@ -70,10 +50,11 @@ def build_generic_type(service):
                     }
                 )
                 
-        if len(clsattr_service) == 0:
+        if len(dict_clsattr) == 0:
             return None
-        return type(query.name_type + "Data", (graphene.ObjectType,), clsattr_service)
-    except:
+        return type(service.type_name + "Data", (graphene.ObjectType,), dict_clsattr)
+    except Exception as e:
+        print(e)
         return None
 
 
@@ -88,9 +69,9 @@ def get_resolve_data_field(service):
     if service.source == "sql":
         return lambda self, info, **kwargs: self.query.get_list_search(kwargs)
     
-    if service.source == "models":
+    if service.source == "model":
         if service.theme == "directory":
-            return OfficeType
+            return lambda self, info, **kwargs: self.offices.all()
 
 
 def built_type_service(service):
@@ -98,8 +79,8 @@ def built_type_service(service):
 
     dict_clsattr.update({"title": graphene.String()})
     dict_clsattr.update({"icon": graphene.String()})
-    dict_clsattr.update({"description": graphene.String()})
     dict_clsattr.update({"theme": graphene.String()})
+    dict_clsattr.update({"description": graphene.String()})
 
     type_field = get_type_data_field(service)
     if type_field is not None:
@@ -110,11 +91,51 @@ def built_type_service(service):
 
     dict_clsattr.update({"resolve_icon": lambda self, info, **kwargs: self.icon})
 
-    dict_clsattr.update({"resolve_description":lambda self, info, **kwargs: self.description})
-
     dict_clsattr.update({"resolve_theme": lambda self, info, **kwargs: self.theme})
 
+    dict_clsattr.update({"resolve_description":lambda self, info, **kwargs: self.description})
+
+
     return type(service.type_name, (graphene.ObjectType,), dict_clsattr)
+
+def get_components_container(container):
+    components = {}
+    try:
+        components.update({'containers':container.components.all()})
+    except:
+        pass
+    try:
+        components.update({'services':container.services.all()})
+    except Exception as e:
+        pass
+    return components
+
+def build_type_container(container):
+    dict_clsattr = {}
+
+    dict_clsattr.update({"title": graphene.String()})
+    dict_clsattr.update({"icon": graphene.String()})
+    dict_clsattr.update({"state": graphene.Boolean()})
+    dict_clsattr.update({"description": graphene.String()})
+
+    type_component = build_type_components(container)
+    if type_component is not None:
+        dict_clsattr.update( {"data": graphene.Field(type_component)})
+
+        dict_clsattr.update({
+            "resolve_data": 
+            lambda self, info, **kwargs:get_components_container(self)
+         })
+
+    dict_clsattr.update({"resolve_title": lambda self, info, **kwargs: self.title})
+
+    dict_clsattr.update({"resolve_icon": lambda self, info, **kwargs: self.icon})
+
+    dict_clsattr.update({"resolve_state": lambda self, info, **kwargs: self.state})
+
+    dict_clsattr.update({"resolve_description":lambda self, info, **kwargs: self.description})
+
+    return type(container.type_name, (graphene.ObjectType, ), dict_clsattr)
 
 
 def build_type_components(container):
@@ -124,6 +145,7 @@ def build_type_components(container):
         components = container.components.all()
     except:
         components = []
+
     try:
         services = container.services.all()
     except:
@@ -131,29 +153,25 @@ def build_type_components(container):
 
     for service in services:
         type_service = built_type_service(service)
-        if type_service is not None:
-            dict_clsattr.update({service.type_name: graphene.Field(type_service)})
+        dict_clsattr.update({service.type_name: graphene.Field(type_service)})
 
-            dict_clsattr.update({
-                    "resolve_"+service.type_name: 
-                    lambda self, info, **kwargs: self['services'].get(type_name=info.field_name)
-                })
-
-    print("#################################")
-    for component in components:
-        print(component)
-        type_component = build_type_container(container)
-        if type_component is not None:
-            dict_clsattr.update({component.type_name:graphene.Field(type_component)})
-
-            dict_clsattr.update({
-                "resolve_"+component.type_name: 
-                lambda self, info, **kwargs: self['containers'].get(type_name=info.field_name)
+        dict_clsattr.update({
+                "resolve_"+service.type_name: 
+                lambda self, info, **kwargs: self['services'].get(type_name=info.field_name)
             })
+
+    for component in components:
+        type_component = build_type_container(component)
+        dict_clsattr.update({component.type_name:graphene.Field(type_component)})
+
+        dict_clsattr.update({
+            "resolve_"+component.type_name: 
+            lambda self, info, **kwargs: self['containers'].get(type_name=info.field_name)
+        })
         
     if len(dict_clsattr) > 0:
         return type(
-            "HomeComponent",
+            container.type_name + "Component",
             (graphene.ObjectType,),
             dict_clsattr
         )
@@ -161,7 +179,7 @@ def build_type_components(container):
 
 
 try:
-    container_home = Container.objects.get(type_name='Home')
+    container_home = Component.objects.get(type_name='Home')
     type_container = build_type_container(container_home)
 
     class Query(graphene.ObjectType):

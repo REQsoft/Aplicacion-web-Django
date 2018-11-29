@@ -23,8 +23,8 @@ class Service(models.Model):
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     theme = models.CharField(choices=themes, max_length=20)
-    component = models.ForeignKey(Component, on_delete='PROTECTED')
-    groups = models.ManyToManyField(Group)
+    component = models.ForeignKey(Component, on_delete='PROTECTED', related_name='services')
+    groups = models.ManyToManyField(Group, blank=True)
     source = models.CharField(choices=sources, max_length=20)
     type_name = models.CharField(max_length=20, unique=True, blank=True)
     description = models.CharField(max_length=300, blank=True)
@@ -38,15 +38,16 @@ class Service(models.Model):
     def save(self):
 
         super(Service, self).save()
-        type_name = "S" + str(self.id)
+        if len(self.type_name) == 0:
+            self.type_name = "S" + str(self.id)
+            self.save()
 
         if self.source == 'sql':
             query_sql = SQLQuery(
                 service=self,
             )
             query_sql.save()
-        
-        self.save()
+    
 
 
 # Modelo de configuracion de servicios de consulta SQL
@@ -55,7 +56,6 @@ class SQLQuery(models.Model):
                                     limit_choices_to={'source': 'sql'},
                                     related_name="query", related_query_name="query")
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True, null=True)
-    type_name = models.SlugField(max_length=50, unique=True)
     query_sql = models.CharField(max_length=300, blank=True)
 
     __current_query_sql = None
@@ -89,7 +89,7 @@ class SQLQuery(models.Model):
     def get_list_search(self, filter={}):
         connection = ManagerConnection(**self.connection.get_data_connection())
         data = connection.managerSQL(self.query_sql)
-        print(data)
+        
         if data is not None:
             if len(filter) > 0:
                 for key, value in filter.items():

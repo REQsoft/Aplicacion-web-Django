@@ -1,4 +1,4 @@
-import graphene
+"""import graphene
 from services.models import Service, SQLQuery
 from .resolve import *
 from promise import Promise
@@ -87,5 +87,5 @@ if len(sql_queries) > 0:
 else:
 
     class Query(graphene.ObjectType):
-        pass
+        pass"""
 

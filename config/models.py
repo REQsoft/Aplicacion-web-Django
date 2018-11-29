@@ -12,7 +12,7 @@ class Icon(models.Model):
 class Component(models.Model):
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED", default=None)
-    container = models.ForeignKey("self", on_delete="PROTECTED")
+    container = models.ForeignKey("self", on_delete="PROTECTED", blank=True, null=True, related_name='components')
     state = models.BooleanField(default=False)
     groups = models.ManyToManyField(Group, blank=True)
     description = models.CharField(max_length=300, blank=True)
@@ -24,5 +24,6 @@ class Component(models.Model):
 
     def save(self):
         super(Component, self).save()
-        type_name = "C" + str(self.id)
-        self.save()
+        if len(self.type_name) == 0:
+            self.type_name = "C" + str(self.id)
+            self.save()
