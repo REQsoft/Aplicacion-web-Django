@@ -22,7 +22,7 @@ class Component(models.Model):
     def __str__(self):
         return self.title
         
-    def save(self):
+    def save(self, **kwargs):
         super(Component, self).save()
         self.type_name = "C" + str(self.id)
         super(Component, self).save()

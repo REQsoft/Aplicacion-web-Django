@@ -35,9 +35,9 @@ class Service(models.Model):
     def get_absolute_url(self):
         return reverse("service-list")
 
-    def save(self):
+    def save(self, *args, **kwargs):
 
-        super(Service, self).save()
+        super(Service, self).save(*args, **kwargs)
         self.type_name = "S" + str(self.id)
 
         if self.source == 'sql':
@@ -46,7 +46,7 @@ class Service(models.Model):
             )
             query_sql.save()
         
-        super(Service, self).save()
+        super(Service, self).save(*args, **kwargs)
 
 
 # Modelo de configuracion de servicios de consulta SQL
@@ -100,7 +100,7 @@ class SQLQuery(models.Model):
             return data
         return None
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if (self.__current_query_sql != self.query_sql) or (
             self.__current_connection != self.connection
         ):
@@ -117,7 +117,7 @@ class SQLQuery(models.Model):
                         )
                         field.save()
 
-        super(SQLQuery, self).save()
+        super(SQLQuery, self).save(*args, **kwargs)
 
 
 class Field(models.Model):
