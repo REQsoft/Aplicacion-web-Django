@@ -83,8 +83,8 @@ def built_type_service(service):
 
     type_field = get_type_data_field(service)
     if type_field is not None:
-        dict_clsattr.update({"data": graphene.List(type_field)})
-        dict_clsattr.update({"resolve_data": get_resolve_data_field(service)})
+        dict_clsattr.update({"fields": graphene.List(type_field)})
+        dict_clsattr.update({"resolve_fields": get_resolve_data_field(service)})
 
     dict_clsattr.update({"resolve_title": lambda self, info, **kwargs: self.title})
 
@@ -147,10 +147,10 @@ def build_type_container(container):
 
     type_component = build_type_components(container)
     if type_component is not None:
-        dict_clsattr.update( {"data": graphene.Field(type_component)})
+        dict_clsattr.update( {"fields": graphene.Field(type_component)})
 
         dict_clsattr.update({
-            "resolve_data": 
+            "resolve_fields": 
             lambda self, info, **kwargs:get_components_container(self, info.context.user.username)
          })
 
