@@ -112,7 +112,6 @@ def check_user_group(component, username):
             groups = []
 
     for group in groups:
-        print(group)
         data_connection = group.connection.get_data_connection()
         conn = ManagerConnection(**data_connection)
         data = conn.managerSQL(group.sql_get_user, input={'username':username})
