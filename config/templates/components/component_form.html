@@ -1,0 +1,17 @@
+{% extends 'Services/base_form.html' %} {% load static %} 
+
+{% block config %}
+    {% if object %}
+        <form action="{% url 'component-edit' object.id %}" method="post">
+    {% else %}
+        <form action="{% url 'component-create' %}" method="post">
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if object %}
+        <h3 class="modal-title">Editar Componente {{ object.title }}</h3>
+    {% else %}
+        <h3 class="modal-title">Nuevo Componente</h3>
+    {% endif %}
+{% endblock %}

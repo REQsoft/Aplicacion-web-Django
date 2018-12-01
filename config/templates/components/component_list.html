@@ -1,0 +1,78 @@
+{% extends 'Services/base.html' %} {% load static %} {% block content %}
+<div class="box box-info">
+    {% if self.id != 1 %}
+    <a type="button" class="btn btn-default btn-lg" title="Atras" href="{% url 'component-list' self.component.id %}">
+        <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
+    </a> 
+    {% endif %}
+    <div class="box-header with-border">
+        <h3 class="box-title">{{ self.title }}</h3><br>
+    </div>
+    <a type="button" class="btn btn-primary btn-sm" title="Agregar Servicio" data-toggle="modal" 
+       data-target="#modal" onclick="return get_url('{% url 'service-create' %}')">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true">Servicio</span>
+    </a>
+    <a type="button" class="btn btn-primary btn-sm" title="Agregar Componente" data-toggle="modal" 
+       data-target="#modal" onclick="return get_url('{% url 'component-create' %}')">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true">Componente</span>
+    </a>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Icono</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for component in components %}
+            <tr style="background: rgb(218, 173, 88);">
+                <td>
+                    <img src="{{ component.icon.image.url }}" height="32" width="32" alt="{{ component.icon.title }}">
+                </td>
+                <td>
+                    {{ component.title }}
+                </td>
+                <td>
+                    <a type="button" class="btn btn-info btn-sm" title="Configurar" href="{% url 'component-list' component.id %}"> 
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    </a>
+                    <a type="button" class="btn btn-primary btn-sm" title="Editar" data-toggle="modal" 
+                        data-target="#modal" onclick="return get_url('{% url 'component-edit' component.id %}')">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </a>
+                    <a type="button" class="btn btn-danger btn-sm" title="Eliminar" data-toggle="modal" 
+                        data-target="#modal" onclick="return get_url('{% url 'component-delete' component.id %}')">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% for service in services %}
+            <tr style="background: rgb(88, 187, 218);">
+                <td>
+                    <img src="{{ service.icon.image.url }}" height="32" width="32" alt="{{ service.icon.title }}">
+                </td>
+                <td>
+                    {{ service.title }}
+                </td>
+                <td>
+                    <a type="button" class="btn btn-info btn-sm" title="Configurar" href="{% url 'service-configure' service.id %}"> 
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    </a>
+                    <a type="button" class="btn btn-primary btn-sm" title="Editar" data-toggle="modal" 
+                        data-target="#modal" onclick="return get_url('{% url 'service-edit' service.id %}')">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    </a>
+                    <a type="button" class="btn btn-danger btn-sm" title="Eliminar" data-toggle="modal" 
+                        data-target="#modal" onclick="return get_url('{% url 'service-delete' service.id %}')">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </a>
+                </td>
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'Services/base.html' %} {% load static %} {% block content %}
 <div class="box box-info">
-    <a type="button" class="btn btn-default btn-lg" title="Atras" href="{% url 'service-list' %}">
+    <a type="button" class="btn btn-default btn-lg" title="Atras" href="{% url 'component-list' service.component.id %}">
         <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
     </a> 
     

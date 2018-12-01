@@ -24,7 +24,7 @@ class Service(models.Model):
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     theme = models.CharField(choices=themes, max_length=20)
     component = models.ForeignKey(Component, on_delete='PROTECTED')
-    groups = models.ManyToManyField(Group)
+    groups = models.ManyToManyField(Group, blank=True)
     source = models.CharField(choices=sources, max_length=20)
     type_name = models.CharField(max_length=20, unique=True, blank=True)
     description = models.CharField(max_length=300, blank=True)
@@ -38,7 +38,7 @@ class Service(models.Model):
     def save(self):
 
         super(Service, self).save()
-        type_name = "S" + str(self.id)
+        self.type_name = "S" + str(self.id)
 
         if self.source == 'sql':
             query_sql = SQLQuery(
@@ -46,7 +46,7 @@ class Service(models.Model):
             )
             query_sql.save()
         
-        self.save()
+        super(Service, self).save()
 
 
 # Modelo de configuracion de servicios de consulta SQL

@@ -20,7 +20,7 @@ class StaffRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
         return super(StaffRequiredMixin, self).dispatch(request, *args, **kwargs)
 
-class GetUrlMixin(object):
+class ServiceReverseMixin(object):
     """
     Este mixin redireccionara a la pagina de configuracion de cada servicio.
     """
@@ -28,30 +28,38 @@ class GetUrlMixin(object):
         service = self.object.service
         return reverse( 'service-configure', kwargs={'pk': service.id})
 
+class ComponentReverseMixin(object):
+    """
+    Este mixin redireccionara al componente padre.
+    """
+    def get_success_url(self):
+        component = self.object.component
+        return reverse( 'component-list', kwargs={'pk': component.id})
+
 # Servicio
 def service_configure(request,pk):
     service = get_object_or_404(Service, id=pk)
 
-    if(service.kind=='query'):
+    if(service.source=='sql'):
         query,state=SQLQuery.objects.get_or_create(service=service)
         return redirect(reverse('query-configure', kwargs={'pk': query.service.id}))
 
-    return render(request, 'Services/'+str(service.kind)+'_configure.html', {'service':service})
+    return render(request, 'Services/'+str(service.theme)+'_configure.html', {'service':service})
 
 def add_element(request,pk):
     service = get_object_or_404(Service, id=pk)
     
-    if(service.kind=='catalog'):
+    if(service.theme=='catalog'):
         form = MissingItemForm()
         if request.method == 'POST':
             form = MissingItemForm(request.POST, request.FILES)
 
-    elif(service.kind=='directory'):
+    elif(service.theme=='directory'):
         form = OfficeForm()
         if request.method == 'POST':
             form = OfficeForm(request.POST)
 
-    elif(service.kind=='map'):
+    elif(service.theme=='map'):
         form = LocationForm()
         if request.method == 'POST':
             form = LocationForm(request.POST)
@@ -65,58 +73,58 @@ def add_element(request,pk):
             post.service = service
             post.save()
             return redirect(reverse('service-configure', kwargs={'pk': service.id}))
-    return render(request, 'Services/'+str(service.kind)+'_form.html', {'form':form, 'service':service})
+    return render(request, 'Services/'+str(service.theme)+'_form.html', {'form':form, 'service':service})
 
     
 class ServiceListView(ListView):
     model = Service
     template_name = "Services/service_list.html"
 
-class ServiceCreateView(CreateView):
+class ServiceCreateView(ComponentReverseMixin,CreateView):
     model = Service
     form_class = ServiceForm
     template_name = "Services/service_form.html"
 
-class ServiceUpdateView(UpdateView):
+class ServiceUpdateView(ComponentReverseMixin,UpdateView):
     model = Service
     form_class = ServiceForm
     template_name = "Services/service_form.html"
 
-class ServiceDeleteView(DeleteView):
+class ServiceDeleteView(ComponentReverseMixin,DeleteView):
     model = Service
     template_name = "Services/confirm_delete.html"
     success_url = reverse_lazy('service-list')
 
 
 # Catalogo de objetos perdidos
-class MissingItemUpdateView(GetUrlMixin, UpdateView):
+class MissingItemUpdateView(ServiceReverseMixin, UpdateView):
     model = MissingItem
     form_class = MissingItemForm
     template_name = "Services/catalog_form.html"
 
-class MissingItemDeleteView(GetUrlMixin, DeleteView):
+class MissingItemDeleteView(ServiceReverseMixin, DeleteView):
     model = MissingItem
     template_name = "Services/confirm_delete.html"
 
 
 # Directorio de dependencias
-class OfficeUpdateView(GetUrlMixin, UpdateView):
+class OfficeUpdateView(ServiceReverseMixin, UpdateView):
     model = Office
     form_class = OfficeForm
     template_name = "Services/directory_form.html"
 
-class OfficeDeleteView(GetUrlMixin, DeleteView):
+class OfficeDeleteView(ServiceReverseMixin, DeleteView):
     model = Office
     template_name = "Services/confirm_delete.html"
 
 
 # Mapa de bloques
-class LocationUpdateView(GetUrlMixin, UpdateView):
+class LocationUpdateView(ServiceReverseMixin, UpdateView):
     model = Location
     form_class = LocationForm
     template_name = "Services/map_form.html"
 
-class LocationDeleteView(GetUrlMixin, DeleteView):
+class LocationDeleteView(ServiceReverseMixin, DeleteView):
     model = Location
     template_name = "Services/confirm_delete.html"
 

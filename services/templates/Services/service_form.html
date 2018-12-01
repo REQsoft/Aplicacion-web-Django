@@ -1,9 +1,17 @@
 {% extends 'Services/base_form.html' %} {% load static %} 
 
 {% block config %}
-    <form action="{% url 'service-create' %}" method="post">
+    {% if object %}
+        <form action="{% url 'service-edit' object.id %}" method="post">
+    {% else %}
+        <form action="{% url 'service-create' %}" method="post">
+    {% endif %}
 {% endblock %}
 
 {% block title %}
-    <h3 class="modal-title">Nuevo Servicio</h3>
+    {% if object %}
+        <h3 class="modal-title">Editar Servicio {{ object.title }}</h3>
+    {% else %}
+        <h3 class="modal-title">Nuevo Servicio</h3>
+    {% endif %}
 {% endblock %}
