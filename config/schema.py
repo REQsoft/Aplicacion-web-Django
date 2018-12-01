@@ -1,4 +1,4 @@
-import graphene
+"""import graphene
 from graphene_django.types import DjangoObjectType
 from .models import *
 from services.schema import ServiceType
@@ -80,6 +80,6 @@ class Query(graphene.ObjectType):
         name = kwargs.get('name')
         if name is not None:
             return [Container.objects.get(name=name)] 
-        return Container.objects.all()
+        return Container.objects.all()"""
     
     

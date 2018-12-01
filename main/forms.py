@@ -19,7 +19,7 @@ class AuthenticationForm(forms.ModelForm):
         labels = {
             'connection':'Conexción a base de datos',
             'sql_auth':'Consulta de autenticación básica',
-            'sql_auth_user':'Consulta de busqueda de usuario',
+            'sql_auth_user':'Consulta de autenticación por token',
             'description':'Descripción'            
         }
 

@@ -23,8 +23,8 @@ class Service(models.Model):
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     theme = models.CharField(choices=themes, max_length=20)
-    component = models.ForeignKey(Component, on_delete='PROTECTED')
-    groups = models.ManyToManyField(Group, blank=True)
+    component = models.ForeignKey(Component, on_delete='PROTECTED', related_name='services')
+    groups = models.ManyToManyField(Group, blank=True, related_name='group_set')
     source = models.CharField(choices=sources, max_length=20)
     type_name = models.CharField(max_length=20, unique=True, blank=True)
     description = models.CharField(max_length=300, blank=True)
@@ -33,8 +33,8 @@ class Service(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('service-list')
-    
+        return reverse("service-list")
+
     def save(self):
 
         super(Service, self).save()
@@ -55,7 +55,6 @@ class SQLQuery(models.Model):
                                     limit_choices_to={'source': 'sql'},
                                     related_name="query", related_query_name="query")
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=True, null=True)
-    type_name = models.SlugField(max_length=50, unique=True)
     query_sql = models.CharField(max_length=300, blank=True)
 
     __current_query_sql = None
@@ -65,16 +64,16 @@ class SQLQuery(models.Model):
         super(SQLQuery, self).__init__(*args, **kwargs)
         self.__current_query_sql = self.query_sql
         self.__current_connection = self.connection
-    
+
     class Meta:
         verbose_name = "Query"
         verbose_name_plural = "Queries"
 
     def __str__(self):
-        return self.type_name
+        return self.service.title
 
     def get_absolute_url(self):
-        return reverse('service-list')
+        return reverse("service-list")
 
     def is_online(self):
         if self.connection is None:
@@ -100,9 +99,11 @@ class SQLQuery(models.Model):
                     data = filtered_data
             return data
         return None
-    
+
     def save(self):
-        if (self.__current_query_sql != self.query_sql) or (self.__current_connection != self.connection):
+        if (self.__current_query_sql != self.query_sql) or (
+            self.__current_connection != self.connection
+        ):
             Field.objects.filter(sql_query=self).delete()
             self.__current_query_sql = self.query_sql
 
@@ -112,34 +113,31 @@ class SQLQuery(models.Model):
                 if fields_service is not None:
                     for field in fields_service:
                         field = Field(
-                            sql_query = self,
-                            name = field,
-                            label = field,
-                            ofType = 'String'
+                            sql_query=self, name=field, label=field, ofType="String"
                         )
-                        field.save()  
+                        field.save()
 
         super(SQLQuery, self).save()
-        
-                
+
 
 class Field(models.Model):
-    sql_query = models.ForeignKey(SQLQuery, on_delete=models.CASCADE, related_name='fields')
+    sql_query = models.ForeignKey(
+        SQLQuery, on_delete=models.CASCADE, related_name="fields"
+    )
     name = models.CharField(max_length=20)
     label = models.CharField(max_length=20)
     ofType = models.CharField(max_length=10)
     visible = models.BooleanField(default=True)
 
-
     class Meta:
-        verbose_name = 'Field'
-        verbose_name_plural = 'Fields'
+        verbose_name = "Field"
+        verbose_name_plural = "Fields"
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('query-configure', kwargs={'pk':'1'})
+        return reverse("query-configure", kwargs={"pk": "1"})
 
 
 # Modelos de items individuales, asociados a un servicio general de Objetos Perdidos, Directorio y Geolocalizacion
@@ -150,35 +148,37 @@ class MissingItem(models.Model):
     title = models.CharField(max_length=100, unique=True) 
     description = models.CharField(max_length=200) 
     date = models.DateField(auto_now_add=True)
-    photo = models.ImageField(upload_to='photos')
-    
+    photo = models.ImageField(upload_to="photos")
+
     def __str__(self):
         return self.title
-    
+
     def get_absolute_url(self):
-        return reverse('service-configure', kwargs={'service_id': service.id})
+        return reverse("service-configure", kwargs={"service_id": service.id})
+
 
 class Office(models.Model):
     service = models.ForeignKey(Service, on_delete="CASCADE",
                                 limit_choices_to={'theme': 'directory'},
                                 related_name="offices", related_query_name="office")
     title = models.CharField(max_length=100, unique=True)
-    extension = models.CharField(max_length=50, blank=True)
-    phone = models.CharField(max_length=50, blank=True)
+    extension = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50)
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('service-configure', kwargs={'service_id': service.id})
+        return reverse("service-configure", kwargs={"service_id": service.id})
+
 
 class Location(models.Model):
     service = models.ForeignKey(Service, on_delete="CASCADE",
                                 limit_choices_to={'theme': 'map'},
                                 related_name="locations", related_query_name="location")
     title = models.CharField(max_length=100, unique=True)
-    description = models.CharField(max_length=300, blank=True)
-    icon = models.ForeignKey(Icon, on_delete="PROTECTED", default=None, blank=True)
+    description = models.CharField(max_length=300)
+    icon = models.ForeignKey(Icon, on_delete="PROTECTED", default=None)
     longitude = models.CharField(max_length=100)
     latitude = models.CharField(max_length=100)
 
@@ -186,5 +186,6 @@ class Location(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return redirect(reverse('service-configure', kwargs={'service_id': service.id}))
+        return redirect(reverse("service-configure", kwargs={"service_id": service.id}))
+
 

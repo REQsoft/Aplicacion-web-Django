@@ -101,7 +101,7 @@ class ManagerConnection:
                     conn = pymysql.connect(**self.config_connection)
                     cursor = conn.cursor(pymysql.cursors.DictCursor)
                     cursor.execute(query, input)
-                    data = cursor.fetchone()
+                    data = cursor.fetchall()
                     print(cursor._last_executed)
                     conn.close()
                     return data
