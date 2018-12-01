@@ -24,7 +24,7 @@ class Service(models.Model):
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     theme = models.CharField(choices=themes, max_length=20)
     component = models.ForeignKey(Component, on_delete='PROTECTED', related_name='services')
-    groups = models.ManyToManyField(Group, blank=True)
+    groups = models.ManyToManyField(Group, blank=True, related_name='group_set')
     source = models.CharField(choices=sources, max_length=20)
     type_name = models.CharField(max_length=20, unique=True, blank=True)
     description = models.CharField(max_length=300, blank=True)

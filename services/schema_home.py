@@ -4,7 +4,6 @@ from promise import Promise
 from promise.dataloader import DataLoader
 from graphql_jwt.decorators import login_required
 
-
 class OfficeType(graphene.ObjectType):
     title = graphene.String()
     extension = graphene.String()
@@ -98,7 +97,34 @@ def built_type_service(service):
 
     return type(service.type_name, (graphene.ObjectType,), dict_clsattr)
 
-def get_components_container(container):
+
+def check_user_group(component, username):
+
+    if component._meta.db_table == 'config_component':
+        try:
+            groups = component.groups.all()
+        except:
+            groups = []
+    else:
+        try:
+            groups = component.groups.all()
+        except:
+            groups = []
+
+    for group in groups:
+        print(group)
+        data_connection = group.connection.get_data_connection()
+        conn = ManagerConnection(**data_connection)
+        data = conn.managerSQL(group.sql_get_user, input={'username':username})
+        if data is not None:
+            return component
+    
+    if len(groups) == 0:
+        return component
+    
+    raise Exception("No tienes permisos para esta consulta")
+
+def get_components_container(container, user):
     components = {}
     try:
         components.update({'containers':container.components.all()})
@@ -106,9 +132,11 @@ def get_components_container(container):
         pass
     try:
         components.update({'services':container.services.all()})
-    except Exception as e:
+    except:
         pass
+    
     return components
+
 
 def build_type_container(container):
     dict_clsattr = {}
@@ -124,7 +152,7 @@ def build_type_container(container):
 
         dict_clsattr.update({
             "resolve_data": 
-            lambda self, info, **kwargs:get_components_container(self)
+            lambda self, info, **kwargs:get_components_container(self, info.context.user.username)
          })
 
     dict_clsattr.update({"resolve_title": lambda self, info, **kwargs: self.title})
@@ -157,7 +185,7 @@ def build_type_components(container):
 
         dict_clsattr.update({
                 "resolve_"+service.type_name: 
-                lambda self, info, **kwargs: self['services'].get(type_name=info.field_name)
+                lambda self, info, **kwargs: check_user_group(self['services'].get(type_name=info.field_name), info.context.user.username)
             })
 
     for component in components:
@@ -166,7 +194,7 @@ def build_type_components(container):
 
         dict_clsattr.update({
             "resolve_"+component.type_name: 
-            lambda self, info, **kwargs: self['containers'].get(type_name=info.field_name)
+            lambda self, info, **kwargs: check_user_group(self['containers'].get(type_name=info.field_name), info.context.user.username)
         })
         
     if len(dict_clsattr) > 0:
@@ -186,9 +214,8 @@ try:
         home = graphene.Field(type_container)
 
         def resolve_home(self, info, **kwargs):
-            return container_home
+            return check_user_group(container_home, info.context.user.username)
 except Exception as e:
-    print(e)
     class Query(graphene.ObjectType):
         pass
 
