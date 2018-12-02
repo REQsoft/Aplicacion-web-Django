@@ -22,8 +22,8 @@ class Component(models.Model):
     def __str__(self):
         return self.title
         
-    def save(self, **kwargs):
+    def save(self):
         super(Component, self).save()
-        self.type_name = "C" + str(self.id)
-        super(Component, self).save()
-    
+        if len(self.type_name) == 0:
+            self.type_name = "C" + str(self.id)
+            self.save()
