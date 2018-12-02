@@ -37,16 +37,16 @@ class Service(models.Model):
 
     def save(self, *args, **kwargs):
 
-        super(Service, self).save(*args, **kwargs)
-        self.type_name = "S" + str(self.id)
+        super(Service, self).save()
+        if len(self.type_name) == 0:
+            self.type_name = "S" + str(self.id)
+            self.save()
 
         if self.source == 'sql':
             query_sql = SQLQuery(
                 service=self,
             )
             query_sql.save()
-        
-        super(Service, self).save(*args, **kwargs)
 
 
 # Modelo de configuracion de servicios de consulta SQL
