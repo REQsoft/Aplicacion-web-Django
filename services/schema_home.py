@@ -198,7 +198,7 @@ def build_type_components(container):
         
     if len(dict_clsattr) > 0:
         return type(
-            container.type_name + "Component",
+            container.type_name + "Fields",
             (graphene.ObjectType,),
             dict_clsattr
         )
