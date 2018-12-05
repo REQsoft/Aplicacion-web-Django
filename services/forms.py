@@ -49,7 +49,7 @@ class FieldForm(forms.ModelForm):
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
-        fields = ["title", "icon", "theme", "component", "groups", "source", "description"]
+        fields = ["title", "icon", "theme", "folder", "groups", "source", "description"]
         labels = {"title": "", "description": "", "theme": "Seleccione el tipo de servicio: ", "icon": "Seleccione un icono para el servicio:"}
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo'}),

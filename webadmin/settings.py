@@ -70,6 +70,12 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+AUTH_LDAP_SERVER_URI = 'ldap://192.168.1.200'
+
+AUTH_LDAP_BIND_DN = 'cn=amdin,dc=unifossldap,dc=com'
+AUTH_LDAP_BIND_PASSWORD = '123'
+AUTH_LDAP_USER_DN_TEMPLATE = 'cn=%(user)s,ou=People,dc=unifossldap,dc=com'
+
 GRAPHQL_JWT = {
     'JWT_ALLOW_ARGUMENT': False,
 }

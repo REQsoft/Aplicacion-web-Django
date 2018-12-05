@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from .models import *
 from services.models import Service
 from services.views import ComponentReverseMixin
-from .forms import ComponentForm
+from .forms import FolderForm
 from itertools import chain
 
 def base_config(request):
@@ -14,26 +14,26 @@ def base_config(request):
 
 
 class ComponentListView(ListView):
-    model = Component
+    model = Folder
     template_name = "components/component_list.html"
 
 class ComponentCreateView(ComponentReverseMixin,CreateView):
-    model = Component
-    form_class = ComponentForm
+    model = Folder
+    form_class = FolderForm
     template_name = "components/component_form.html"
 
 class ComponentUpdateView(ComponentReverseMixin,UpdateView):
-    model = Component
-    form_class = ComponentForm
+    model = Folder
+    form_class = FolderForm
     template_name = "components/component_form.html"
 
 class ComponentDeleteView(ComponentReverseMixin,DeleteView):
-    model = Component
+    model = Folder
     template_name = "components/confirm_delete.html"
     success_url = reverse_lazy('component-list')
 
 def component_configure(request,pk):
-    component = get_object_or_404(Component, id=pk)
-    services = Service.objects.filter(component=component)
-    components = Component.objects.filter(component=component)
-    return render(request, 'components/component_list.html', {'self':component,'components':components,'services':services})
+    folder = get_object_or_404(Folder, id=pk)
+    services = Service.objects.filter(folder=folder)
+    folders = Folder.objects.filter(folder=folder)
+    return render(request, 'components/component_list.html', {'self':folder,'components':folders,'services':services})

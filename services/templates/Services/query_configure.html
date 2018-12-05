@@ -3,6 +3,8 @@
     <form method="post" id="form_service">
         <div class="box-header with-border">
             <h3 class="box-title">Configuración del servicio "{{ object.service }}"</h3>
+            <h4><small>type:{{ object.service.type_name }}</small></h4>
+            <h4><small>theme:{{ object.service.theme }}</small></h4>
         </div>
         <div class="box-body">
 
@@ -10,15 +12,6 @@
                 {% csrf_token %}
                 <tr>
                     <td width="25%">
-                        <span class="input-group-addon label-info form-control" id="sizing-addon1">{{ form.type_name.label }}</span>
-                    </td>
-                    <td>
-                        {{ form.type_name }}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
                         <span class="input-group-addon label-info form-control">{{ form.connection.label }}</span>
                     </td>
                     <td>
@@ -34,16 +27,7 @@
                         {{ form.query_sql }}
                     </td>
                 </tr>
-
-                <tr>
-                    <td>
-                        <span class="input-group-addon label-info form-control" id="sizing-addon1">{{ form.theme.label }}</span>
-                    </td>
-                    <td>
-                        {{ form.theme }}
-                    </td>
-                </tr>
-
+                
                 <tr>
                     <td>
                         {% if fields %}

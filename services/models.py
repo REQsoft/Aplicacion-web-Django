@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from global_.manager_connection import ManagerConnection
 from main.models import Group
-from config.models import Component,Icon
+from config.models import Folder,Icon
 from connections.models import Connection
 from django.template.defaultfilters import slugify
 import ast
@@ -23,7 +23,7 @@ class Service(models.Model):
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     theme = models.CharField(choices=themes, max_length=20)
-    component = models.ForeignKey(Component, on_delete='PROTECTED', related_name='services')
+    folder = models.ForeignKey(Folder, on_delete='PROTECTED', related_name='services')
     groups = models.ManyToManyField(Group, blank=True, related_name='group_set')
     source = models.CharField(choices=sources, max_length=20)
     type_name = models.CharField(max_length=20, unique=True, blank=True)

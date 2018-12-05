@@ -1,10 +1,10 @@
 from django import forms
 from .models import *
 
-class ComponentForm(forms.ModelForm):
+class FolderForm(forms.ModelForm):
     class Meta:
-        model = Component
-        fields = ["title", "icon", "component", "state", "groups", "description"]
+        model = Folder
+        fields = ["title", "icon", "folder", "state", "groups", "description"]
         labels = {"title": "", "description": "", "groups": "Seleccione los grupos del componente: ", "icon": "Seleccione un icono para el componente:"}
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo'}),
