@@ -1,7 +1,7 @@
 {% extends 'adminlte/base.html' %}
 {% load staticfiles %}
-{% block page_name %}
-    <div id="container">
+{% block page_title %}
+    <div id="modalcontainer">
         <div class="modal fade" id="modal">
             <div class="modal-dialog" role="document">
             
@@ -23,7 +23,7 @@
             $('#modal').on('hidden.bs.modal', function(event){
                 $('#modal').remove();
                 var myClone = originalModal.clone();
-                $('#container').append(myClone);
+                $('#modalcontainer').append(myClone);
             });
         }
     </script>
