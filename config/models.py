@@ -13,7 +13,7 @@ class Folder(models.Model):
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED", default=None)
     folder = models.ForeignKey("self", on_delete="PROTECTED", related_name="folders", blank=True, null=True)
-    state = models.BooleanField(default=False)
+    state = models.BooleanField(default=True)
     groups = models.ManyToManyField(Group, blank=True)
     description = models.CharField(max_length=300, blank=True)
     type_name = models.CharField(max_length=20, unique=True, blank=True)
