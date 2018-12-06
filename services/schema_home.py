@@ -191,18 +191,18 @@ def build_type_elements(folder):
                 lambda self, info, **kwargs: check_user_group(self['services'].get(type_name=info.field_name), info.context.user.username)
             })
 
-    for folder in folders:
-        type_folder = build_type_folder(folder)
-        dict_clsattr.update({folder.type_name:graphene.Field(type_folder)})
+    for f in folders:
+        type_folder = build_type_folder(f)
+        dict_clsattr.update({f.type_name:graphene.Field(type_folder)})
 
         dict_clsattr.update({
-            "resolve_"+folder.type_name: 
+            "resolve_"+f.type_name: 
             lambda self, info, **kwargs: check_user_group(self['folders'].get(type_name=info.field_name), info.context.user.username)
         })
         
     if len(dict_clsattr) > 0:
         return type(
-            folder.type_name + "Fields",
+            folder.type_name + "Elements",
             (graphene.ObjectType,),
             dict_clsattr
         )
