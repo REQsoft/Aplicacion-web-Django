@@ -23,7 +23,7 @@ class Folder(models.Model):
         return self.title
         
     def save(self):
-        super(Component, self).save()
+        super(Folder, self).save()
         if len(self.type_name) == 0:
             self.type_name = "C" + str(self.id)
             self.save()

@@ -23,6 +23,7 @@ class Service(models.Model):
     title = models.CharField(max_length=100, unique=True)
     icon = models.ForeignKey(Icon, on_delete="PROTECTED")
     theme = models.CharField(choices=themes, max_length=20)
+    state = models.BooleanField(default=True)
     folder = models.ForeignKey(Folder, on_delete='PROTECTED', related_name='services')
     groups = models.ManyToManyField(Group, blank=True, related_name='group_set')
     source = models.CharField(choices=sources, max_length=20)

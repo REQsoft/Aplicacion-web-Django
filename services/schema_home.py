@@ -79,12 +79,13 @@ def built_type_service(service):
     dict_clsattr.update({"title": graphene.String()})
     dict_clsattr.update({"icon": graphene.String()})
     dict_clsattr.update({"theme": graphene.String()})
+    dict_clsattr.update({"state": graphene.Boolean()})
     dict_clsattr.update({"description": graphene.String()})
 
     type_field = get_type_data_field(service)
     if type_field is not None:
-        dict_clsattr.update({"fields": graphene.List(type_field)})
-        dict_clsattr.update({"resolve_fields": get_resolve_data_field(service)})
+        dict_clsattr.update({"elements": graphene.List(type_field)})
+        dict_clsattr.update({"resolve_elements": get_resolve_data_field(service)})
 
     dict_clsattr.update({"resolve_title": lambda self, info, **kwargs: self.title})
 
@@ -92,22 +93,24 @@ def built_type_service(service):
 
     dict_clsattr.update({"resolve_theme": lambda self, info, **kwargs: self.theme})
 
+    dict_clsattr.update({"resolve_state": lambda self, info, **kwargs: self.state})
+
     dict_clsattr.update({"resolve_description":lambda self, info, **kwargs: self.description})
 
 
     return type(service.type_name, (graphene.ObjectType,), dict_clsattr)
 
 
-def check_user_group(component, username):
+def check_user_group(folder, username):
 
-    if component._meta.db_table == 'config_component':
+    if folder._meta.db_table == 'config_folder':
         try:
-            groups = component.groups.all()
+            groups = folder.groups.all()
         except:
             groups = []
     else:
         try:
-            groups = component.groups.all()
+            groups = folder.groups.all()
         except:
             groups = []
 
@@ -116,42 +119,43 @@ def check_user_group(component, username):
         conn = ManagerConnection(**data_connection)
         data = conn.managerSQL(group.sql_get_user, input={'username':username})
         if data is not None:
-            return component
+            return folder
     
     if len(groups) == 0:
-        return component
+        return folder
     
     raise Exception("No tienes permisos para esta consulta")
 
-def get_components_container(container, user):
-    components = {}
+def get_elements_folder(folder, user):
+    elements = {}
     try:
-        components.update({'containers':container.components.all()})
+        elements.update({'folders':folder.folders.all()})
     except:
         pass
     try:
-        components.update({'services':container.services.all()})
+        elements.update({'services':folder.services.all()})
     except:
         pass
     
-    return components
+    return elements
 
 
-def build_type_container(container):
+def build_type_folder(folder):
     dict_clsattr = {}
 
     dict_clsattr.update({"title": graphene.String()})
     dict_clsattr.update({"icon": graphene.String()})
     dict_clsattr.update({"state": graphene.Boolean()})
+    dict_clsattr.update({"theme": graphene.String()})
     dict_clsattr.update({"description": graphene.String()})
 
-    type_component = build_type_components(container)
-    if type_component is not None:
-        dict_clsattr.update( {"fields": graphene.Field(type_component)})
+    type_folder = build_type_elements(folder)
+    if type_folder is not None:
+        dict_clsattr.update( {"elements": graphene.Field(type_folder)})
 
         dict_clsattr.update({
-            "resolve_fields": 
-            lambda self, info, **kwargs:get_components_container(self, info.context.user.username)
+            "resolve_elements": 
+            lambda self, info, **kwargs:get_elements_folder(self, info.context.user.username)
          })
 
     dict_clsattr.update({"resolve_title": lambda self, info, **kwargs: self.title})
@@ -162,19 +166,19 @@ def build_type_container(container):
 
     dict_clsattr.update({"resolve_description":lambda self, info, **kwargs: self.description})
 
-    return type(container.type_name, (graphene.ObjectType, ), dict_clsattr)
+    return type(folder.type_name, (graphene.ObjectType, ), dict_clsattr)
 
 
-def build_type_components(container):
+def build_type_elements(folder):
     dict_clsattr = {}
 
     try:
-        components = container.components.all()
+        folders = folder.folders.all()
     except:
-        components = []
+        folders = []
 
     try:
-        services = container.services.all()
+        services = folder.services.all()
     except:
         services = []
 
@@ -187,18 +191,18 @@ def build_type_components(container):
                 lambda self, info, **kwargs: check_user_group(self['services'].get(type_name=info.field_name), info.context.user.username)
             })
 
-    for component in components:
-        type_component = build_type_container(component)
-        dict_clsattr.update({component.type_name:graphene.Field(type_component)})
+    for folder in folders:
+        type_folder = build_type_folder(folder)
+        dict_clsattr.update({folder.type_name:graphene.Field(type_folder)})
 
         dict_clsattr.update({
-            "resolve_"+component.type_name: 
-            lambda self, info, **kwargs: check_user_group(self['containers'].get(type_name=info.field_name), info.context.user.username)
+            "resolve_"+folder.type_name: 
+            lambda self, info, **kwargs: check_user_group(self['folders'].get(type_name=info.field_name), info.context.user.username)
         })
         
     if len(dict_clsattr) > 0:
         return type(
-            container.type_name + "Fields",
+            folder.type_name + "Fields",
             (graphene.ObjectType,),
             dict_clsattr
         )
@@ -206,15 +210,16 @@ def build_type_components(container):
 
 
 try:
-    container_home = Component.objects.get(type_name='Home')
-    type_container = build_type_container(container_home)
+    folder_home = Folder.objects.get(type_name='Home')
+    type_folder = build_type_folder(folder_home)
 
     class Query(graphene.ObjectType):
-        home = graphene.Field(type_container)
+        Home = graphene.Field(type_folder)
 
-        def resolve_home(self, info, **kwargs):
-            return check_user_group(container_home, info.context.user.username)
+        def resolve_Home(self, info, **kwargs):
+            return check_user_group(folder_home, info.context.user.username)
 except Exception as e:
+    print(e)
     class Query(graphene.ObjectType):
         pass
 
