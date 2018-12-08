@@ -4,7 +4,7 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <!-- Sidebar user panel -->
-        {% block user_panel %}
+        <!-- {% block user_panel %}
         <div class="user-panel">
             <div class="pull-left image">
                 <img src="{% avatar_url size=90 %}" class="img-circle" alt="User Image">
@@ -13,7 +13,7 @@
                 <p>{% firstof request.user.get_full_name request.user.username %}</p>
             </div>
         </div>
-        {% endblock %}
+        {% endblock %} -->
 
         {% block form %}{% endblock %}
 
@@ -21,7 +21,7 @@
         {% block nav_links_ul %}
         <ul class="sidebar-menu">
             {% block nav_links_outer %}
-            <li class="header">{% block nav_heading %}MAIN NAVIGATION{% endblock %}</li>base
+            <!-- <li class="header">{% block nav_heading %}MAIN NAVIGATION{% endblock %}</li> -->
 
             {% block nav_links %}
             <li>
