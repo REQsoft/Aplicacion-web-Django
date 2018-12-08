@@ -20,7 +20,14 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="{% url 'auth-update' 'authentication' %}">Autenticación</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Autenticación
+            <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'auth-update' 'authentication' %}">Conexion a base de datos</a></li>
+            <li><a href="{% url 'auth-update' 'authentication' %}">Acceso a directorio activo</a></li>
+          </ul>
+        </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Grupos
             <span class="caret"></span></a>
