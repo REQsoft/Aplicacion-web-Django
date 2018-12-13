@@ -12,28 +12,23 @@ from itertools import chain
 def base_config(request):
     return render(request, "components/base.html")
 
-
-class ComponentListView(ListView):
-    model = Folder
-    template_name = "components/component_list.html"
-
-class ComponentCreateView(ComponentReverseMixin,CreateView):
+class FolderCreateView(ComponentReverseMixin,CreateView):
     model = Folder
     form_class = FolderForm
     template_name = "components/component_form.html"
 
-class ComponentUpdateView(ComponentReverseMixin,UpdateView):
+class FolderUpdateView(ComponentReverseMixin,UpdateView):
     model = Folder
     form_class = FolderForm
     template_name = "components/component_form.html"
 
-class ComponentDeleteView(ComponentReverseMixin,DeleteView):
+class FolderDeleteView(ComponentReverseMixin,DeleteView):
     model = Folder
     template_name = "components/confirm_delete.html"
     success_url = reverse_lazy('component-list')
 
-def component_configure(request,pk):
+def component_list(request,pk):
     folder = get_object_or_404(Folder, id=pk)
     services = Service.objects.filter(folder=folder)
     folders = Folder.objects.filter(folder=folder)
-    return render(request, 'components/component_list.html', {'self':folder,'components':folders,'services':services})
+    return render(request, 'components/component_list.html', {'self':folder,'folders':folders,'services':services})

@@ -1,20 +1,29 @@
 {% extends 'Services/base.html' %} {% load static %} {% block content %}
-<div class="box box-info">
-    <a type="button" class="btn btn-default btn-lg" title="Atras" href="{% url 'component-list' service.component.id %}">
-        <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
-    </a> 
-    
-    <div class="box-header with-border">
-        <h3 class="box-title">{{ service.title }}</h3><br>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ service.title }}</h3><br>
+            </div>
+            <div class="row justify-content-between">
+                    <div class="col-md-4">
+                        <a type="button" class="btn btn-default" title="Atras" href="{% url 'component-list' service.folder.id %}">
+                            <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a type="button" class="btn btn-primary btn-sm" title="Agregar" data-toggle="modal" 
+                            data-target="#modal" onclick="return get_url('{% url 'add-element' service.id %}')">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                </div>
+        
+            {% block table %}
+            
+            {% endblock %}
+        </div>
     </div>
-
-    <a type="button" class="btn btn-primary btn-sm" title="Agregar" data-toggle="modal" 
-       data-target="#modal" onclick="return get_url('{% url 'add-element' service.id %}')">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-    </a>
-
-    {% block table %}
     
-    {% endblock %}
 </div>
 {% endblock %}

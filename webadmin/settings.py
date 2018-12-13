@@ -36,8 +36,6 @@ prueba = ''
 INSTALLED_APPS = [
     # para poder ejecutar adminlte y hacer uso de sus templates
     "django_adminlte",
-    # si se requiere cambiar la interfaz del admin propio de django
-    "django_adminlte_theme",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

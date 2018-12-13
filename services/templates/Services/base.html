@@ -1,15 +1,13 @@
 {% extends 'adminlte/base.html' %}
 {% load staticfiles %}
-{% block page_title %}
+{% block modal %}
     <div id="modalcontainer">
-        <div class="modal fade" id="modal">
-            <div class="modal-dialog" role="document">
-            
-            </div>
+        <div class="modal modal-adminpro-general default-popup-PrimaryModal fade" id="modal">
+        
         </div>
     </div>
     <script>
-        function get_url(url){   
+        function get_url(url){
             $('#modal').on('show.bs.modal', function(event){
                 var modal = $(this);
                 $.ajax({
