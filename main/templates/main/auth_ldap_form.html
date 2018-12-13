@@ -1,71 +1,192 @@
 {% extends 'main/base.html' %} {% load static %} {% block content %}
-<div class="box box-info">
-    <div class="box-header with-border">
-        <h3 class="box-title">Autenticación</h3>
-    </div>
-    <div class="box-body">
-        <div id="div_form">
-            <table class="table">
-                {% if form.name.errors %}
-                <div id="alert_error_connection_name" class="alert alert-warning">
-                    <button type="button" class="close" data-dismiss="alert">x</button>
-                    <strong>{{ form.name.errors }}</strong>
-                </div>
-                {% endif %}
-                <form method="post" id="form_connection">
-                    {% csrf_token %}
-                    <tr>
-                        <td width="25%">
-                            <span class="input-group-addon label-info form-control">{{ form.connection.label }}</span>
-                        </td>
-                        <td>
-                            {{ form.connection }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control">{{ form.sql_auth.label }}</span>
-                        </td>
-                        <td>
-                            {{ form.sql_auth }}
-                        </td>
-                    </tr>
+<section class="panel form-wizard" id="w1">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <a href="#" class="fa fa-caret-down"></a>
+            <a href="#" class="fa fa-times"></a>
+        </div>
 
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control">{{ form.sql_auth_user.label }}</span>
-                        </td>
-                        <td>
-                            {{ form.sql_auth_user }}
-                        </td>
-                    </tr>
+        <h2 class="panel-title">Configuración del servidor LDAP</h2>
+    </header>
+    <div class="panel-body panel-body-nopadding">
+        <div class="wizard-tabs">
+            <ul class="wizard-steps">
+                <li class="active">
+                    <a href="#w1-account" data-toggle="tab" class="text-center">
+                        <span class="badge hidden-xs">1</span>
+                        Conexión
+                    </a>
+                </li>
+                <li>
+                    <a href="#w1-profile" data-toggle="tab" class="text-center">
+                        <span class="badge hidden-xs">2</span>
+                        Autenticación
+                    </a>
+                </li>
+                <li>
+                    <a href="#w1-confirm" data-toggle="tab" class="text-center">
+                        <span class="badge hidden-xs">3</span>
+                        Confirm
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div id="w1-account" class="tab-pane active">
+                <form class="form-horizontal form-bordered" method="POST">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_SERVER_URI.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_SERVER_URI }}
+                        </div>
+                    </div>
 
-                    <tr>
-                        <td>
-                            <div id="button_save">
-                                <button type="submit" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_BIND_DN.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_BIND_DN }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_BIND_PASSWORD.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_BIND_PASSWORD }}
+                        </div>
+                    </div>
                 </form>
-            </table>
-            <div id="loader" hidden>
-                <center>
-                    <img src="{% static 'images/loader.gif' %}" width="40px" height="40px">
-                </center>
             </div>
-            <div id="alert_success" class="alert alert-success" hidden>
-                <button type="button" class="close" data-dismiss="alert">x</button>
-                <strong>La conexion es correcta! </strong>
-            </div>
-            <div id="alert_error" class="alert alert-danger" hidden>
-                <button type="button" class="close" data-dismiss="alert">x</button>
-                <strong>ERROR! </strong>
-                No se ha establecido la conexion.
+
+            <div id="w1-profile" class="tab-pane">
+                <form class="form-horizontal form-bordered" method="POST">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="inputSuccess">Tipo de vinculación</label>
+                        <div class="col-md-6">
+                            <div class="radio-custom">
+                                <input type="radio" id="busqueda/enlace" name="radioExample">
+                                <label for="radioExample1">Búsqueda/Vinculación</label>
+                            </div>
+                            <div class="radio-custom">
+                                <input type="radio" id="enlace_directo" name="radioExample">
+                                <label for="radioExample1">Vinculación directa</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="inputSuccess"></label>
+                        <div class="col-md-6">
+                            <label class="checkbox-inline">
+                                {{ form.AUTH_LDAP_PERMIT_EMPTY_PASSWORD }} {{
+                                form.AUTH_LDAP_PERMIT_EMPTY_PASSWORD.label }}
+                            </label>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+    <div class="panel-footer">
+        <ul class="pager">
+            <li class="previous disabled">
+                <a><i class="fa fa-angle-left"></i> Previous</a>
+            </li>
+            <li class="finish hidden pull-right">
+                <a>Finish</a>
+            </li>
+            <li class="next">
+                <a>Next <i class="fa fa-angle-right"></i></a>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <div class="panel-actions">
+                    <a href="#" class="fa fa-caret-down"></a>
+                    <a href="#" class="fa fa-times"></a>
+                </div>
+
+                <h2 class="panel-title">Form Elements</h2>
+            </header>
+            <div class="panel-body">
+                <form class="form-horizontal form-bordered" method="POST">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_SERVER_URI.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_SERVER_URI }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_BIND_DN.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_BIND_DN }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_BIND_PASSWORD.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_BIND_PASSWORD }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="inputSuccess"></label>
+                        <div class="col-md-6">
+                            <label class="checkbox-inline">
+                                {{ form.AUTH_LDAP_PERMIT_EMPTY_PASSWORD }} {{ form.AUTH_LDAP_PERMIT_EMPTY_PASSWORD.label }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_USER_DN_TEMPLATE.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_USER_DN_TEMPLATE }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_USER_SEARCH.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_USER_SEARCH }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_GROUP_SEARCH.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_GROUP_SEARCH }}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_REQUIRE_GROUP.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_REQUIRE_GROUP }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.AUTH_LDAP_DENY_GROUP.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.AUTH_LDAP_DENY_GROUP }}
+                        </div>
+                    </div>
+
+                    <div class="panel-footer">
+                        <button type="submit" class="btn btn-success">
+                            <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
     </div>
 </div>
 {% endblock %}
