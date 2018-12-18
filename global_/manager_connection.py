@@ -31,7 +31,7 @@ class ManagerConnection:
                 conn.close()
                 return True
             except Exception as e:
-                print(e)
+                print(e, self.config_connection)
                 return False
 
         if self.manager_db == "postgresql":

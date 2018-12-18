@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-import ldap
 from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 
 
@@ -66,62 +65,18 @@ MIDDLEWARE = [
 ]
 
 #=========================================================================================
-import ldap
-from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
-from . import LDAP_settings
 
-# Baseline configuration.
+from webadmin.ldap_settings import * 
 
-if len(LDAP_settings.AUTH_LDAP_SERVER_URI) > 0:
-    AUTH_LDAP_SERVER_URI = LDAP_settings.AUTH_LDAP_SERVER_URI
-
-if len(LDAP_settings.AUTH_LDAP_BIND_DN) > 0:
-    AUTH_LDAP_BIND_DN = LDAP_settings.AUTH_LDAP_BIND_DN
-
-if len(LDAP_settings.AUTH_LDAP_BIND_PASSWORD) > 0:
-    AUTH_LDAP_BIND_PASSWORD = LDAP_settings.AUTH_LDAP_BIND_PASSWORD
-
-AUTH_LDAP_PERMIT_EMPTY_PASSWORD = LDAP_settings.AUTH_LDAP_PERMIT_EMPTY_PASSWORD
-
-if len(LDAP_settings.AUTH_LDAP_USER_DN_TEMPLATE) > 0:
-    AUTH_LDAP_USER_DN_TEMPLATE = LDAP_settings.AUTH_LDAP_USER_DN_TEMPLATE
-
-if len(LDAP_settings.AUTH_LDAP_USER_SEARCH) > 0:
-    AUTH_LDAP_USER_SEARCH = LDAPSearch(
-        LDAP_settings.AUTH_LDAP_USER_SEARCH,
-        ldap.SCOPE_SUBTREE,
-        '(uid=%(user)s)',
-    )
-
-if len(LDAP_settings.AUTH_LDAP_GROUP_SEARCH) > 0:
-    AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
-        LDAP_settings.AUTH_LDAP_GROUP_SEARCH,
-        ldap.SCOPE_SUBTREE,
-        '(objectClass=groupOfNames)',
-    )
-    AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr='cn')
-
-    # Simple group restrictions
-    if len(LDAP_settings.AUTH_LDAP_REQUIRE_GROUP) > 0:
-        AUTH_LDAP_REQUIRE_GROUP = LDAP_settings.AUTH_LDAP_REQUIRE_GROUP
-
-    if len(LDAP_settings.AUTH_LDAP_DENY_GROUP) > 0:
-        AUTH_LDAP_REQUIRE_GROUP = LDAP_settings.AUTH_LDAP_DENY_GROUP
-
-# This is the default, but I like to be explicit.
 AUTH_LDAP_ALWAYS_UPDATE_USER = False
 
-# Cache distinguised names and group memberships for an hour to minimize
-# LDAP traffic.
-AUTH_LDAP_CACHE_TIMEOUT = 3600
-
 #========================================================================================
-
+ 
+from webadmin.authentication_backend_settings import authentication_backend
 
 
 AUTHENTICATION_BACKENDS = [
-    'webadmin.backends.LDAPBackend',
-    'webadmin.backends.CustomBackend',
+    authentication_backend,
     'webadmin.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]

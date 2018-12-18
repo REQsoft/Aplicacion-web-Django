@@ -3,49 +3,65 @@ from django import forms
 from .models import *
 
 #Formulario para gestionar conexión.
-class LDAPServerForm(forms.ModelForm):
+class AuthenticationLDAPForm(forms.ModelForm):
 
     class Meta:
 
-        model = LDAPServer 
+        model = AuthenticationLDAP 
         fields = (
-            'AUTH_LDAP_SERVER_URI',
-            'AUTH_LDAP_BIND_DN',
-            'AUTH_LDAP_BIND_PASSWORD',
-            'AUTH_LDAP_USER_DN_TEMPLATE',
-            'AUTH_LDAP_PERMIT_EMPTY_PASSWORD',
-            'AUTH_LDAP_GROUP_SEARCH',
-            'AUTH_LDAP_USER_SEARCH',
-            'AUTH_LDAP_REQUIRE_GROUP',
-            'AUTH_LDAP_DENY_GROUP'
+            'SERVER_URI',
+            'USER_DN_TEMPLATE',
+            'PERMIT_EMPTY_PASSWORD',
+            'GROUP_SEARCH',
+            'REQUIRE_GROUP',
+            'DENY_GROUP',
+            'authentication',
         )
 
         labels = {
-            'AUTH_LDAP_SERVER_URI':'URI servidor',
-            'AUTH_LDAP_BIND_DN':'Usuario administrador',
-            'AUTH_LDAP_BIND_PASSWORD':'Contraseña',
-            'AUTH_LDAP_PERMIT_EMPTY_PASSWORD':'Permitir enlace sin contraseña', 
-            'AUTH_LDAP_USER_DN_TEMPLATE':'Plantilla DN de usuario',
-            'AUTH_LDAP_USER_SEARCH':'DN usuarios',
-            'AUTH_LDAP_GROUP_SEARCH':'DN de grupos',      
-            'AUTH_LDAP_REQUIRE_GROUP':'Grupo de usuarios permitidos',
-            'AUTH_LDAP_DENY_GROUP':'Grupo de usuarios rechazados' 
+            'SERVER_URI':'URI servidor',
+            'PERMIT_EMPTY_PASSWORD':'Permitir enlace sin contraseña', 
+            'USER_DN_TEMPLATE':'Plantilla DN de usuario',
+            'GROUP_SEARCH':'DN de grupos',      
+            'REQUIRE_GROUP':'Grupo de usuarios permitidos',
+            'DENY_GROUP':'Grupo de usuarios rechazados',
+            'authentication':'Autenticación'
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         for field in self.fields:
-            if field != 'AUTH_LDAP_PERMIT_EMPTY_PASSWORD':
+            if field != 'PERMIT_EMPTY_PASSWORD':
                 self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
+class LDAPUserSearchForm(forms.ModelForm):
 
-class AuthenticationForm(forms.ModelForm):
+    class Meta:
+        model = LDAPUserSearch
+        fields = (
+            'USER_SEARCH',
+            'filter_attr',
+            )
+
+        labels = {
+            'USER_SEARCH':'DN base del grupo',
+            'filter_attr':'Atributo de filtro de usuario',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class AuthenticationDBForm(forms.ModelForm):
 
     class Meta:
 
-        model = Authentication 
+        model = AuthenticationDB 
 
         fields = [
             'connection',
@@ -55,7 +71,7 @@ class AuthenticationForm(forms.ModelForm):
         ]
 
         labels = {
-            'connection':'Conexción a base de datos',
+            'connection':'Conexión a base de datos',
             'sql_auth':'Consulta de autenticación básica',
             'sql_auth_user':'Consulta de autenticación por token',
             'description':'Descripción'            

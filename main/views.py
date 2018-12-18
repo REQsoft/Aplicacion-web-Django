@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.contrib import auth
 from django.views.generic import CreateView, DeleteView, UpdateView, ListView
 from .models import *
 from .forms import *
 from webadmin import settings
 import os
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -26,43 +28,105 @@ def base_main(request):
 
 
 
-class AuthenticationUpdateView(UpdateView):
-    model = Authentication
-    form_class = AuthenticationForm
+class AuthenticationDBUpdateView(UpdateView):
+    model = AuthenticationDB
+    form_class = AuthenticationDBForm
     template_name = "main/auth_form.html"
+
+    def get_object(self, queryset=None):
+        obj, created = AuthenticationDB.objects.get_or_create(pk='AuthenticationDB')
+        return obj
 
 
 class GroupListView(ListView):
     model = Group
     template_name = "main/group_list.html"
 
-
 class GroupCreateView(CreateView):
     model = Group
     form_class = GroupForm
     template_name = "main/group_form.html"
 
+class LDAPUserSearchCreateView(CreateView):
+    model = LDAPUserSearch
+    form_class = LDAPUserSearchForm
+    template_name = "main/user_search_form.html"
 
-class LDAPServerUpdateView(UpdateView):
-    model = LDAPServer
-    form_class = LDAPServerForm
+
+class LDAPUserSearchUpdateView(UpdateView):
+    model = LDAPUserSearch
+    form_class = LDAPUserSearchForm
+    template_name = "main/user_search_form.html"
+
+
+class LDAPUserSearchDeleteView(DeleteView):
+    model = LDAPUserSearch
+    success_url = reverse_lazy("authldap-update")
+    
+
+class AuthenticationLDAPUpdateView(UpdateView):
+    model = AuthenticationLDAP
+    form_class = AuthenticationLDAPForm
     template_name = "main/auth_ldap_form.html"
+
+    def get_object(self, queryset=None):
+        obj, created = AuthenticationLDAP.objects.get_or_create(pk='AuthenticationLDAP')
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(AuthenticationLDAPUpdateView, self).get_context_data(**kwargs)
+        try:
+            context['USER_SEARCH'] = LDAPUserSearch.objects.all()
+        except:
+            pass
+        return context
+
 
     def form_valid(self, form):
         self.object = form.save()
+        
         BASE_DIR = settings.BASE_DIR
-        LDAP_settings = open(os.path.join(BASE_DIR, 'webadmin/LDAP_settings.py'), 'w')
-        LDAP_settings.write("AUTH_LDAP_SERVER_URI = '"+self.object.AUTH_LDAP_SERVER_URI+"'\n")
-        LDAP_settings.write("AUTH_LDAP_BIND_DN = '"+self.object.AUTH_LDAP_BIND_DN+"'\n")
-        LDAP_settings.write("AUTH_LDAP_BIND_PASSWORD = '"+self.object.AUTH_LDAP_BIND_PASSWORD+"'\n")
-        LDAP_settings.write("AUTH_LDAP_USER_DN_TEMPLATE = '"+self.object.AUTH_LDAP_USER_DN_TEMPLATE+"'\n")
-        LDAP_settings.write("AUTH_LDAP_PERMIT_EMPTY_PASSWORD = "+str(self.object.AUTH_LDAP_PERMIT_EMPTY_PASSWORD)+"\n")
-        LDAP_settings.write("AUTH_LDAP_GROUP_SEARCH = '"+self.object.AUTH_LDAP_GROUP_SEARCH+"'\n")
-        LDAP_settings.write("AUTH_LDAP_USER_SEARCH = '"+self.object.AUTH_LDAP_USER_SEARCH+"'\n")
-        LDAP_settings.write("AUTH_LDAP_REQUIRE_GROUP = '"+self.object.AUTH_LDAP_REQUIRE_GROUP+"'\n")
-        LDAP_settings.write("AUTH_LDAP_DENY_GROUP = '"+self.object.AUTH_LDAP_DENY_GROUP+"'\n")
-        LDAP_settings.close()
-        return super(LDAPServerUpdateView, self).form_valid(form)
+        ldap_settings = open(os.path.join(BASE_DIR, 'webadmin/ldap_settings.py'), 'w')
+
+
+        ldap_settings.write("import ldap\n")
+        ldap_settings.write("from django_auth_ldap.config import LDAPSearch, LDAPSearchUnion\n")
+
+        ldap_settings.write("AUTH_LDAP_SERVER_URI = '"+self.object.SERVER_URI+"'\n")
+        ldap_settings.write("AUTH_LDAP_PERMIT_EMPTY_PASSWORD = "+str(self.object.PERMIT_EMPTY_PASSWORD)+"\n")
+
+        if self.object.authentication == '1':
+            ldap_settings.write("AUTH_LDAP_USER_DN_TEMPLATE = '"+self.object.USER_DN_TEMPLATE+"'\n")
+        else:
+            LDAPSearchs = ''
+            for user_search in LDAPUserSearch.objects.all():
+                LDAPSearchs += "\nLDAPSearch('"+ user_search.USER_SEARCH +"', ldap.SCOPE_SUBTREE,'("+user_search.filter_attr+"=%(user)s)'),"
+
+            ldap_settings.write("AUTH_LDAP_USER_SEARCH = LDAPSearchUnion("+LDAPSearchs+")\n")
+
+        ldap_settings.close()
+
+        return super(AuthenticationLDAPUpdateView, self).form_valid(form)
+
+def set_backend_setting_db_auth(request):
+    BASE_DIR = settings.BASE_DIR
+
+    auth_backend_setting = open(os.path.join(BASE_DIR, 'webadmin/authentication_backend_settings.py'), 'w')
+    auth_backend_setting.write("authentication_backend = 'webadmin.backends.CustomBackend'")
+    auth_backend_setting.close()
+    context =  {"object":True}
+
+    return JsonResponse(context) 
+
+def set_backend_setting_ldap_auth(request):
+    BASE_DIR = settings.BASE_DIR
+
+    auth_backend_setting = open(os.path.join(BASE_DIR, 'webadmin/authentication_backend_settings.py'), 'w')
+    auth_backend_setting.write("authentication_backend = 'webadmin.backends.LDAPBackend'")
+    auth_backend_setting.close()
+    context =  {"object":True}
+
+    return JsonResponse(context) 
 
 
 

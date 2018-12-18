@@ -106,10 +106,8 @@
                                 <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Autenticación
                                     <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
                                 <div role="menu" class="dropdown-menu animated flipInX">
-                                    <a href="{% url 'auth-update' 'authentication' %}" class="dropdown-item">Conexión a
-                                        base de datos</a>
-                                    <a href="{% url 'ldap-update' 'settingldap' %}" class="dropdown-item">Conexión a
-                                        servidor LDAP</a>
+                                    <a href="{% url 'authdb-update' %}" class="dropdown-item">Usuarios en base de datos</a>
+                                    <a href="{% url 'authldap-update' %}" class="dropdown-item">Servidor LDAP</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">

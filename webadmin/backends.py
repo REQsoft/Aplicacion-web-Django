@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from global_.manager_connection import ManagerConnection
-from main.models import Group, Authentication
+from main.models import Group, AuthenticationDB
 from graphql_jwt.utils import get_credentials, get_payload
 from graphql_jwt.settings import jwt_settings
 from django_auth_ldap.backend import LDAPBackend, logger, _LDAPUser, LDAPSettings
@@ -9,7 +9,7 @@ import ldap
 
 def get_user_by_natural_key(user_id):
     try:
-        auth = Authentication.objects.all()[0]
+        auth = AuthenticationDB.objects.all()[0]
         data_connection = auth.connection.get_data_connection()
         data_connection.update({"dbname": auth.connection.dbname})
         conn = ManagerConnection(**data_connection)
@@ -35,7 +35,7 @@ def get_user_by_payload(payload):
 
 
 def check_user(username, password):
-    auth = Authentication.objects.all()[0]
+    auth = AuthenticationDB.objects.all()[0]
     data_connection = auth.connection.get_data_connection()
     conn = ManagerConnection(**data_connection)
     data = conn.managerSQL(auth.sql_auth, input={'username':username, 'password':password})
