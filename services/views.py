@@ -30,7 +30,7 @@ class ServiceReverseMixin(object):
 
 class ComponentReverseMixin(object):
     """
-    Este mixin redireccionara al componente padre.
+    Este mixin redireccionara al folder padre.
     """
     def get_success_url(self):
         folder = self.object.folder

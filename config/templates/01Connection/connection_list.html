@@ -1,0 +1,125 @@
+{% extends 'adminlte/base.html' %} {% load static %} {% block content %}
+<section class="panel">
+    <header class="panel-heading">
+        <h2 class="panel-title">Lista de conexiones</h2>
+        <div class="panel-actions">
+            <button type="button" class="btn btn-info btn-sm" id="refresh_state_connections">
+                <span class=" glyphicon glyphicon-refresh" aria-hidden="true"></span> Actualizar estado de conexiones
+            </button>
+        </div>
+    </header>
+    <div class="panel-body">
+        <table class="table table-hover mb-none">
+            <thead>
+                <tr>
+                    <th>Nombre de conexion</th>
+                    <th>Motor de base de datos</th>
+                    <th>Usuario</th>
+                    <th>IP Servidor</th>
+                    <th>Puerto</th>
+                    <th>Base de datos</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if object_list %} {% for connection in object_list %}
+                <tr>
+                    <td>
+                        {{ connection.connection_name }}
+                    </td>
+                    <td>
+                        {{ connection.manager_db }}
+                    </td>
+                    <td>
+                        {{ connection.user }}
+                    </td>
+                    <td>
+                        {{ connection.host }}
+                    </td>
+                    <td>
+                        {{ connection.port }}
+                    </td>
+                    <td>
+                        {{ connection.dbname }}
+                    </td>
+                    <td id="{{ connection.id }}">
+                        <div>
+
+                        </div>
+                    </td>
+                    <td>
+                        <a type="button" class="btn btn-primary" href="{% url 'edit-connection' connection.id %}">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar
+                        </a>
+
+                        <button type="button" class="btn btn-danger" onclick="check_delete_connection('{% url 'delete-connection' connection.id %}', '{{ connection.connection_name }}', '{{ connection.manager_db }}', '{{ connection.user }}')">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eliminar
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+</section>
+
+<div class="modal fade" id="mostrarmodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-primary close" data-dismiss="modal" aria-hidden="true">
+                    <span class="glyphicon glyphicon-close" aria-hidden="true"></span> Cancelar
+                </button>
+                <h3>Esta seguro de eliminar la conexión</h3>
+            </div>
+            <form method="post" action="" id="form_confirmacion">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Datos de la conexión</h3>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <td>
+                                        <span class="input-group-addon label-info form-control">Nombre de la
+                                            conexión</span>
+                                    </td>
+                                    <td>
+                                        <span class="input-group-addon label-default form-control" id="spn_nombre"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="input-group-addon label-info form-control">Motor de base
+                                            de
+                                            datos</span>
+                                    </td>
+                                    <td>
+                                        <span class="input-group-addon label-default form-control" id="spn_motor"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="input-group-addon label-info form-control">Usuario</span>
+                                    </td>
+                                    <td>
+                                        <span class="input-group-addon label-default form-control" id="spn_usuario"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">
+                        <span class="glyphicon glyphicon-delete" aria-hidden="true"></span> Eliminar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/codigo.js' %}"></script> {% endblock %}

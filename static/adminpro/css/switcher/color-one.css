@@ -1,1 +1,28 @@
-html, body {font-family: 'Open Sans', sans-serif;font-weight:400;background: #555}
+html, body {font-family: 'Open Sans', sans-serif;font-weight:400;background: #4fb3bf;color:white;}
+.btn-primary{
+	background-color: #00838f;
+}
+.btn-primary:hover{
+	background-color: #005662;
+}
+.header-color-modal.bg-color-1{
+	background:#00838f;
+}
+.modal-close-area a{
+	background: #00838f;
+}
+.marvel-device .screen{
+    background: #4fb3bf;
+}
+.folder{
+    background: #00838f;
+}
+.service{
+    background: #57807e;
+}
+.form-control{
+	color: black;
+}
+.modal{
+	color: black;
+}

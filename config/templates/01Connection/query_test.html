@@ -1,0 +1,11 @@
+<table class="table">
+    {% if object_list is not None %}{% for data in object_list %}
+    <tr>
+        <td>{{ data }}</td>
+    </tr>
+    {% endfor %} {% else %}
+    <tr>
+        <td>No exiten datos</td>
+    </tr>
+    {% endif %}
+</table>

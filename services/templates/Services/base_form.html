@@ -1,5 +1,43 @@
 {% load static %}
 {% block content %}
+<!-- chosen CSS
+    ============================================ -->
+<link rel="stylesheet" href="{% static 'adminpro/css/chosen/bootstrap-chosen.css' %}">
+<!-- chosen JS
+    ============================================ -->
+<script src="{% static 'adminpro/js/chosen/chosen.jquery.js' %}"></script>
+<script src="{% static 'adminpro/js/chosen/chosen-active.js' %}"></script>
+
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'icon/css/lib/control/iconselect.css' %}" >
+<script type="text/javascript" src="{% static 'icon/lib/control/iconselect.js' %}"></script>
+<script type="text/javascript" src="{% static 'icon/lib/iscroll.js' %}"></script>
+
+<script>
+    
+var iconSelect;
+
+window.onload = function(){
+
+    iconSelect = new IconSelect("my-icon-select", 
+        {'selectedIconWidth':48,
+        'selectedIconHeight':48,
+        'selectedBoxPadding':1,
+        'iconsWidth':23,
+        'iconsHeight':23,
+        'boxIconSpace':1,
+        'vectoralIconNumber':4,
+        'horizontalIconNumber':4});
+
+    var icons = [];
+    {% for icon in icons %}
+        icons.push({'iconFilePath':'"{{icon.image.url}}"', 'iconValue':'"{{icon.id}}"'});    
+    {% endfor %}
+    
+    iconSelect.refresh(icons);
+
+};
+    
+</script> -->
 <div class="modal-dialog" role="document">
     {% block config %}
         <form method="post">
@@ -27,13 +65,13 @@
                 </div>
                 <div class="modal-footer">
                     <div class="row">                    
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-secondary btn-lg btn-block" data-dismiss="modal" data-toggle="tooltip" title="Cancelar">
-                                <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary notika-btn-black btn-lg btn-block" data-dismiss="modal" data-toggle="tooltip" title="Cancelar">
+                                <span class="glyphicon glyphicon-arrow-left"></span>
                             </button>
                         </div>
-                        <div class="col-sm-10">
-                            <button type="submit" class="btn btn-success btn-lg btn-block" data-toggle="tooltip" title="Guardar">
+                        <div class="col-md-10">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" title="Guardar">
                                 <span class="glyphicon glyphicon-floppy-disk"></span>Guardar
                             </button>
                         </div>

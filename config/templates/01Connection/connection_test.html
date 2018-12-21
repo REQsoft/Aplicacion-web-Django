@@ -1,0 +1,40 @@
+{% extends 'adminlte/base.html' %} {% load static %} {% block content %}
+<section class="panel">
+    <header class="panel-heading">
+        <h2 class="panel-title">Pruebas de conexión</h2>
+    </header>
+    <div class="panel-body">
+        <form class="form-horizontal form-bordered" id="form_test">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="col-md-3 control-label">Seleccione una conexión</label>
+                <div class="col-md-6">
+                    <select name="connection" class="form-control mb-md" id="select_connection" required>
+                        {% if object_list %} {% for connection in object_list %}
+                        <option value="{{ connection.id }}">{{ connection.connection_name }}</option>
+                        {% endfor %} {% endif %}
+                    </select>
+                </div>
+            </div>
+            <div id="info_connection"></div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">Escriba la(s) consulta(s) SQL que desea ejecutar:</label>
+                <div class="col-md-6">
+                    <textarea class="form-control" rows="5" name="query"></textarea>
+                </div>
+            </div>
+            <input type="hidden" id="url" value="{% url 'run-test' %}">
+        </form>
+    </div>
+    <div class="panel-footer">
+        <button type="submit" class="btn btn-info">
+            <span class="glyphicon glyphicon-delete" aria-hidden="true"></span> Continuar
+        </button>
+    </div>
+</section>
+
+<section class="panel">
+    <div id="result_query"></div>
+</section>
+<script src="{% static 'js/codigo.js' %}"></script> {% endblock %}
