@@ -2,6 +2,9 @@ from django import forms
 from .models import *
 
 class FolderForm(forms.ModelForm):
+    icon_label_message = 'Icono'
+    folder_label_message = 'Ubicacion'
+
     class Meta:
         model = Folder
         fields = ["title", "icon", "folder", "state", "groups", "description"]
@@ -15,3 +18,8 @@ class FolderForm(forms.ModelForm):
             'description':forms.Textarea(attrs={'class':'form-control','rows':3,'placeholder':'Descripcion'}),
         }
         error_messages = {"title": {"unique": "Ya existe un componente con ese titulo."}}
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['icon'].empty_label = self.icon_label_message
+        self.fields['folder'].empty_label = self.folder_label_message

@@ -18,7 +18,6 @@ class Folder(models.Model):
     description = models.CharField(max_length=300, blank=True)
     type_name = models.CharField(max_length=20, unique=True, blank=True)
     
-    
     def __str__(self):
         return self.title
         
