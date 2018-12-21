@@ -1,13 +1,67 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from .models import Authentication, Group
+from .models import *
 
 #Formulario para gestionar conexión.
-class AuthenticationForm(forms.ModelForm):
+class AuthenticationLDAPForm(forms.ModelForm):
 
     class Meta:
 
-        model = Authentication 
+        model = AuthenticationLDAP 
+        fields = (
+            'SERVER_URI',
+            'USER_DN_TEMPLATE',
+            'PERMIT_EMPTY_PASSWORD',
+            'GROUP_SEARCH',
+            'REQUIRE_GROUP',
+            'DENY_GROUP',
+            'authentication',
+        )
+
+        labels = {
+            'SERVER_URI':'URI servidor',
+            'PERMIT_EMPTY_PASSWORD':'Permitir enlace sin contraseña', 
+            'USER_DN_TEMPLATE':'Plantilla DN de usuario',
+            'GROUP_SEARCH':'DN de grupos',      
+            'REQUIRE_GROUP':'Grupo de usuarios permitidos',
+            'DENY_GROUP':'Grupo de usuarios rechazados',
+            'authentication':'Autenticación'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            if field != 'PERMIT_EMPTY_PASSWORD':
+                self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class LDAPUserSearchForm(forms.ModelForm):
+
+    class Meta:
+        model = LDAPUserSearch
+        fields = (
+            'USER_SEARCH',
+            'filter_attr',
+            )
+
+        labels = {
+            'USER_SEARCH':'DN base del grupo',
+            'filter_attr':'Atributo de filtro de usuario',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class AuthenticationDBForm(forms.ModelForm):
+
+    class Meta:
+
+        model = AuthenticationDB 
 
         fields = [
             'connection',
@@ -17,7 +71,7 @@ class AuthenticationForm(forms.ModelForm):
         ]
 
         labels = {
-            'connection':'Conexción a base de datos',
+            'connection':'Conexión a base de datos',
             'sql_auth':'Consulta de autenticación básica',
             'sql_auth_user':'Consulta de autenticación por token',
             'description':'Descripción'            

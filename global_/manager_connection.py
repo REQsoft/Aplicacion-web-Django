@@ -30,7 +30,8 @@ class ManagerConnection:
                 conn = pymysql.connect(**self.config_connection)
                 conn.close()
                 return True
-            except:
+            except Exception as e:
+                print(e, self.config_connection)
                 return False
 
         if self.manager_db == "postgresql":

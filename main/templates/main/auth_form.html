@@ -1,71 +1,86 @@
-{% extends 'main/base.html' %} {% load static %} {% block content %}
-<div class="box box-info">
-    <div class="box-header with-border">
-        <h3 class="box-title">Autenticación</h3>
-    </div>
-    <div class="box-body">
-        <div id="div_form">
-            <table class="table">
-                {% if form.name.errors %}
-                <div id="alert_error_connection_name" class="alert alert-warning">
-                    <button type="button" class="close" data-dismiss="alert">x</button>
-                    <strong>{{ form.name.errors }}</strong>
+{% extends 'adminlte/base.html' %} {% load static %} {% block content %}
+<section class="panel">
+    <header class="panel-heading">
+        <h2 class="panel-title">Autenticación con usuarios en base de datos</h2>
+    </header>
+    <div class="panel-body">
+        {% if form.name.errors %}
+        <div id="alert_error_connection_name" class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>{{ form.name.errors }}</strong>
+        </div>
+        {% endif %}
+        <form class="form-horizontal form-bordered" method="post" id="form_connection">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{ form.connection.label }}</label>
+                <div class="col-md-6">
+                    {{ form.connection }}
                 </div>
-                {% endif %}
-                <form method="post" id="form_connection">
-                    {% csrf_token %}
-                    <tr>
-                        <td width="25%">
-                            <span class="input-group-addon label-info form-control">{{ form.connection.label }}</span>
-                        </td>
-                        <td>
-                            {{ form.connection }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control">{{ form.sql_auth.label }}</span>
-                        </td>
-                        <td>
-                            {{ form.sql_auth }}
-                        </td>
-                    </tr>
+            </div>
 
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control">{{ form.sql_auth_user.label }}</span>
-                        </td>
-                        <td>
-                            {{ form.sql_auth_user }}
-                        </td>
-                    </tr>
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{ form.sql_auth.label }}</label>
+                <div class="col-md-6">
+                    {{ form.sql_auth }}
+                </div>
+            </div>
 
-                    <tr>
-                        <td>
-                            <div id="button_save">
-                                <button type="submit" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </form>
-            </table>
-            <div id="loader" hidden>
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{ form.sql_auth_user.label }}</label>
+                <div class="col-md-6">
+                    {{ form.sql_auth_user }}
+                </div>
+            </div>
+
+            <div class="form-group">
                 <center>
-                    <img src="{% static 'images/loader.gif' %}" width="40px" height="40px">
+                    <button type="submit" class="btn btn-success">
+                        <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
+                    </button>
+                    <input type="hidden" id="url_backend_setting_authdb" value="{% url 'authdb-backend-set' %}">
+                    <button type="button" class="btn btn-warning" id="set_backend_setting_authdb">
+                        <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Establecer
+                        como configuración predeterminada
+                    </button>
                 </center>
             </div>
-            <div id="alert_success" class="alert alert-success" hidden>
-                <button type="button" class="close" data-dismiss="alert">x</button>
-                <strong>La conexion es correcta! </strong>
+        </form>
+    </div>
+</section>
+
+<div id="modal_confirmation_change_success" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+    aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="mySmallModalLabel">Authenticatión con base de datos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <div id="alert_error" class="alert alert-danger" hidden>
-                <button type="button" class="close" data-dismiss="alert">x</button>
-                <strong>ERROR! </strong>
-                No se ha establecido la conexion.
+            <div class="modal-body">
+                Configuración estabecida con exito.
             </div>
         </div>
+        <!-- /.modal-content -->
     </div>
+    <!-- /.modal-dialog -->
 </div>
+
+<div id="modal_confirmation_change_error" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+    aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="mySmallModalLabel">Authenticatión con base de datos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                Error al establecer el backend de autenticación.
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script src="{% static 'js/code_auth.js' %}"></script>
 {% endblock %}

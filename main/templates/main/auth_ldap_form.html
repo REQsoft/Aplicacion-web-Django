@@ -1,71 +1,245 @@
-{% extends 'main/base.html' %} {% load static %} {% block content %}
-<div class="box box-info">
-    <div class="box-header with-border">
-        <h3 class="box-title">Autenticación</h3>
-    </div>
-    <div class="box-body">
-        <div id="div_form">
-            <table class="table">
-                {% if form.name.errors %}
-                <div id="alert_error_connection_name" class="alert alert-warning">
-                    <button type="button" class="close" data-dismiss="alert">x</button>
-                    <strong>{{ form.name.errors }}</strong>
-                </div>
-                {% endif %}
-                <form method="post" id="form_connection">
-                    {% csrf_token %}
-                    <tr>
-                        <td width="25%">
-                            <span class="input-group-addon label-info form-control">{{ form.connection.label }}</span>
-                        </td>
-                        <td>
-                            {{ form.connection }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control">{{ form.sql_auth.label }}</span>
-                        </td>
-                        <td>
-                            {{ form.sql_auth }}
-                        </td>
-                    </tr>
+{% extends 'adminlte/base.html' %} {% load static %} {% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <h2 class="panel-title">Autenticación con LDAP</h2>
+            </header>
+            <div class="panel-body">
+                <form class="form-horizontal form-bordered" method="POST">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ form.SERVER_URI.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.SERVER_URI }}
+                        </div>
+                    </div>
 
-                    <tr>
-                        <td>
-                            <span class="input-group-addon label-info form-control">{{ form.sql_auth_user.label }}</span>
-                        </td>
-                        <td>
-                            {{ form.sql_auth_user }}
-                        </td>
-                    </tr>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="inputSuccess"></label>
+                        <div class="col-md-6">
+                            <label class="checkbox-inline">
+                                {{ form.PERMIT_EMPTY_PASSWORD }} {{ form.PERMIT_EMPTY_PASSWORD.label }}
+                            </label>
+                        </div>
+                    </div>
 
-                    <tr>
-                        <td>
-                            <div id="button_save">
-                                <button type="submit" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
-                                </button>
+                    <hr>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="inputSuccess">{{ form.authentication.label }}</label>
+                        <div class="col-md-6">
+                            {{ form.authentication }}
+                        </div>
+                    </div>
+
+                    {% if form.initial.authentication == '1' %}
+                    <div id="dn_template">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">{{ form.USER_DN_TEMPLATE.label }}</label>
+                            <div class="col-md-6">
+                                {{ form.USER_DN_TEMPLATE }}
                             </div>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
+                    <div id="user_search" hidden>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Grupos de usuarios</label>
+                            <div class="col-md-6">
+                                <button onclick="return open_modal_user_search('{% url 'search-user-create' %}')" class="btn btn-info btn-sm">
+                                    <span class="fa fa-plus" aria-hidden="true"></span>
+                                </button>
+                                <br>
+                                {% if USER_SEARCH %}
+                                <table class="table mb-none">
+                                    <thead>
+                                        <tr>
+                                            <th>DN base del grupo</th>
+                                            <th>Plantilla de fitro</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for user_search in USER_SEARCH %}
+                                        <tr>
+                                            <td>
+                                                {{ user_search }}
+                                            </td>
+                                            <td>
+                                                {{ user_search.filter_attr }}=%(user)s
+                                            </td>
+                                            <td>
+                                                <button onclick="return open_modal_user_search('{% url 'search-user-update' user_search.id %}')"
+                                                    class="btn btn-info btn-xs">
+                                                    <span class="fa fa-edit" aria-hidden="true"></span>
+                                                </button>
+                                                <button onclick="check_delete_user_search('{% url 'search-user-remove' user_search.id %}', '{{ user_search }}', '{{ user_search.filter_attr }}=%(user)s')"
+                                                    class="btn btn-danger btn-xs">
+                                                    <span class="fa fa-trash-o" aria-hidden="true"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+
+                                <label class="control-label">No existen grupos de búsqueda</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div id="dn_template" hidden>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">{{ form.USER_DN_TEMPLATE.label }}</label>
+                            <div class="col-md-6">
+                                {{ form.USER_DN_TEMPLATE }}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="user_search">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Grupos de usuarios</label>
+                            <div class="col-md-6">
+                                <button onclick="return open_modal_user_search('{% url 'search-user-create' %}')" class="btn btn-info btn-sm">
+                                    <span class="fa fa-plus" aria-hidden="true"></span>
+                                </button>
+                                <br>
+                                {% if USER_SEARCH %}
+                                <table class="table mb-none">
+                                    <thead>
+                                        <tr>
+                                            <th>DN base del grupo</th>
+                                            <th>Plantilla de fitro</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for user_search in USER_SEARCH %}
+                                        <tr>
+                                            <td>
+                                                {{ user_search }}
+                                            </td>
+                                            <td>
+                                                {{ user_search.filter_attr }}=%(user)s
+                                            </td>
+                                            <td>
+                                                <button onclick="return open_modal_user_search('{% url 'search-user-update' user_search.id %}')"
+                                                    class="btn btn-info btn-xs">
+                                                    <span class="fa fa-edit" aria-hidden="true"></span>
+                                                </button>
+                                                <button onclick="check_delete_user_search('{% url 'search-user-remove' user_search.id %}', '{{ user_search }}', '{{ user_search.filter_attr }}=%(user)s')"
+                                                    class="btn btn-danger btn-xs">
+                                                    <span class="fa fa-trash-o" aria-hidden="true"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+
+                                <label class="control-label">No existen grupos de búsqueda</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <center>
+                            <button type="submit" class="btn btn-success">
+                                <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Guardar
+                            </button>
+
+                            <input type="hidden" id="url_authldap_backend_set" value="{% url 'auth-ldap-backend-set' %}">
+                            <button type="button" class="btn btn-warning" id="set_backend_setting_ldap_auth">
+                                <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Establecer
+                                como configuración predeterminada
+                            </button>
+                        </center>
+                    </div>
                 </form>
-            </table>
+            </div>
             <div id="loader" hidden>
                 <center>
                     <img src="{% static 'images/loader.gif' %}" width="40px" height="40px">
                 </center>
             </div>
-            <div id="alert_success" class="alert alert-success" hidden>
-                <button type="button" class="close" data-dismiss="alert">x</button>
-                <strong>La conexion es correcta! </strong>
+        </section>
+    </div>
+</div>
+
+<div id="modal_create_user_search" class="modal modal-adminpro-general default-popup-PrimaryModal fade" role="dialog"></div>
+
+<div id="modal_confirmation_change_success" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+    aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="mySmallModalLabel">Authenticatión con LDAP</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <div id="alert_error" class="alert alert-danger" hidden>
-                <button type="button" class="close" data-dismiss="alert">x</button>
-                <strong>ERROR! </strong>
-                No se ha establecido la conexion.
+            <div class="modal-body">
+                Configuración estabecida con exito.
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div id="modal_confirmation_change_error" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+    aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="mySmallModalLabel">Authenticatión con LDAP</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                Error al establecer el backend de autenticación.
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div id="modal_delete_user_search" class="modal modal-adminpro-general default-popup-PrimaryModal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3>Esta seguro de eliminar este grupo de usuarios ?</h3>
+                <table class="table mb-none">
+                    <thead>
+                        <tr>
+                            <th>DN base del grupo</th>
+                            <th>Plantilla de fitro</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="dn_base"></td>
+                            <td id="filter_attr"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <form action="" method="POST" id="form_delete_user_search">
+                    <button type="submit" class="btn btn-success">
+                        <span class="fa fa-trash-o" aria-hidden="true"></span> Eliminar
+                    </button>
+                </form>
+
+                <button type="button" data-dismiss="modal" class="btn btn-default">
+                    <span aria-hidden="true"></span> Cancelar
+                </button>
             </div>
         </div>
     </div>
 </div>
+<script src="{% static 'js/code_auth.js' %}"></script>
 {% endblock %}

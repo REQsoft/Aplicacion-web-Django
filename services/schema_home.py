@@ -217,6 +217,8 @@ try:
         Home = graphene.Field(type_folder)
 
         def resolve_Home(self, info, **kwargs):
+            print("/////////////////////////7")
+            print(info.context.user)
             return check_user_group(folder_home, info.context.user.username)
 except Exception as e:
     print(e)

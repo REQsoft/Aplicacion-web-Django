@@ -1,8 +1,9 @@
-{% load static %}<!doctype html>
+{% load static %}
+<!doctype html>
 <html class="no-js" lang="en">
 
 <head>
-    <meta charset="utf-8">  
+    <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Dashboard v.1.0 | Adminpro - Admin Template</title>
     <meta name="description" content="">
@@ -98,21 +99,24 @@
                 <div class="col-lg-5 col-md-5 col-sm-0 col-xs-12">
                     <div class="header-top-menu">
                         <ul class="nav navbar-nav mai-top-nav">
-                            <li class="nav-item"><a href="{% url 'base-main' %}" class="nav-link">Principal</a>
-                            </li>
-                            <li class="nav-item"><a href="{% url 'base-connection' %}" class="nav-link">Conecciones</a>
-                            </li>
-                            <li class="nav-item"><a href="{% url 'component-list' 1 %}" class="nav-link">Configuracion</a>
+                            <li class="nav-item dropdown">
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Autenticación
+                                    <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
+                                <div role="menu" class="dropdown-menu animated flipInX">
+                                    <a href="{% url 'authdb-update' %}" class="dropdown-item">Usuarios en base de datos</a>
+                                    <a href="{% url 'authldap-update' %}" class="dropdown-item">Servidor LDAP</a>
+                                </div>
                             </li>
                             <li class="nav-item dropdown">
-                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Otros <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Conexiones
+                                    <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
                                 <div role="menu" class="dropdown-menu animated flipInX">
-                                    <a href="#" class="dropdown-item">Company Info</a>
-                                    <a href="#" class="dropdown-item">Documentation</a>
-                                    <a href="#" class="dropdown-item">Expert Backend</a>
-                                    <a href="#" class="dropdown-item">Expert FrontEnd</a>
-                                    <a href="#" class="dropdown-item">Contact Support</a>
+                                    <a href="{% url 'create-connection' %}" class="dropdown-item">Agregar conexión</a>
+                                    <a href="{% url 'list-connections' %}" class="dropdown-item">Lista de conexiones</a>
+                                    <a href="{% url 'test-connection' %}" class="dropdown-item">Pruebas de conexión</a>
                                 </div>
+                            </li>
+                            <li class="nav-item"><a href="{% url 'component-list' 1 %}" class="nav-link">Configuración</a>
                             </li>
                         </ul>
                     </div>
@@ -121,7 +125,8 @@
                     <div class="header-right-info">
                         <ul class="nav navbar-nav mai-top-nav header-right-menu">
                             <li class="nav-item dropdown">
-                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><span class="adminpro-icon adminpro-chat-pro"></span><span class="indicator-ms"></span></a>
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><span
+                                        class="adminpro-icon adminpro-chat-pro"></span><span class="indicator-ms"></span></a>
                                 <div role="menu" class="author-message-top dropdown-menu animated flipInX">
                                     <div class="message-single-top">
                                         <h1>Message</h1>
@@ -181,7 +186,9 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="nav-item"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><i class="fa fa-bell-o" aria-hidden="true"></i><span class="indicator-nt"></span></a>
+                            <li class="nav-item"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                    class="nav-link dropdown-toggle"><i class="fa fa-bell-o" aria-hidden="true"></i><span
+                                        class="indicator-nt"></span></a>
                                 <div role="menu" class="notification-author dropdown-menu animated flipInX">
                                     <div class="notification-single-top">
                                         <h1>Notifications</h1>
@@ -248,19 +255,24 @@
                                     <span class="author-project-icon adminpro-icon adminpro-down-arrow"></span>
                                 </a>
                                 <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated flipInX">
-                                    <li><a href="#"><span class="adminpro-icon adminpro-home-admin author-log-ic"></span>My Account</a>
+                                    <li><a href="#"><span class="adminpro-icon adminpro-home-admin author-log-ic"></span>My
+                                            Account</a>
                                     </li>
-                                    <li><a href="#"><span class="adminpro-icon adminpro-user-rounded author-log-ic"></span>My Profile</a>
+                                    <li><a href="#"><span class="adminpro-icon adminpro-user-rounded author-log-ic"></span>My
+                                            Profile</a>
                                     </li>
-                                    <li><a href="#"><span class="adminpro-icon adminpro-money author-log-ic"></span>User Billing</a>
+                                    <li><a href="#"><span class="adminpro-icon adminpro-money author-log-ic"></span>User
+                                            Billing</a>
                                     </li>
                                     <li><a href="#"><span class="adminpro-icon adminpro-settings author-log-ic"></span>Settings</a>
                                     </li>
-                                    <li><a href="#"><span class="adminpro-icon adminpro-locked author-log-ic"></span>Log Out</a>
+                                    <li><a href="#"><span class="adminpro-icon adminpro-locked author-log-ic"></span>Log
+                                            Out</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li class="nav-item nav-setting-open"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><i class="fa fa-tasks"></i></a>
+                            <li class="nav-item nav-setting-open"><a href="#" data-toggle="dropdown" role="button"
+                                    aria-expanded="false" class="nav-link dropdown-toggle"><i class="fa fa-tasks"></i></a>
 
                                 <div role="menu" class="admintab-wrap menu-setting-wrap menu-setting-wrap-bg dropdown-menu animated flipInX">
                                     <ul class="nav nav-tabs custon-set-tab">
@@ -285,10 +297,12 @@
                                                             <a href="#">
                                                                 <div class="notes-list-flow">
                                                                     <div class="notes-img">
-                                                                        <img src="{% static 'adminpro/img/notification/5.jpg' %}" alt="" />
+                                                                        <img src="{% static 'adminpro/img/notification/5.jpg' %}"
+                                                                            alt="" />
                                                                     </div>
                                                                     <div class="notes-content">
-                                                                        <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more-or-less normal.</p>
                                                                         <span>Yesterday 2:45 pm</span>
                                                                     </div>
                                                                 </div>
@@ -298,10 +312,12 @@
                                                             <a href="#">
                                                                 <div class="notes-list-flow">
                                                                     <div class="notes-img">
-                                                                        <img src="{% static 'adminpro/img/notification/1.jpg' %}" alt="" />
+                                                                        <img src="{% static 'adminpro/img/notification/1.jpg' %}"
+                                                                            alt="" />
                                                                     </div>
                                                                     <div class="notes-content">
-                                                                        <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more-or-less normal.</p>
                                                                         <span>Yesterday 2:45 pm</span>
                                                                     </div>
                                                                 </div>
@@ -311,10 +327,12 @@
                                                             <a href="#">
                                                                 <div class="notes-list-flow">
                                                                     <div class="notes-img">
-                                                                        <img src="{% static 'adminpro/img/notification/2.jpg' %}" alt="" />
+                                                                        <img src="{% static 'adminpro/img/notification/2.jpg' %}"
+                                                                            alt="" />
                                                                     </div>
                                                                     <div class="notes-content">
-                                                                        <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more-or-less normal.</p>
                                                                         <span>Yesterday 2:45 pm</span>
                                                                     </div>
                                                                 </div>
@@ -324,10 +342,12 @@
                                                             <a href="#">
                                                                 <div class="notes-list-flow">
                                                                     <div class="notes-img">
-                                                                        <img src="{% static 'adminpro/img/notification/3.jpg' %}" alt="" />
+                                                                        <img src="{% static 'adminpro/img/notification/3.jpg' %}"
+                                                                            alt="" />
                                                                     </div>
                                                                     <div class="notes-content">
-                                                                        <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more-or-less normal.</p>
                                                                         <span>Yesterday 2:45 pm</span>
                                                                     </div>
                                                                 </div>
@@ -337,10 +357,12 @@
                                                             <a href="#">
                                                                 <div class="notes-list-flow">
                                                                     <div class="notes-img">
-                                                                        <img src="{% static 'adminpro/img/notification/4.jpg' %}" alt="" />
+                                                                        <img src="{% static 'adminpro/img/notification/4.jpg' %}"
+                                                                            alt="" />
                                                                     </div>
                                                                     <div class="notes-content">
-                                                                        <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more-or-less normal.</p>
                                                                         <span>Yesterday 2:45 pm</span>
                                                                     </div>
                                                                 </div>
@@ -350,10 +372,12 @@
                                                             <a href="#">
                                                                 <div class="notes-list-flow">
                                                                     <div class="notes-img">
-                                                                        <img src="{% static 'adminpro/img/notification/5.jpg' %}" alt="" />
+                                                                        <img src="{% static 'adminpro/img/notification/5.jpg' %}"
+                                                                            alt="" />
                                                                     </div>
                                                                     <div class="notes-content">
-                                                                        <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more-or-less normal.</p>
                                                                         <span>Yesterday 2:45 pm</span>
                                                                     </div>
                                                                 </div>
@@ -363,10 +387,12 @@
                                                             <a href="#">
                                                                 <div class="notes-list-flow">
                                                                     <div class="notes-img">
-                                                                        <img src="{% static 'adminpro/img/notification/6.jpg' %}" alt="" />
+                                                                        <img src="{% static 'adminpro/img/notification/6.jpg' %}"
+                                                                            alt="" />
                                                                     </div>
                                                                     <div class="notes-content">
-                                                                        <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more-or-less normal.</p>
                                                                         <span>Yesterday 2:45 pm</span>
                                                                     </div>
                                                                 </div>
@@ -376,10 +402,12 @@
                                                             <a href="#">
                                                                 <div class="notes-list-flow">
                                                                     <div class="notes-img">
-                                                                        <img src="{% static 'adminpro/img/notification/1.jpg' %}" alt="" />
+                                                                        <img src="{% static 'adminpro/img/notification/1.jpg' %}"
+                                                                            alt="" />
                                                                     </div>
                                                                     <div class="notes-content">
-                                                                        <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more-or-less normal.</p>
                                                                         <span>Yesterday 2:45 pm</span>
                                                                     </div>
                                                                 </div>
@@ -389,10 +417,12 @@
                                                             <a href="#">
                                                                 <div class="notes-list-flow">
                                                                     <div class="notes-img">
-                                                                        <img src="{% static 'adminpro/img/notification/2.jpg' %}" alt="" />
+                                                                        <img src="{% static 'adminpro/img/notification/2.jpg' %}"
+                                                                            alt="" />
                                                                     </div>
                                                                     <div class="notes-content">
-                                                                        <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more-or-less normal.</p>
                                                                         <span>Yesterday 2:45 pm</span>
                                                                     </div>
                                                                 </div>
@@ -402,10 +432,12 @@
                                                             <a href="#">
                                                                 <div class="notes-list-flow">
                                                                     <div class="notes-img">
-                                                                        <img src="{% static 'adminpro/img/notification/3.jpg' %}" alt="" />
+                                                                        <img src="{% static 'adminpro/img/notification/3.jpg' %}"
+                                                                            alt="" />
                                                                     </div>
                                                                     <div class="notes-content">
-                                                                        <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more-or-less normal.</p>
                                                                         <span>Yesterday 2:45 pm</span>
                                                                     </div>
                                                                 </div>
@@ -428,7 +460,8 @@
                                                                 <div class="project-list-flow">
                                                                     <div class="projects-st-heading">
                                                                         <h2>Web Development</h2>
-                                                                        <p> The point of using Lorem Ipsum is that it has a more or less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more or less normal.</p>
                                                                         <span class="project-st-time">1 hours ago</span>
                                                                     </div>
                                                                     <div class="projects-st-content">
@@ -446,7 +479,8 @@
                                                                 <div class="project-list-flow">
                                                                     <div class="projects-st-heading">
                                                                         <h2>Software Development</h2>
-                                                                        <p> The point of using Lorem Ipsum is that it has a more or less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more or less normal.</p>
                                                                         <span class="project-st-time">2 hours ago</span>
                                                                     </div>
                                                                     <div class="projects-st-content project-rating-cl">
@@ -464,7 +498,8 @@
                                                                 <div class="project-list-flow">
                                                                     <div class="projects-st-heading">
                                                                         <h2>Graphic Design</h2>
-                                                                        <p> The point of using Lorem Ipsum is that it has a more or less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more or less normal.</p>
                                                                         <span class="project-st-time">3 hours ago</span>
                                                                     </div>
                                                                     <div class="projects-st-content">
@@ -482,7 +517,8 @@
                                                                 <div class="project-list-flow">
                                                                     <div class="projects-st-heading">
                                                                         <h2>Web Design</h2>
-                                                                        <p> The point of using Lorem Ipsum is that it has a more or less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more or less normal.</p>
                                                                         <span class="project-st-time">4 hours ago</span>
                                                                     </div>
                                                                     <div class="projects-st-content project-rating-cl2">
@@ -500,7 +536,8 @@
                                                                 <div class="project-list-flow">
                                                                     <div class="projects-st-heading">
                                                                         <h2>Business Card</h2>
-                                                                        <p> The point of using Lorem Ipsum is that it has a more or less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more or less normal.</p>
                                                                         <span class="project-st-time">5 hours ago</span>
                                                                     </div>
                                                                     <div class="projects-st-content">
@@ -518,7 +555,8 @@
                                                                 <div class="project-list-flow">
                                                                     <div class="projects-st-heading">
                                                                         <h2>Ecommerce Business</h2>
-                                                                        <p> The point of using Lorem Ipsum is that it has a more or less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more or less normal.</p>
                                                                         <span class="project-st-time">6 hours ago</span>
                                                                     </div>
                                                                     <div class="projects-st-content project-rating-cl">
@@ -536,7 +574,8 @@
                                                                 <div class="project-list-flow">
                                                                     <div class="projects-st-heading">
                                                                         <h2>Woocommerce Plugin</h2>
-                                                                        <p> The point of using Lorem Ipsum is that it has a more or less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more or less normal.</p>
                                                                         <span class="project-st-time">7 hours ago</span>
                                                                     </div>
                                                                     <div class="projects-st-content">
@@ -554,7 +593,8 @@
                                                                 <div class="project-list-flow">
                                                                     <div class="projects-st-heading">
                                                                         <h2>Wordpress Theme</h2>
-                                                                        <p> The point of using Lorem Ipsum is that it has a more or less normal.</p>
+                                                                        <p> The point of using Lorem Ipsum is that it
+                                                                            has a more or less normal.</p>
                                                                         <span class="project-st-time">9 hours ago</span>
                                                                     </div>
                                                                     <div class="projects-st-content project-rating-cl2">
@@ -584,7 +624,8 @@
                                                                 <h2>Show notifications</h2>
                                                                 <div class="ts-custom-check">
                                                                     <div class="onoffswitch">
-                                                                        <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example">
+                                                                        <input type="checkbox" name="collapsemenu"
+                                                                            class="onoffswitch-checkbox" id="example">
                                                                         <label class="onoffswitch-label" for="example">
                                                                             <span class="onoffswitch-inner"></span>
                                                                             <span class="onoffswitch-switch"></span>
@@ -600,7 +641,8 @@
                                                                 <h2>Disable Chat</h2>
                                                                 <div class="ts-custom-check">
                                                                     <div class="onoffswitch">
-                                                                        <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example3">
+                                                                        <input type="checkbox" name="collapsemenu"
+                                                                            class="onoffswitch-checkbox" id="example3">
                                                                         <label class="onoffswitch-label" for="example3">
                                                                             <span class="onoffswitch-inner"></span>
                                                                             <span class="onoffswitch-switch"></span>
@@ -616,7 +658,8 @@
                                                                 <h2>Enable history</h2>
                                                                 <div class="ts-custom-check">
                                                                     <div class="onoffswitch">
-                                                                        <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example4">
+                                                                        <input type="checkbox" name="collapsemenu"
+                                                                            class="onoffswitch-checkbox" id="example4">
                                                                         <label class="onoffswitch-label" for="example4">
                                                                             <span class="onoffswitch-inner"></span>
                                                                             <span class="onoffswitch-switch"></span>
@@ -632,7 +675,8 @@
                                                                 <h2>Show charts</h2>
                                                                 <div class="ts-custom-check">
                                                                     <div class="onoffswitch">
-                                                                        <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example7">
+                                                                        <input type="checkbox" name="collapsemenu"
+                                                                            class="onoffswitch-checkbox" id="example7">
                                                                         <label class="onoffswitch-label" for="example7">
                                                                             <span class="onoffswitch-inner"></span>
                                                                             <span class="onoffswitch-switch"></span>
@@ -648,7 +692,8 @@
                                                                 <h2>Update everyday</h2>
                                                                 <div class="ts-custom-check">
                                                                     <div class="onoffswitch">
-                                                                        <input type="checkbox" name="collapsemenu" checked="" class="onoffswitch-checkbox" id="example2">
+                                                                        <input type="checkbox" name="collapsemenu"
+                                                                            checked="" class="onoffswitch-checkbox" id="example2">
                                                                         <label class="onoffswitch-label" for="example2">
                                                                             <span class="onoffswitch-inner"></span>
                                                                             <span class="onoffswitch-switch"></span>
@@ -664,7 +709,8 @@
                                                                 <h2>Global search</h2>
                                                                 <div class="ts-custom-check">
                                                                     <div class="onoffswitch">
-                                                                        <input type="checkbox" name="collapsemenu" checked="" class="onoffswitch-checkbox" id="example6">
+                                                                        <input type="checkbox" name="collapsemenu"
+                                                                            checked="" class="onoffswitch-checkbox" id="example6">
                                                                         <label class="onoffswitch-label" for="example6">
                                                                             <span class="onoffswitch-inner"></span>
                                                                             <span class="onoffswitch-switch"></span>
@@ -680,7 +726,8 @@
                                                                 <h2>Offline users</h2>
                                                                 <div class="ts-custom-check">
                                                                     <div class="onoffswitch">
-                                                                        <input type="checkbox" name="collapsemenu" checked="" class="onoffswitch-checkbox" id="example5">
+                                                                        <input type="checkbox" name="collapsemenu"
+                                                                            checked="" class="onoffswitch-checkbox" id="example5">
                                                                         <label class="onoffswitch-label" for="example5">
                                                                             <span class="onoffswitch-inner"></span>
                                                                             <span class="onoffswitch-switch"></span>
@@ -748,7 +795,8 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a data-toggle="collapse" data-target="#Miscellaneousmob" href="#">Interface <span class="admin-project-icon adminpro-icon adminpro-down-arrow"></span></a>
+                                <li><a data-toggle="collapse" data-target="#Miscellaneousmob" href="#">Interface <span
+                                            class="admin-project-icon adminpro-icon adminpro-down-arrow"></span></a>
                                     <ul id="Miscellaneousmob" class="collapse dropdown-header-top">
                                         <li><a href="{% static 'adminpro/google-map.html">Google Map</a>
                                         </li>
@@ -798,7 +846,8 @@
                                     <ul id="Tablesmob" class="collapse dropdown-header-top">
                                         <li><a href="{% static 'adminpro/basic-form-element.html">Basic Form Elements</a>
                                         </li>
-                                        <li><a href="{% static 'adminpro/advance-form-element.html">Advanced Form Elements</a>
+                                        <li><a href="{% static 'adminpro/advance-form-element.html">Advanced Form
+                                                Elements</a>
                                         </li>
                                         <li><a href="{% static 'adminpro/password-meter.html">Password Meter</a>
                                         </li>
@@ -814,7 +863,8 @@
                                     <ul id="Appviewsmob" class="collapse dropdown-header-top">
                                         <li><a href="{% static 'adminpro/basic-form-element.html">Basic Form Elements</a>
                                         </li>
-                                        <li><a href="{% static 'adminpro/advance-form-element.html">Advanced Form Elements</a>
+                                        <li><a href="{% static 'adminpro/advance-form-element.html">Advanced Form
+                                                Elements</a>
                                         </li>
                                         <li><a href="{% static 'adminpro/password-meter.html">Password Meter</a>
                                         </li>
@@ -857,7 +907,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-    
+
             </div>
         </div>
     </div>
