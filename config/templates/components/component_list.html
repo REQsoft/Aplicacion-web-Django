@@ -1,7 +1,8 @@
 {% extends 'Services/base.html' %} {% load static %} {% block content %}
-<link rel="stylesheet" href="{% static 'css/devices.min.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'css/waves.min.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'css/button.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'adminpro/css/buttons.css' %}" type="text/css">
+
 <div class="container">
     <div class="row justify-content-between">
         <div class="col-md-8">
@@ -15,17 +16,17 @@
             <div class="row justify-content-between">
                 <div class="col-md-4">
                     {% if self.id != 1 %}
-                    <a type="button" class="btn btn-default" title="Atras" href="{% url 'component-list' self.folder.id %}">
-                        <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
+                    <a type="button" class="btn btn-custon-rounded-three btn-primary notika-btn-black" title="Atras" href="{% url 'component-list' self.folder.id %}">
+                        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
                     </a> 
                     {% endif %}
                 </div>
-                <div class="col-md-4">
-                    <a type="button" class="btn btn-primary" title="Agregar Servicio" data-toggle="modal" 
+                <div class="col-md-4 button-drop-style-one">
+                    <a type="button" class="btn btn-custon-rounded-three btn-primary" title="Agregar Servicio" data-toggle="modal" 
                         data-target="#modal" onclick="return get_url('{% url 'service-create' %}')">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Servicio
                     </a>
-                    <a type="button" class="btn btn-primary" title="Agregar Folder" data-toggle="modal" 
+                    <a type="button" class="btn btn-custon-rounded-three btn-primary" title="Agregar Folder" data-toggle="modal" 
                         data-target="#modal" onclick="return get_url('{% url 'folder-create' %}')">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Carpeta
                     </a>
@@ -33,7 +34,7 @@
             </div>
             <br>
             <br>
-            <table class="table table-bordered table-hover">
+            <table data-toggle="table" data-pagination="true" data-search="true" class="table">
                 <thead>
                     <tr>
                         <th>Icono</th>
@@ -43,7 +44,7 @@
                 </thead>
                 <tbody>
                     {% for folder in folders %}
-                    <tr style="background: rgb(218, 173, 88);">
+                    <tr class="folder">
                         <td>
                             <img src="{{ folder.icon.image.url }}" height="32" width="32" alt="{{ folder.icon.title }}">
                         </td>
@@ -66,7 +67,7 @@
                     </tr>
                     {% endfor %}
                     {% for service in services %}
-                    <tr style="background: rgb(88, 187, 218);">
+                    <tr class="service">
                         <td>
                             <img src="{{ service.icon.image.url }}" height="32" width="32" alt="{{ service.icon.title }}">
                         </td>
@@ -100,21 +101,19 @@
                 <div class="camera"></div>
                 <div class="sensor"></div>
                 <div class="speaker"></div>
-                <div class="screen">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-md-6 offset-6">
-                                {% for folder in folders %}
-                                <img src="{{ folder.icon.image.url }}" height="32" width="32" alt="{{ folder.icon.title }}">
-                                {{ folder.title }}
-                                <br>
-                                {% endfor %}
-                                {% for service in services %}
-                                <img src="{{ service.icon.image.url }}" height="32" width="32" alt="{{ service.icon.title }}">
-                                {{ service.title }}
-                                <br>
-                                {% endfor %}
-                            </div>
+                <div class="container screen">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 offset-6">
+                            {% for folder in folders %}
+                            <img src="{{ folder.icon.image.url }}" height="32" width="32" alt="{{ folder.icon.title }}">
+                            {{ folder.title }}
+                            <br>
+                            {% endfor %}
+                            {% for service in services %}
+                            <img src="{{ service.icon.image.url }}" height="32" width="32" alt="{{ service.icon.title }}">
+                            {{ service.title }}
+                            <br>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
