@@ -141,7 +141,7 @@
             this.results_showing = false;
             this.result_highlighted = null;
             this.allow_single_deselect = (this.options.allow_single_deselect != null) && (this.form_field.options[0] != null) && this.form_field.options[0].text === "" ? this.options.allow_single_deselect : false;
-            this.disable_search_threshold = this.options.disable_search_threshold || 0;
+            this.disable_search_threshold = this.options.disable_search_threshold || 50;
             this.disable_search = this.options.disable_search || false;
             this.enable_split_word_search = this.options.enable_split_word_search != null ? this.options.enable_split_word_search : true;
             this.group_search = this.options.group_search != null ? this.options.group_search : true;

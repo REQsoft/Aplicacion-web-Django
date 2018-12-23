@@ -199,6 +199,7 @@
 .fixed-table-toolbar .bs-bars,
 .fixed-table-toolbar .search,
 .fixed-table-toolbar .columns {
+    color: #303030;
     position: relative;
     margin-top: 10px;
     margin-bottom: 10px;

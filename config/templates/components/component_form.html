@@ -15,3 +15,31 @@
         <h3 class="modal-title">Nueva Carpeta</h3>
     {% endif %}
 {% endblock %}
+{% block form %}
+    <div>
+        <div class="row">
+            <div class="col-md-8">
+                {{ form.title }}
+            </div>
+            <div class="col-md-4">
+                <!-- <select data-placeholder="Seleccione un icono" class="chosen-select" id="id_icon">
+                    {% for icon in icons %}
+                    <option data-imagesrc="{{ icon.image.url }}" value="{{ icon.id }}">{{ icon }}</option>
+                    {% endfor %}
+                </select> -->
+                {{ form.icon }}
+            </div>
+        </div>
+    <br>
+    <div class="row">
+        <div class="col-md-4">
+            {{ form.folder }}
+        </div>
+        <div class="col-md-8">
+           {{ form.groups }}    
+        </div>
+    </div>
+    <br>
+    {{ form.description }}
+    </div>
+{% endblock %}
