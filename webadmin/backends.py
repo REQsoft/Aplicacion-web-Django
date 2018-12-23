@@ -1,22 +1,21 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from global_.manager_connection import ManagerConnection
-from main.models import Group, AuthenticationDB
+from main.models import DBGroup, AuthenticationDB
 from graphql_jwt.utils import get_credentials, get_payload
 from graphql_jwt.settings import jwt_settings
 from django_auth_ldap.backend import LDAPBackend, logger, _LDAPUser, LDAPSettings
 import ldap
 
-def get_user_by_natural_key(user_id):
+def get_user_by_natural_key(username):
     try:
-        auth = AuthenticationDB.objects.all()[0]
+        auth = AuthenticationDB.objects.get(name='AuthenticationDB')
         data_connection = auth.connection.get_data_connection()
-        data_connection.update({"dbname": auth.connection.dbname})
         conn = ManagerConnection(**data_connection)
-        data = conn.managerSQL(auth.sql_auth_user, input={'username':user_id})
-        if data is not None:
-            return User(username=user_id)
-        return None
+        data = conn.managerSQL(auth.get_query_search(), input={'username':username})
+        if data is None or len(data) == 0:
+            return None
+        return User(username=username)
     except:
         return None
 
@@ -35,13 +34,18 @@ def get_user_by_payload(payload):
 
 
 def check_user(username, password):
-    auth = AuthenticationDB.objects.all()[0]
-    data_connection = auth.connection.get_data_connection()
-    conn = ManagerConnection(**data_connection)
-    data = conn.managerSQL(auth.sql_auth, input={'username':username, 'password':password})
-    if data is None or len(data) == 0:
-        return False
-    return True
+    try:
+        auth = AuthenticationDB.objects.get(name='AuthenticationDB')
+        data_connection = auth.connection.get_data_connection()
+        conn = ManagerConnection(**data_connection)
+        data = conn.managerSQL(auth.get_query_auth(), input={
+            'username':username,
+            'password':password})
+        if data is None or len(data) == 0:
+            return None
+        return User(username=username)
+    except:
+        return None
 
 
 class CustomBackend(object):
@@ -49,13 +53,17 @@ class CustomBackend(object):
     def authenticate(self, request=None, **kwargs):
         if request is None:
             return None
+        
+        token = get_credentials(request, **kwargs)
+
+        if token is not None:
+            payload = get_payload(token, request)
+            return get_user_by_payload(payload)
 
         try:
             username = kwargs[get_user_model().USERNAME_FIELD]
             password = kwargs["password"]
-            if check_user(username, password):
-                return User(username=username)
-            return None
+            return check_user(username, password)
         except:
             return None
 
@@ -64,25 +72,6 @@ class CustomBackend(object):
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return None
-
-
-class JSONWebTokenBackend(object):
-
-    def authenticate(self, request=None, **kwargs):
-        if request is None:
-            return None
-
-        token = get_credentials(request, **kwargs)
-
-        if token is not None:
-            payload = get_payload(token, request)
-            return get_user_by_payload(payload)
-
-        return None
-
-    def get_user(self, user_id):
-        return get_user_by_natural_key(user_id)
-
 
 
 class LDAPBackend(LDAPBackend):

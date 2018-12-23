@@ -65,16 +65,16 @@ class AuthenticationDBForm(forms.ModelForm):
 
         fields = [
             'connection',
-            'sql_auth',
-            'sql_auth_user',
-            'description'
+            'table_users',
+            'field_username',
+            'field_password'
         ]
 
         labels = {
             'connection':'Conexión a base de datos',
-            'sql_auth':'Consulta de autenticación básica',
-            'sql_auth_user':'Consulta de autenticación por token',
-            'description':'Descripción'            
+            'table_users':'Tabla de usuarios',
+            'field_username':'Campo para nombre de usuario',
+            'field_password':'Campo para contraseña'            
         }
 
     def __init__(self, *args, **kwargs):
@@ -84,23 +84,21 @@ class AuthenticationDBForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
-class GroupForm(forms.ModelForm):
+class DBGroupForm(forms.ModelForm):
     """Form definition for Group."""
 
     class Meta:
 
-        model = Group 
+        model = DBGroup 
 
         fields = [
-            'connection',
             'name',
-            'sql_get_user',
+            'sql_check_user',
         ]
 
         labels = {
-            'connection':'Conexion a base de datos',
             'name':'Nombre',
-            'sql_get_user':'Consulta de busqueda',
+            'sql_check_user':'Plantilla sql de usuario',
             
         }
 
@@ -118,4 +116,54 @@ class GroupForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({'class': 'form-control','required':'required'})
 
         
+class LDAPGroupForm(forms.ModelForm):
+    """Form definition for Group."""
+
+    class Meta:
+
+        model = LDAPGroup 
+
+        fields = [
+            'name',
+            'type_bind',
+            'USER_DN_TEMPLATE'
+        ]
+
+        labels = {
+            'name':'Nombre del grupo',
+            'type_bind':'Tipe de enlace de usuario',
+            'USER_DN_TEMPLATE':'PLantilla DN de usuario',
+        }
+
+        error_messages = {
+            'name': {
+                'unique':"El nombre del grupo ya existe.",
+            },
+        }
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control','required':'required'})
         
+class LDAPGroupUserSearchForm(forms.ModelForm):
+
+    class Meta:
+        model = LDAPUserSearch
+        fields = (
+            'USER_SEARCH',
+            'filter_attr',
+            )
+
+        labels = {
+            'USER_SEARCH':'DN base del grupo',
+            'filter_attr':'Atributo de filtro de usuario',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})

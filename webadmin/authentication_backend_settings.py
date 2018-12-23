@@ -1,1 +1,1 @@
-authentication_backend = 'webadmin.backends.LDAPBackend'
+authentication_backend = 'webadmin.backends.CustomBackend'

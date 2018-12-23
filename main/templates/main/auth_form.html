@@ -4,12 +4,6 @@
         <h2 class="panel-title">Autenticación con usuarios en base de datos</h2>
     </header>
     <div class="panel-body">
-        {% if form.name.errors %}
-        <div id="alert_error_connection_name" class="alert alert-warning">
-            <button type="button" class="close" data-dismiss="alert">x</button>
-            <strong>{{ form.name.errors }}</strong>
-        </div>
-        {% endif %}
         <form class="form-horizontal form-bordered" method="post" id="form_connection">
             {% csrf_token %}
             <div class="form-group">
@@ -20,16 +14,23 @@
             </div>
 
             <div class="form-group">
-                <label class="col-md-3 control-label">{{ form.sql_auth.label }}</label>
+                <label class="col-md-3 control-label">{{ form.table_users.label }}</label>
                 <div class="col-md-6">
-                    {{ form.sql_auth }}
+                    {{ form.table_users }}
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-md-3 control-label">{{ form.sql_auth_user.label }}</label>
+                <label class="col-md-3 control-label">{{ form.field_username.label }}</label>
                 <div class="col-md-6">
-                    {{ form.sql_auth_user }}
+                    {{ form.field_username }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{ form.field_password.label }}</label>
+                <div class="col-md-6">
+                    {{ form.field_password }}
                 </div>
             </div>
 

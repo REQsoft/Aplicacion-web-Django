@@ -3,6 +3,8 @@ from .models import *
 from promise import Promise
 from promise.dataloader import DataLoader
 from graphql_jwt.decorators import login_required
+from main.models import AuthenticationDB, AuthenticationLDAP
+
 
 class OfficeType(graphene.ObjectType):
     title = graphene.String()
@@ -81,10 +83,10 @@ def built_type_service(service):
     dict_clsattr.update({"theme": graphene.String()})
     dict_clsattr.update({"state": graphene.Boolean()})
     dict_clsattr.update({"description": graphene.String()})
+    dict_clsattr.update({"elements": graphene.List(type_field)})
 
     type_field = get_type_data_field(service)
     if type_field is not None:
-        dict_clsattr.update({"elements": graphene.List(type_field)})
         dict_clsattr.update({"resolve_elements": get_resolve_data_field(service)})
 
     dict_clsattr.update({"resolve_title": lambda self, info, **kwargs: self.title})
@@ -101,9 +103,8 @@ def built_type_service(service):
     return type(service.type_name, (graphene.ObjectType,), dict_clsattr)
 
 
-def check_user_group(folder, username):
-
-    if folder._meta.db_table == 'config_folder':
+def get_groupsdb_element(element):
+    if elements._meta.db_table == 'config_folder':
         try:
             groups = folder.groups.all()
         except:
@@ -113,6 +114,27 @@ def check_user_group(folder, username):
             groups = folder.groups.all()
         except:
             groups = []
+
+def check_user_group(elements, username):
+
+    try:
+        authdb = AuthenticationDB.objects.get(name='AuthenticationDB')
+    except:
+        authdb = None
+
+    try:
+        authldap = AuthenticationLDAP.objects.get(name='AuthenticationLDAP')
+    except:
+        authldap = None
+
+    if authdb is not None:
+        if authdb.is_active:
+            pass
+    
+    if authldap is not None:
+        if authldap.is_active:
+            pass
+
 
     for group in groups:
         data_connection = group.connection.get_data_connection()
@@ -148,11 +170,10 @@ def build_type_folder(folder):
     dict_clsattr.update({"state": graphene.Boolean()})
     dict_clsattr.update({"theme": graphene.String()})
     dict_clsattr.update({"description": graphene.String()})
+    dict_clsattr.update( {"elements": graphene.Field(type_folder)})
 
     type_folder = build_type_elements(folder)
     if type_folder is not None:
-        dict_clsattr.update( {"elements": graphene.Field(type_folder)})
-
         dict_clsattr.update({
             "resolve_elements": 
             lambda self, info, **kwargs:get_elements_folder(self, info.context.user.username)
@@ -217,8 +238,6 @@ try:
         Home = graphene.Field(type_folder)
 
         def resolve_Home(self, info, **kwargs):
-            print("/////////////////////////7")
-            print(info.context.user)
             return check_user_group(folder_home, info.context.user.username)
 except Exception as e:
     print(e)

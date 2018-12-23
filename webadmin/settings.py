@@ -77,7 +77,6 @@ from webadmin.authentication_backend_settings import authentication_backend
 
 AUTHENTICATION_BACKENDS = [
     authentication_backend,
-    'webadmin.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 

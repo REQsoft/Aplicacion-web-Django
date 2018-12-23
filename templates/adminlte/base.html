@@ -111,6 +111,14 @@
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Grupos
+                                    <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
+                                <div role="menu" class="dropdown-menu animated flipInX">
+                                    <a href="{% url 'dbgroup-list' %}" class="dropdown-item">Autenticación con base de datos</a>
+                                    <a href="{% url 'ldapgroup-list' %}" class="dropdown-item">Autenticación con servidor LDAP</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
                                 <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Conexiones
                                     <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
                                 <div role="menu" class="dropdown-menu animated flipInX">

@@ -38,14 +38,24 @@ class AuthenticationDBUpdateView(UpdateView):
         return obj
 
 
-class GroupListView(ListView):
-    model = Group
-    template_name = "main/group_list.html"
+class DBGroupListView(ListView):
+    model = DBGroup
+    template_name = "main/dbgroup_list.html"
 
-class GroupCreateView(CreateView):
-    model = Group
-    form_class = GroupForm
-    template_name = "main/group_form.html"
+class DBGroupCreateView(CreateView):
+    model = DBGroup
+    form_class = DBGroupForm
+    template_name = "main/DBgroup_form.html"
+
+class LDAPGroupListView(ListView):
+    model = LDAPGroup
+    template_name = "main/ldapgroup_list.html"
+
+class LDAPGroupCreateView(CreateView):
+    model = LDAPGroup
+    form_class = LDAPGroupForm
+    template_name = "main/ldapgroup_form.html"
+
 
 class LDAPUserSearchCreateView(CreateView):
     model = LDAPUserSearch
