@@ -60,7 +60,7 @@ class LDAPGroupCreateView(CreateView):
 class LDAPUserSearchCreateView(CreateView):
     model = LDAPUserSearch
     form_class = LDAPUserSearchForm
-    template_name = "main/user_search_form.html"
+    template_name = "main/user_search_form.html" 
 
 
 class LDAPUserSearchUpdateView(UpdateView):
@@ -126,6 +126,10 @@ def set_backend_setting_db_auth(request):
     auth_backend_setting.close()
     context =  {"object":True}
 
+    auth = AuthenticationDB.objects.get(name='AuthenticationDB')
+    auth.is_active = True
+    auth.save()
+
     return JsonResponse(context) 
 
 def set_backend_setting_ldap_auth(request):
@@ -135,6 +139,10 @@ def set_backend_setting_ldap_auth(request):
     auth_backend_setting.write("authentication_backend = 'webadmin.backends.LDAPBackend'")
     auth_backend_setting.close()
     context =  {"object":True}
+
+    auth = AuthenticationLDAP.objects.get(name='AuthenticationLDAP')
+    auth.is_active = True
+    auth.save()
 
     return JsonResponse(context) 
 

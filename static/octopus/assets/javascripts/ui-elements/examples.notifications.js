@@ -7,7 +7,7 @@
 	/*
 	Default Notifications
 	*/
-	$('#default-primary').click(function() {
+	$('#default-primary').click(function() { 
 		new PNotify({
 			title: 'Regular Notice',
 			text: 'Check me out! I\'m a notice.',

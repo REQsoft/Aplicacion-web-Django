@@ -1,23 +1,10 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-from global_.manager_connection import ManagerConnection
-from main.models import DBGroup, AuthenticationDB
+from main.models import AuthenticationDB
 from graphql_jwt.utils import get_credentials, get_payload
 from graphql_jwt.settings import jwt_settings
-from django_auth_ldap.backend import LDAPBackend, logger, _LDAPUser, LDAPSettings
+from django_auth_ldap.backend import LDAPBackend, logger, _LDAPUser
 import ldap
-
-def get_user_by_natural_key(username):
-    try:
-        auth = AuthenticationDB.objects.get(name='AuthenticationDB')
-        data_connection = auth.connection.get_data_connection()
-        conn = ManagerConnection(**data_connection)
-        data = conn.managerSQL(auth.get_query_search(), input={'username':username})
-        if data is None or len(data) == 0:
-            return None
-        return User(username=username)
-    except:
-        return None
 
 
 def get_user_by_payload(payload):
@@ -26,33 +13,29 @@ def get_user_by_payload(payload):
     if not username:
         raise exceptions.JSONWebTokenError(_("Invalid payload"))
 
-    user = get_user_by_natural_key(username)
+    auth = AuthenticationDB.objects.get(name='AuthenticationDB')
+    if auth.search_user(username):
+        user = User(username=username)
+    else:   
+        user = None
 
     if user is not None and not user.is_active:
         raise exceptions.JSONWebTokenError(_("User is disabled"))
     return user
 
 
-def check_user(username, password):
-    try:
-        auth = AuthenticationDB.objects.get(name='AuthenticationDB')
-        data_connection = auth.connection.get_data_connection()
-        conn = ManagerConnection(**data_connection)
-        data = conn.managerSQL(auth.get_query_auth(), input={
-            'username':username,
-            'password':password})
-        if data is None or len(data) == 0:
-            return None
-        return User(username=username)
-    except:
-        return None
-
-
 class CustomBackend(object):
     
     def authenticate(self, request=None, **kwargs):
         if request is None:
-            return None
+            try:
+                username = kwargs.get('username')
+                group = kwargs.get('group')
+                if group.searh_user(username):
+                    return User(username=username)
+                return None
+            except:
+                return None
         
         token = get_credentials(request, **kwargs)
 
@@ -63,22 +46,25 @@ class CustomBackend(object):
         try:
             username = kwargs[get_user_model().USERNAME_FIELD]
             password = kwargs["password"]
-            return check_user(username, password)
-        except:
+            auth = AuthenticationDB.objects.get(name='AuthenticationDB')
+            if auth.validate_user(username=username, password=password):
+                return User(username=username)
             return None
-
-    def get_user(self, user_id):
-        try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
+        except:
             return None
 
 
 class LDAPBackend(LDAPBackend):
     
-    def authenticate(self, request, username=None, password=None, **kwargs):
+    def authenticate(self, request=None, username=None, password=None, **kwargs):
         if request is None:
-            return None
+            try:
+                group = kwargs.get('group')
+                if group.searh_user(username):
+                    return User(username=username)
+                return None
+            except:
+                return None
 
         token = get_credentials(request, **kwargs)
 
@@ -99,9 +85,9 @@ class LDAPBackend(LDAPBackend):
                     result_search = ldap_user.connection.search_s(user_dn, 0)
                     if len(result_search) == 1 and result_search is not None:
                         return User(username=username) 
+                    return None
                 except:
-                    pass
-            return None
+                    return None
 
         if password or self.settings.PERMIT_EMPTY_PASSWORD:
             ldap_user = _LDAPUser(self, username=username.strip(), request=request)

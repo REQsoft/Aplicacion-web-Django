@@ -2,6 +2,9 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from connections.models import Connection
+import ldap
+
+#==============================Autenticación===========================
 
 class AuthenticationDB(models.Model):
     name = models.SlugField(primary_key=True)
@@ -24,7 +27,7 @@ class AuthenticationDB(models.Model):
     def save(self, *args, **kwargs):
 
         super(AuthenticationDB, self).save()
-        if len(self.is_active) == True:
+        if self.is_active == True:
             try:
                 authdb = AuthenticationLDAP.objects.get(name='AuthenticationLDAP')
                 authdb.is_active = False
@@ -50,6 +53,25 @@ class AuthenticationDB(models.Model):
                 "u":"%(username)s",
                 "p":"%(password)s"
             }
+
+    def validate_user(self, username, password):
+        conn = self.connection.get_connection()
+        if conn is not None:
+            data = conn.managerSQL(self.get_query_auth(), input={
+            'username':username,
+            'password':password})
+            if len(data) == 1 and data is not None:
+                return True
+        return False
+
+    def search_user(self, username):
+        conn = self.connection.get_connection()
+        if conn is not None:
+            data = conn.managerSQL(self.get_query_search(), input={'username':username})
+            if len(data) == 1 and data is not None:
+                return True
+        return False
+
 
 class AuthenticationLDAP(models.Model):
     types_bind = (
@@ -80,7 +102,7 @@ class AuthenticationLDAP(models.Model):
     def save(self, *args, **kwargs):
 
         super(AuthenticationLDAP, self).save()
-        if len(self.is_active) == True:
+        if self.is_active == True:
             try:
                 authdb = AuthenticationDB.objects.get(name='AuthenticationDB')
                 authdb.is_active = False
@@ -105,6 +127,8 @@ class LDAPUserSearch(models.Model):
         return reverse("authldap-update")
 
 
+#==============================Grupos===========================
+
 class DBGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)
     sql_check_user = models.TextField(blank=True)
@@ -119,16 +143,25 @@ class DBGroup(models.Model):
     def get_absolute_url(self):
         return reverse("list-connections")
 
+    def search_user(self, username):
+        auth = AuthenticationDB.objects.get(name='AuthenticationDB')
+        conn = auth.connection.get_connection()
+        if conn is not None:
+            data = conn.managerSQL(self.sql_check_user, input={'username':username})
+            if len(data) == 1 and data is not None:
+                return True
+        return False
+
     
 class LDAPGroup(models.Model):
     types_bind = (
-        ('1', 'Enlace directo'),
-        ('2', 'Busqueda/Enlace')
+        (1, 'Enlace directo'),
+        (2, 'Busqueda/Enlace')
     )
 
     name = models.CharField(max_length=100, unique=True)
     USER_DN_TEMPLATE = models.CharField(max_length=100, blank=True)
-    type_bind = models.CharField(choices=types_bind, max_length=20, default='1')
+    type_bind = models.CharField(choices=types_bind, max_length=20, default=1)
 
     class Meta:
         verbose_name = 'LDAPGroup'
@@ -136,10 +169,30 @@ class LDAPGroup(models.Model):
 
     def __str__(self):
         return self.name
+
+    def search_user(self, username):
+        auth =  AuthenticationLDAP.objects.get(name='AuthenticationLDAP')
+        uri = auth.SERVER_URI
+        conn = ldap.initialize(uri)
+        if self.type_bind == 1:
+            result = con.search_s(self.USER_DN_TEMPLATE % {'user':username}, 0)
+            if len(result) == 1 and result is not None:
+                return True
+            return False
+        
+        user_searchs = self.user_search.all()
+        if user_searchs is not None:
+            for user_search in user_searchs:
+                result = con.search_s(user_search.dn_base, 2, user_search.get_filter_attr() % {'user':username})
+                if len(result) == 1 and result is not None:
+                    return True
+            return False
+        
+
     
 class LDAPGroupUserSearch(models.Model):
-    ldapgroup = models.ForeignKey(LDAPGroup, on_delete=models.CASCADE)
-    USER_SEARCH  = models.CharField(max_length=100)
+    ldapgroup = models.ForeignKey(LDAPGroup, on_delete=models.CASCADE, related_name='user_search')
+    dn_base = models.CharField(max_length=100)
     filter_attr = models.CharField(max_length=100, default=None)
 
     class Meta:
@@ -151,6 +204,9 @@ class LDAPGroupUserSearch(models.Model):
 
     def get_absolute_url(self):
         return reverse("list-connections")
+    
+    def get_filter_attr(self):
+        return "("+self.filter_attr+"=%(user)s)"
 
 
 

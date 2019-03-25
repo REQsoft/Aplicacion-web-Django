@@ -47,7 +47,7 @@ class LDAPUserSearchForm(forms.ModelForm):
 
         labels = {
             'USER_SEARCH':'DN base del grupo',
-            'filter_attr':'Atributo de filtro de usuario',
+            'filter_attr':'Atributo de filtro de usuario', 
         }
 
     def __init__(self, *args, **kwargs):
@@ -151,14 +151,14 @@ class LDAPGroupForm(forms.ModelForm):
 class LDAPGroupUserSearchForm(forms.ModelForm):
 
     class Meta:
-        model = LDAPUserSearch
+        model = LDAPGroupUserSearch
         fields = (
-            'USER_SEARCH',
+            'dn_base',
             'filter_attr',
             )
 
         labels = {
-            'USER_SEARCH':'DN base del grupo',
+            'dn_base':'DN base del grupo',
             'filter_attr':'Atributo de filtro de usuario',
         }
 

@@ -4,6 +4,21 @@ from .models import *
 from itertools import chain
 from . import schema_home
 
+class Persona(graphene.ObjectType):
+    nombre = graphene.String()
+    apellido = graphene.String()
+    edad = graphene.Int()
+
+    def resolve_nombre(self, info, **kwargs):
+        return self[0]
+
+    def resolve_apellido(self, info, **kwargs):
+        return self[1]
+    
+    def resolve_edad(self, info, **kwargs):
+        return self[2]
+
+
 
 class PruebaType(graphene.ObjectType):
     title = graphene.String()
@@ -56,6 +71,7 @@ class Query(schema_home.Query, graphene.ObjectType):
     map = graphene.List(LocationType, service=graphene.Int(required=True))
     catalog = graphene.List(MissingItemType, service=graphene.Int(required=True))
     prueba = graphene.List(PruebaType)
+    persona = graphene.Field(Persona)
 
     def resolve_prueba(self, info, **kwargs):
         prueba = list(chain(Office.objects.all(), Location.objects.all(), MissingItem.objects.all()))
@@ -92,3 +108,6 @@ class Query(schema_home.Query, graphene.ObjectType):
             if check_user_group(group, user):
                 return MissingItem.objects.filter(service=service)                       
         return []
+
+    def resolve_persona(self, info, **kwargs):
+        return "JG2"

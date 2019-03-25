@@ -10,7 +10,7 @@ urlpatterns = [
     path('dbgroups/list', DBGroupListView.as_view(), name='dbgroup-list'),
 
     path('authldap/update', AuthenticationLDAPUpdateView.as_view(), name='authldap-update'),
-    path('ldapgroup/create', LDAPGroupCreateView.as_view(), name='ldapgroup-create'),
+    path('ldapgroup/create', LDAPGroupCreateView.as_view(), name='ldapgroup-create'), 
     path('ldapgroups/list', LDAPGroupListView.as_view(), name='ldapgroup-list'),
   
     path('search/user/create', LDAPUserSearchCreateView.as_view(), name='search-user-create'),

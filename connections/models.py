@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from .manager_connection import ManagerConnection
 
 # Create your models here.
 
@@ -29,6 +30,15 @@ class Connection(models.Model):
             "passwd": self.passwd,
             "dbname": self.dbname,
         }
+
+    def get_connection(self):
+        try:
+            conn = ManagerConnection(**self.get_data_connection())
+            if conn.check_connection():
+                return conn
+            return None
+        except:
+            return None
 
     def get_absolute_url(self):
         return reverse("list-connections")

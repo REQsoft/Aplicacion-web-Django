@@ -7,7 +7,7 @@
                 {% endif %}
                 <div class="modal-header header-color-modal bg-color-1">
                     <div class="modal-close-area modal-close-df">
-                        <a class="close" data-dismiss="modal"><i class="fa fa-close"></i></a>
+                        <a class="close" data-dismiss="modal"><i class="fa fa-close"></i></a> 
                     </div>
                     {% if object %}
                     <h4 class="modal-title">Editar grupo de usuarios</h3>
@@ -19,9 +19,9 @@
                     {% csrf_token %}
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label">{{ form.AUTH_LDAP_USER_SEARCH.label }}</label>
+                        <label class="col-md-4 control-label">{{ form.USER_SEARCH.label }}</label>
                         <div class="col-md-8">
-                            {{ form.AUTH_LDAP_USER_SEARCH }}
+                            {{ form.USER_SEARCH }}
                         </div>
                     </div>
 

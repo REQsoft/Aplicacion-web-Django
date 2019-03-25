@@ -11,26 +11,30 @@ $(document).ready(function () {
                 $("#loader").show();
             },
             success: function (data) {
-                $("#loader").hide();
                 if (data.object_list) {
-                    $("#alert_success").show().hide(2000);
-                    $("#button_list").hide();
-                    $("#button_save").show();
                     $("#id_dbname").html("<option value='' selected disabled>Selecione una base de datos</option>");
                     data.object_list.forEach(element => {
                         $("#id_dbname").append(
                             "<option value='" + element + "'>" + element + "</option>"
                         );
                     });
+                    $("#loader").hide();
+                    Lobibox.notify('success', {
+                        msg: 'Lorem ipsum dolor sit amet against apennine any created, spend loveliest, building stripes.'
+                    });
                 } else {
                     $("#loader").hide();
-                    $("#alert_error").show().hide(2000);
+                    Lobibox.notify('error', {
+                        msg: 'Lorem ipsum dolor sit amet against apennine any created, spend loveliest, building stripes.'
+                    });
                 }
             },
 
             error: function () {
                 $("#loader").hide();
-                $("#alert_error").show().hide(2000);
+                Lobibox.notify('error', {
+                    msg: 'Lorem ipsum dolor sit amet against apennine any created, spend loveliest, building stripes.'
+                });
             }
         });
 
@@ -87,6 +91,12 @@ $(document).ready(function () {
 
             error: function () {
             }
+        });
+    });
+
+    $('#basicSuccess').on('click', function () {
+        Lobibox.notify('success', {
+            msg: 'Lorem ipsum dolor sit amet against apennine any created, spend loveliest, building stripes.'
         });
     });
 });

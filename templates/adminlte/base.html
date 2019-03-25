@@ -64,8 +64,18 @@
 		============================================ -->
     <link rel="stylesheet" href="{% static 'adminpro/css/responsive.css' %}">
     <!-- modernizr JS
+        ============================================ -->
+    <!-- notifications CSS
 		============================================ -->
+    <link rel="stylesheet" href="{% static 'adminpro/css/Lobibox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'adminpro/css/notifications.css' %}">
+
     <script src="{% static 'adminpro/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+
+    <!-- notification JS
+		============================================ -->
+    <script src="{% static 'adminpro/js/Lobibox.js' %}"></script>
+    <script src="{% static 'adminpro/js/notification-active.js' %}"></script>
     <!-- Color Css Files
 		============================================ -->
     <!-- <link rel="alternate stylesheet" type="text/css" href="{% static 'adminpro/css/switcher/color-one.css' %}" title="color-one" media="screen" />
@@ -78,8 +88,8 @@
     <link rel="alternate stylesheet" type="text/css" href="{% static 'adminpro/css/switcher/color-eight.css' %}" title="color-eight" media="screen" />
     <link rel="alternate stylesheet" type="text/css" href="{% static 'adminpro/css/switcher/color-nine.css' %}" title="color-nine" media="screen" />
     <link rel="alternate stylesheet" type="text/css" href="{% static 'adminpro/css/switcher/color-ten.css' %}" title="color-ten" media="screen" /> -->
-    
-    <link rel="stylesheet" href="{% static 'adminpro/css/switcher/color-one.css' %}"/>
+
+    <!-- <link rel="stylesheet" href="{% static 'adminpro/css/switcher/color-one.css' %}"/> -->
 </head>
 
 <body>
@@ -100,23 +110,29 @@
                     <div class="header-top-menu">
                         <ul class="nav navbar-nav mai-top-nav">
                             <li class="nav-item dropdown">
-                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Autenticación
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                    class="nav-link dropdown-toggle">Autenticación
                                     <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
                                 <div role="menu" class="dropdown-menu animated flipInX">
-                                    <a href="{% url 'authdb-update' %}" class="dropdown-item">Usuarios en base de datos</a>
+                                    <a href="{% url 'authdb-update' %}" class="dropdown-item">Usuarios en base de
+                                        datos</a>
                                     <a href="{% url 'authldap-update' %}" class="dropdown-item">Servidor LDAP</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
-                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Grupos
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                    class="nav-link dropdown-toggle">Grupos
                                     <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
                                 <div role="menu" class="dropdown-menu animated flipInX">
-                                    <a href="{% url 'dbgroup-list' %}" class="dropdown-item">Autenticación con base de datos</a>
-                                    <a href="{% url 'ldapgroup-list' %}" class="dropdown-item">Autenticación con servidor LDAP</a>
+                                    <a href="{% url 'dbgroup-list' %}" class="dropdown-item">Autenticación con base de
+                                        datos</a>
+                                    <a href="{% url 'ldapgroup-list' %}" class="dropdown-item">Autenticación con
+                                        servidor LDAP</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
-                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Conexiones
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                    class="nav-link dropdown-toggle">Conexiones
                                     <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
                                 <div role="menu" class="dropdown-menu animated flipInX">
                                     <a href="{% url 'create-connection' %}" class="dropdown-item">Agregar conexión</a>
@@ -124,7 +140,8 @@
                                     <a href="{% url 'test-connection' %}" class="dropdown-item">Pruebas de conexión</a>
                                 </div>
                             </li>
-                            <li class="nav-item"><a href="{% url 'component-list' 1 %}" class="nav-link">Configuración</a>
+                            <li class="nav-item"><a href="{% url 'component-list' 1 %}"
+                                    class="nav-link">Configuración</a>
                             </li>
                         </ul>
                     </div>
@@ -133,8 +150,10 @@
                     <div class="header-right-info">
                         <ul class="nav navbar-nav mai-top-nav header-right-menu">
                             <li class="nav-item dropdown">
-                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><span
-                                        class="adminpro-icon adminpro-chat-pro"></span><span class="indicator-ms"></span></a>
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                    class="nav-link dropdown-toggle"><span
+                                        class="adminpro-icon adminpro-chat-pro"></span><span
+                                        class="indicator-ms"></span></a>
                                 <div role="menu" class="author-message-top dropdown-menu animated flipInX">
                                     <div class="message-single-top">
                                         <h1>Message</h1>
@@ -195,8 +214,8 @@
                                 </div>
                             </li>
                             <li class="nav-item"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
-                                    class="nav-link dropdown-toggle"><i class="fa fa-bell-o" aria-hidden="true"></i><span
-                                        class="indicator-nt"></span></a>
+                                    class="nav-link dropdown-toggle"><i class="fa fa-bell-o"
+                                        aria-hidden="true"></i><span class="indicator-nt"></span></a>
                                 <div role="menu" class="notification-author dropdown-menu animated flipInX">
                                     <div class="notification-single-top">
                                         <h1>Notifications</h1>
@@ -257,22 +276,26 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                    class="nav-link dropdown-toggle">
                                     <span class="adminpro-icon adminpro-user-rounded header-riht-inf"></span>
                                     <span class="admin-name">Advanda Cro</span>
                                     <span class="author-project-icon adminpro-icon adminpro-down-arrow"></span>
                                 </a>
                                 <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated flipInX">
-                                    <li><a href="#"><span class="adminpro-icon adminpro-home-admin author-log-ic"></span>My
+                                    <li><a href="#"><span
+                                                class="adminpro-icon adminpro-home-admin author-log-ic"></span>My
                                             Account</a>
                                     </li>
-                                    <li><a href="#"><span class="adminpro-icon adminpro-user-rounded author-log-ic"></span>My
+                                    <li><a href="#"><span
+                                                class="adminpro-icon adminpro-user-rounded author-log-ic"></span>My
                                             Profile</a>
                                     </li>
                                     <li><a href="#"><span class="adminpro-icon adminpro-money author-log-ic"></span>User
                                             Billing</a>
                                     </li>
-                                    <li><a href="#"><span class="adminpro-icon adminpro-settings author-log-ic"></span>Settings</a>
+                                    <li><a href="#"><span
+                                                class="adminpro-icon adminpro-settings author-log-ic"></span>Settings</a>
                                     </li>
                                     <li><a href="#"><span class="adminpro-icon adminpro-locked author-log-ic"></span>Log
                                             Out</a>
@@ -280,9 +303,11 @@
                                 </ul>
                             </li>
                             <li class="nav-item nav-setting-open"><a href="#" data-toggle="dropdown" role="button"
-                                    aria-expanded="false" class="nav-link dropdown-toggle"><i class="fa fa-tasks"></i></a>
+                                    aria-expanded="false" class="nav-link dropdown-toggle"><i
+                                        class="fa fa-tasks"></i></a>
 
-                                <div role="menu" class="admintab-wrap menu-setting-wrap menu-setting-wrap-bg dropdown-menu animated flipInX">
+                                <div role="menu"
+                                    class="admintab-wrap menu-setting-wrap menu-setting-wrap-bg dropdown-menu animated flipInX">
                                     <ul class="nav nav-tabs custon-set-tab">
                                         <li class="active"><a data-toggle="tab" href="#Notes">Notes</a>
                                         </li>
@@ -475,7 +500,9 @@
                                                                     <div class="projects-st-content">
                                                                         <p>Completion with: 28%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 28%;" class="progress-bar progress-bar-danger"></div>
+                                                                            <div style="width: 28%;"
+                                                                                class="progress-bar progress-bar-danger">
+                                                                            </div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -494,7 +521,8 @@
                                                                     <div class="projects-st-content project-rating-cl">
                                                                         <p>Completion with: 68%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 68%;" class="progress-bar"></div>
+                                                                            <div style="width: 68%;"
+                                                                                class="progress-bar"></div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -513,7 +541,8 @@
                                                                     <div class="projects-st-content">
                                                                         <p>Completion with: 78%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 78%;" class="progress-bar"></div>
+                                                                            <div style="width: 78%;"
+                                                                                class="progress-bar"></div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -532,7 +561,9 @@
                                                                     <div class="projects-st-content project-rating-cl2">
                                                                         <p>Completion with: 38%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 38%;" class="progress-bar progress-bar-danger"></div>
+                                                                            <div style="width: 38%;"
+                                                                                class="progress-bar progress-bar-danger">
+                                                                            </div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -551,7 +582,9 @@
                                                                     <div class="projects-st-content">
                                                                         <p>Completion with: 28%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 28%;" class="progress-bar progress-bar-danger"></div>
+                                                                            <div style="width: 28%;"
+                                                                                class="progress-bar progress-bar-danger">
+                                                                            </div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -570,7 +603,8 @@
                                                                     <div class="projects-st-content project-rating-cl">
                                                                         <p>Completion with: 68%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 68%;" class="progress-bar"></div>
+                                                                            <div style="width: 68%;"
+                                                                                class="progress-bar"></div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -589,7 +623,8 @@
                                                                     <div class="projects-st-content">
                                                                         <p>Completion with: 78%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 78%;" class="progress-bar"></div>
+                                                                            <div style="width: 78%;"
+                                                                                class="progress-bar"></div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -608,7 +643,9 @@
                                                                     <div class="projects-st-content project-rating-cl2">
                                                                         <p>Completion with: 38%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 38%;" class="progress-bar progress-bar-danger"></div>
+                                                                            <div style="width: 38%;"
+                                                                                class="progress-bar progress-bar-danger">
+                                                                            </div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -701,7 +738,8 @@
                                                                 <div class="ts-custom-check">
                                                                     <div class="onoffswitch">
                                                                         <input type="checkbox" name="collapsemenu"
-                                                                            checked="" class="onoffswitch-checkbox" id="example2">
+                                                                            checked="" class="onoffswitch-checkbox"
+                                                                            id="example2">
                                                                         <label class="onoffswitch-label" for="example2">
                                                                             <span class="onoffswitch-inner"></span>
                                                                             <span class="onoffswitch-switch"></span>
@@ -718,7 +756,8 @@
                                                                 <div class="ts-custom-check">
                                                                     <div class="onoffswitch">
                                                                         <input type="checkbox" name="collapsemenu"
-                                                                            checked="" class="onoffswitch-checkbox" id="example6">
+                                                                            checked="" class="onoffswitch-checkbox"
+                                                                            id="example6">
                                                                         <label class="onoffswitch-label" for="example6">
                                                                             <span class="onoffswitch-inner"></span>
                                                                             <span class="onoffswitch-switch"></span>
@@ -735,7 +774,8 @@
                                                                 <div class="ts-custom-check">
                                                                     <div class="onoffswitch">
                                                                         <input type="checkbox" name="collapsemenu"
-                                                                            checked="" class="onoffswitch-checkbox" id="example5">
+                                                                            checked="" class="onoffswitch-checkbox"
+                                                                            id="example5">
                                                                         <label class="onoffswitch-label" for="example5">
                                                                             <span class="onoffswitch-inner"></span>
                                                                             <span class="onoffswitch-switch"></span>
@@ -767,7 +807,8 @@
                     <div class="mobile-menu">
                         <nav id="dropdown">
                             <ul class="mobile-menu-nav">
-                                <li><a data-toggle="collapse" data-target="#Charts" href="#">Home <span class="admin-project-icon adminpro-icon adminpro-down-arrow"></span></a>
+                                <li><a data-toggle="collapse" data-target="#Charts" href="#">Home <span
+                                            class="admin-project-icon adminpro-icon adminpro-down-arrow"></span></a>
                                     <ul class="collapse dropdown-header-top">
                                         <li><a href="{% static 'adminpro/dashboard.html">Dashboard v.1</a>
                                         </li>
@@ -929,20 +970,22 @@
 
     {% endblock %}
     <!-- Footer Start-->
-    <div class="footer-copyright-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="footer-copy-right">
-                        <p>Copyright &#169; 2018 Colorlib All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+    <div class=" footer-copyright-area">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="footer-copy-right">
+                                                                <p>Copyright &#169; 2018 Colorlib All rights reserved.
+                                                                    Template by <a
+                                                                        href="https://colorlib.com">Colorlib</a>.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Footer End-->
-    <!-- Color Switcher -->
-    <!-- <div class="ec-colorswitcher">
+                    <!-- Footer End-->
+                    <!-- Color Switcher -->
+                    <!-- <div class="ec-colorswitcher">
         <a class="ec-handle" href="#"><i class="fa fa-cog" aria-hidden="true"></i></a>
         <h3>Style Switcher</h3>
         <div class="ec-switcherarea">
@@ -986,79 +1029,79 @@
             </div>
         </div>
     </div> -->
-    <!-- Color Switcher end -->
-    <!-- jquery
+                    <!-- Color Switcher end -->
+                    <!-- jquery
 		============================================ -->
-    <script src="{% static 'adminpro/js/vendor/jquery-1.11.3.min.js' %}"></script>
-    <!-- bootstrap JS
+                    <script src="{% static 'adminpro/js/vendor/jquery-1.11.3.min.js' %}"></script>
+                    <!-- bootstrap JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/bootstrap.min.js' %}"></script>
-    <!-- meanmenu JS
+                    <script src="{% static 'adminpro/js/bootstrap.min.js' %}"></script>
+                    <!-- meanmenu JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/jquery.meanmenu.js' %}"></script>
-    <!-- mCustomScrollbar JS
+                    <script src="{% static 'adminpro/js/jquery.meanmenu.js' %}"></script>
+                    <!-- mCustomScrollbar JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
-    <!-- sticky JS
+                    <script src="{% static 'adminpro/js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+                    <!-- sticky JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/jquery.sticky.js' %}"></script>
-    <!-- scrollUp JS
+                    <script src="{% static 'adminpro/js/jquery.sticky.js' %}"></script>
+                    <!-- scrollUp JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/jquery.scrollUp.min.js' %}"></script>
-    <!-- counterup JS
+                    <script src="{% static 'adminpro/js/jquery.scrollUp.min.js' %}"></script>
+                    <!-- counterup JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/counterup/jquery.counterup.min.js' %}"></script>
-    <script src="{% static 'adminpro/js/counterup/waypoints.min.js' %}"></script>
-    <script src="{% static 'adminpro/js/counterup/counterup-active.js' %}"></script>
-    <!-- peity JS
+                    <script src="{% static 'adminpro/js/counterup/jquery.counterup.min.js' %}"></script>
+                    <script src="{% static 'adminpro/js/counterup/waypoints.min.js' %}"></script>
+                    <script src="{% static 'adminpro/js/counterup/counterup-active.js' %}"></script>
+                    <!-- peity JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/peity/jquery.peity.min.js' %}"></script>
-    <script src="{% static 'adminpro/js/peity/peity-active.js' %}"></script>
-    <!-- sparkline JS
+                    <script src="{% static 'adminpro/js/peity/jquery.peity.min.js' %}"></script>
+                    <script src="{% static 'adminpro/js/peity/peity-active.js' %}"></script>
+                    <!-- sparkline JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/sparkline/jquery.sparkline.min.js' %}"></script>
-    <script src="{% static 'adminpro/js/sparkline/sparkline-active.js' %}"></script>
-    <!-- flot JS
+                    <script src="{% static 'adminpro/js/sparkline/jquery.sparkline.min.js' %}"></script>
+                    <script src="{% static 'adminpro/js/sparkline/sparkline-active.js' %}"></script>
+                    <!-- flot JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/flot/jquery.flot.js' %}"></script>
-    <script src="{% static 'adminpro/js/flot/jquery.flot.tooltip.min.js' %}"></script>
-    <script src="{% static 'adminpro/js/flot/jquery.flot.spline.js' %}"></script>
-    <script src="{% static 'adminpro/js/flot/jquery.flot.resize.js' %}"></script>
-    <script src="{% static 'adminpro/js/flot/jquery.flot.pie.js' %}"></script>
-    <script src="{% static 'adminpro/js/flot/Chart.min.js' %}"></script>
-    <script src="{% static 'adminpro/js/flot/flot-active.js' %}"></script>
-    <!-- map JS
+                    <script src="{% static 'adminpro/js/flot/jquery.flot.js' %}"></script>
+                    <script src="{% static 'adminpro/js/flot/jquery.flot.tooltip.min.js' %}"></script>
+                    <script src="{% static 'adminpro/js/flot/jquery.flot.spline.js' %}"></script>
+                    <script src="{% static 'adminpro/js/flot/jquery.flot.resize.js' %}"></script>
+                    <script src="{% static 'adminpro/js/flot/jquery.flot.pie.js' %}"></script>
+                    <script src="{% static 'adminpro/js/flot/Chart.min.js' %}"></script>
+                    <script src="{% static 'adminpro/js/flot/flot-active.js' %}"></script>
+                    <!-- map JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/map/raphael.min.js' %}"></script>
-    <script src="{% static 'adminpro/js/map/jquery.mapael.js' %}"></script>
-    <script src="{% static 'adminpro/js/map/france_departments.js' %}"></script>
-    <script src="{% static 'adminpro/js/map/world_countries.js' %}"></script>
-    <script src="{% static 'adminpro/js/map/usa_states.js' %}"></script>
-    <script src="{% static 'adminpro/js/map/map-active.js' %}"></script>
-    <!-- data table JS
+                    <script src="{% static 'adminpro/js/map/raphael.min.js' %}"></script>
+                    <script src="{% static 'adminpro/js/map/jquery.mapael.js' %}"></script>
+                    <script src="{% static 'adminpro/js/map/france_departments.js' %}"></script>
+                    <script src="{% static 'adminpro/js/map/world_countries.js' %}"></script>
+                    <script src="{% static 'adminpro/js/map/usa_states.js' %}"></script>
+                    <script src="{% static 'adminpro/js/map/map-active.js' %}"></script>
+                    <!-- data table JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/data-table/bootstrap-table.js' %}"></script>
-    <script src="{% static 'adminpro/js/data-table/tableExport.js' %}"></script>
-    <script src="{% static 'adminpro/js/data-table/data-table-active.js' %}"></script>
-    <script src="{% static 'adminpro/js/data-table/bootstrap-table-editable.js' %}"></script>
-    <script src="{% static 'adminpro/js/data-table/bootstrap-editable.js' %}"></script>
-    <script src="{% static 'adminpro/js/data-table/bootstrap-table-resizable.js' %}"></script>
-    <script src="{% static 'adminpro/js/data-table/colResizable-1.5.source.js' %}"></script>
-    <script src="{% static 'adminpro/js/data-table/bootstrap-table-export.js' %}"></script>
-    <!-- switcher JS
+                    <script src="{% static 'adminpro/js/data-table/bootstrap-table.js' %}"></script>
+                    <script src="{% static 'adminpro/js/data-table/tableExport.js' %}"></script>
+                    <script src="{% static 'adminpro/js/data-table/data-table-active.js' %}"></script>
+                    <script src="{% static 'adminpro/js/data-table/bootstrap-table-editable.js' %}"></script>
+                    <script src="{% static 'adminpro/js/data-table/bootstrap-editable.js' %}"></script>
+                    <script src="{% static 'adminpro/js/data-table/bootstrap-table-resizable.js' %}"></script>
+                    <script src="{% static 'adminpro/js/data-table/colResizable-1.5.source.js' %}"></script>
+                    <script src="{% static 'adminpro/js/data-table/bootstrap-table-export.js' %}"></script>
+                    <!-- switcher JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/switcher/styleswitch.js' %}"></script>
-    <script src="{% static 'adminpro/js/switcher/switch-active.js' %}"></script>
-    <!-- chosen JS
+                    <script src="{% static 'adminpro/js/switcher/styleswitch.js' %}"></script>
+                    <script src="{% static 'adminpro/js/switcher/switch-active.js' %}"></script>
+                    <!-- chosen JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/chosen/chosen.jquery.js' %}"></script>
-    <script src="{% static 'adminpro/js/chosen/chosen-active.js' %}"></script>
-    <!-- modal JS
+                    <script src="{% static 'adminpro/js/chosen/chosen.jquery.js' %}"></script>
+                    <script src="{% static 'adminpro/js/chosen/chosen-active.js' %}"></script>
+                    <!-- modal JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/modal-active.js' %}"></script>
-    <!-- main JS
+                    <script src="{% static 'adminpro/js/modal-active.js' %}"></script>
+                    <!-- main JS
 		============================================ -->
-    <script src="{% static 'adminpro/js/main.js' %}"></script>
+                    <script src="{% static 'adminpro/js/main.js' %}"></script>
 </body>
 
 </html>

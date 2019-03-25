@@ -19,11 +19,11 @@ $(document).ready(function () {
             success: function (data) {
                 $("#loader").hide();
                 $("#modal_confirmation_change_success").modal('show');
+                location.reload();
             },
-
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            error: function () {
                 $("#loader").hide();
-                $("#modal_confirmation_change_erro").modal('show');
+                $("#modal_confirmation_change_error").modal('show');
             }
         });
     });
@@ -38,15 +38,34 @@ $(document).ready(function () {
             success: function (data) {
                 $("#loader").hide();
                 $("#modal_confirmation_change_success").modal('show');
+                location.reload();
             },
 
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            error: function () {
                 $("#loader").hide();
-                $("#modal_confirmation_change_erro").modal('show');
+                $("#modal_confirmation_change_error").modal('show');
             }
         });
     });
+
+    $('#default-primary').click(function () {
+        new PNotify({
+            title: 'Regular Notice',
+            text: 'Check me out! I\'m a notice.',
+            type: 'custom',
+            addclass: 'notification-primary',
+            icon: 'fa fa-twitter'
+        });
+    });
+
+    $("input").keydown(function () {
+        $("#options").show();
+    });
 });
+
+function reload() {
+    location.reload();
+}
 
 function open_modal_user_search(url) {
     $('#modal_create_user_search').load(url, function () {
