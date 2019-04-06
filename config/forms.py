@@ -7,6 +7,7 @@ class FolderForm(forms.ModelForm):
 
     class Meta:
         model = Folder
+        
         fields = ["title", "icon", "folder", "state", "groups", "description"]
         labels = {"title": "", "description": "", "groups": "", "icon": "", "folder": "", "state":""}
         widgets = {

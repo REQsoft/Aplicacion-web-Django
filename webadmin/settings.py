@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +28,7 @@ SECRET_KEY = "n)!1s@%4u$am)mly99g$&wum(8bbe=$7_#=uq=*6821do7x&=q"
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
+prueba = ''
 
 # Application definition
 
@@ -62,17 +64,21 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+#=========================================================================================
+
+from webadmin.ldap_settings import * 
+
+AUTH_LDAP_ALWAYS_UPDATE_USER = False
+
+#========================================================================================
+ 
+from webadmin.authentication_backend_settings import authentication_backend
+
+
 AUTHENTICATION_BACKENDS = [
-    'webadmin.backends.CustomBackend',
-    'webadmin.backends.JSONWebTokenBackend',
+    authentication_backend,
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-AUTH_LDAP_SERVER_URI = 'ldap://192.168.1.200'
-
-AUTH_LDAP_BIND_DN = 'cn=amdin,dc=unifossldap,dc=com'
-AUTH_LDAP_BIND_PASSWORD = '123'
-AUTH_LDAP_USER_DN_TEMPLATE = 'cn=%(user)s,ou=People,dc=unifossldap,dc=com'
 
 GRAPHQL_JWT = {
     'JWT_ALLOW_ARGUMENT': False,

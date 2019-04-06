@@ -51,6 +51,9 @@
     <!-- forms CSS
 		============================================ -->
     <link rel="stylesheet" href="{% static 'adminpro/css/form/all-type-forms.css' %}">
+    <!-- chosen CSS
+		============================================ -->
+    <link rel="stylesheet" href="{% static 'adminpro/css/chosen/bootstrap-chosen.css' %}">
     <!-- switcher CSS
 		============================================ -->
     <link rel="stylesheet" href="{% static 'adminpro/css/switcher/color-switcher.css' %}">
@@ -61,8 +64,18 @@
 		============================================ -->
     <link rel="stylesheet" href="{% static 'adminpro/css/responsive.css' %}">
     <!-- modernizr JS
+        ============================================ -->
+    <!-- notifications CSS
 		============================================ -->
+    <link rel="stylesheet" href="{% static 'adminpro/css/Lobibox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'adminpro/css/notifications.css' %}">
+
     <script src="{% static 'adminpro/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+
+    <!-- notification JS
+		============================================ -->
+    <script src="{% static 'adminpro/js/Lobibox.js' %}"></script>
+    <script src="{% static 'adminpro/js/notification-active.js' %}"></script>
     <!-- Color Css Files
 		============================================ -->
     <!-- <link rel="alternate stylesheet" type="text/css" href="{% static 'adminpro/css/switcher/color-one.css' %}" title="color-one" media="screen" />
@@ -97,13 +110,29 @@
                     <div class="header-top-menu">
                         <ul class="nav navbar-nav mai-top-nav">
                             <li class="nav-item dropdown">
-                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Autenticación
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                    class="nav-link dropdown-toggle">Autenticación
                                     <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
                                 <div role="menu" class="dropdown-menu animated flipInX">
+                                    <a href="{% url 'authdb-update' %}" class="dropdown-item">Usuarios en base de
+                                        datos</a>
+                                    <a href="{% url 'authldap-update' %}" class="dropdown-item">Servidor LDAP</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
-                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Conexiones
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                    class="nav-link dropdown-toggle">Grupos
+                                    <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
+                                <div role="menu" class="dropdown-menu animated flipInX">
+                                    <a href="{% url 'dbgroup-list' %}" class="dropdown-item">Autenticación con base de
+                                        datos</a>
+                                    <a href="{% url 'ldapgroup-list' %}" class="dropdown-item">Autenticación con
+                                        servidor LDAP</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                    class="nav-link dropdown-toggle">Conexiones
                                     <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
                                 <div role="menu" class="dropdown-menu animated flipInX">
                                     <a href="{% url 'create-connection' %}" class="dropdown-item">Agregar conexión</a>
@@ -244,7 +273,8 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
+                                <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                    class="nav-link dropdown-toggle">
                                     <span class="adminpro-icon adminpro-user-rounded header-riht-inf"></span>
                                     <span class="admin-name">Advanda Cro</span>
                                     <span class="author-project-icon adminpro-icon adminpro-down-arrow"></span>
@@ -259,7 +289,8 @@
                                     <li><a href="#"><span class="adminpro-icon adminpro-money author-log-ic"></span>User
                                             Billing</a>
                                     </li>
-                                    <li><a href="#"><span class="adminpro-icon adminpro-settings author-log-ic"></span>Settings</a>
+                                    <li><a href="#"><span
+                                                class="adminpro-icon adminpro-settings author-log-ic"></span>Settings</a>
                                     </li>
                                     <li><a href="#"><span class="adminpro-icon adminpro-locked author-log-ic"></span>Log
                                             Out</a>
@@ -269,7 +300,8 @@
                             <li class="nav-item nav-setting-open"><a href="#" data-toggle="dropdown" role="button"
                                     aria-expanded="false" class="nav-link dropdown-toggle"><i class="fa fa-tasks"></i></a>
 
-                                <div role="menu" class="admintab-wrap menu-setting-wrap menu-setting-wrap-bg dropdown-menu animated flipInX">
+                                <div role="menu"
+                                    class="admintab-wrap menu-setting-wrap menu-setting-wrap-bg dropdown-menu animated flipInX">
                                     <ul class="nav nav-tabs custon-set-tab">
                                         <li class="active"><a data-toggle="tab" href="#Notes">Notes</a>
                                         </li>
@@ -462,7 +494,9 @@
                                                                     <div class="projects-st-content">
                                                                         <p>Completion with: 28%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 28%;" class="progress-bar progress-bar-danger"></div>
+                                                                            <div style="width: 28%;"
+                                                                                class="progress-bar progress-bar-danger">
+                                                                            </div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -481,7 +515,8 @@
                                                                     <div class="projects-st-content project-rating-cl">
                                                                         <p>Completion with: 68%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 68%;" class="progress-bar"></div>
+                                                                            <div style="width: 68%;"
+                                                                                class="progress-bar"></div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -500,7 +535,8 @@
                                                                     <div class="projects-st-content">
                                                                         <p>Completion with: 78%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 78%;" class="progress-bar"></div>
+                                                                            <div style="width: 78%;"
+                                                                                class="progress-bar"></div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -519,7 +555,9 @@
                                                                     <div class="projects-st-content project-rating-cl2">
                                                                         <p>Completion with: 38%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 38%;" class="progress-bar progress-bar-danger"></div>
+                                                                            <div style="width: 38%;"
+                                                                                class="progress-bar progress-bar-danger">
+                                                                            </div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -538,7 +576,9 @@
                                                                     <div class="projects-st-content">
                                                                         <p>Completion with: 28%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 28%;" class="progress-bar progress-bar-danger"></div>
+                                                                            <div style="width: 28%;"
+                                                                                class="progress-bar progress-bar-danger">
+                                                                            </div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -557,7 +597,8 @@
                                                                     <div class="projects-st-content project-rating-cl">
                                                                         <p>Completion with: 68%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 68%;" class="progress-bar"></div>
+                                                                            <div style="width: 68%;"
+                                                                                class="progress-bar"></div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -576,7 +617,8 @@
                                                                     <div class="projects-st-content">
                                                                         <p>Completion with: 78%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 78%;" class="progress-bar"></div>
+                                                                            <div style="width: 78%;"
+                                                                                class="progress-bar"></div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -595,7 +637,9 @@
                                                                     <div class="projects-st-content project-rating-cl2">
                                                                         <p>Completion with: 38%</p>
                                                                         <div class="progress progress-mini">
-                                                                            <div style="width: 38%;" class="progress-bar progress-bar-danger"></div>
+                                                                            <div style="width: 38%;"
+                                                                                class="progress-bar progress-bar-danger">
+                                                                            </div>
                                                                         </div>
                                                                         <p>Project end: 4:00 pm - 12.06.2014</p>
                                                                     </div>
@@ -754,7 +798,8 @@
                     <div class="mobile-menu">
                         <nav id="dropdown">
                             <ul class="mobile-menu-nav">
-                                <li><a data-toggle="collapse" data-target="#Charts" href="#">Home <span class="admin-project-icon adminpro-icon adminpro-down-arrow"></span></a>
+                                <li><a data-toggle="collapse" data-target="#Charts" href="#">Home <span
+                                            class="admin-project-icon adminpro-icon adminpro-down-arrow"></span></a>
                                     <ul class="collapse dropdown-header-top">
                                         <li><a href="{% static 'adminpro/dashboard.html">Dashboard v.1</a>
                                         </li>
@@ -916,14 +961,62 @@
 
     {% endblock %}
     <!-- Footer Start-->
-    <div class="footer-copyright-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="footer-copy-right">
-                        <p>Copyright &#169; 2018 Colorlib All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+    <div class=" footer-copyright-area">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="footer-copy-right">
+                                                                <p>Copyright &#169; 2018 Colorlib All rights reserved.
+                                                                    Template by <a
+                                                                        href="https://colorlib.com">Colorlib</a>.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                     </div>
-                </div>
+                    <!-- Footer End-->
+                    <!-- Color Switcher -->
+                    <!-- <div class="ec-colorswitcher">
+        <a class="ec-handle" href="#"><i class="fa fa-cog" aria-hidden="true"></i></a>
+        <h3>Style Switcher</h3>
+        <div class="ec-switcherarea">
+            <div class="base-color">
+                <h6>Background Color</h6>
+                <ul class="ec-switcher">
+                    <li>
+                        <a href="#" class="cs-color-1 styleswitch" data-rel="color-one"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="cs-color-2 styleswitch" data-rel="color-two"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="cs-color-3 styleswitch" data-rel="color-three"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="cs-color-4 styleswitch" data-rel="color-four"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="cs-color-5 styleswitch" data-rel="color-five"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="cs-color-6 styleswitch" data-rel="color-six"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="cs-color-7 styleswitch" data-rel="color-seven"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="cs-color-8 styleswitch" data-rel="color-eight"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="cs-color-9 styleswitch" data-rel="color-nine"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="cs-color-10 styleswitch" data-rel="color-ten"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="cs-color-11 styleswitch" data-rel="color-eleven"></a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

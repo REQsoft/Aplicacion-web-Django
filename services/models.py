@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from global_.manager_connection import ManagerConnection
-from main.models import Group
+from main.models import DBGroup, LDAPGroup
 from config.models import Folder,Icon
 from connections.models import Connection
 from django.template.defaultfilters import slugify
@@ -27,7 +27,8 @@ class Service(models.Model):
     theme = models.CharField(choices=themes, max_length=20)
     state = models.BooleanField(default=True)
     folder = models.ForeignKey(Folder, on_delete='PROTECTED', related_name='services')
-    groups = models.ManyToManyField(Group, blank=True, related_name='group_set')
+    groups = models.ManyToManyField(DBGroup, blank=True)
+    ldapgroups = models.ManyToManyField(LDAPGroup, blank=True)
     source = models.CharField(choices=sources, max_length=20)
     type_name = models.CharField(max_length=20, unique=True, blank=True)
     description = models.CharField(max_length=300, blank=True)

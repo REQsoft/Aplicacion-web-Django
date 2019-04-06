@@ -3,6 +3,8 @@ import graphql_jwt
 import services.schema, config.schema, connections.schema
 
 
+
+
 class Query(services.schema.Query, 
             graphene.ObjectType):
     '''This class will inherit from multiple Queries
