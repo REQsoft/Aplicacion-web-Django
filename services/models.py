@@ -6,6 +6,8 @@ from config.models import Folder,Icon
 from connections.models import Connection
 from django.template.defaultfilters import slugify
 import ast
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 # Modelo principal de servicios.
 class Service(models.Model):
@@ -157,6 +159,10 @@ class MissingItem(models.Model):
     def get_absolute_url(self):
         return reverse("service-configure", kwargs={"service_id": service.id})
 
+@receiver(post_delete, sender=MissingItem)
+def missing_item_delete(sender, instance, **kwargs):
+    """ Borra los ficheros de las fotos de objetos perdidos que se eliminan. """
+    instance.photo.delete(False)
 
 class Office(models.Model):
     service = models.ForeignKey(Service, on_delete="CASCADE",

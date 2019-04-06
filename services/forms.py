@@ -57,13 +57,13 @@ class ServiceForm(forms.ModelForm):
         fields = ["title", "icon", "theme", "folder", "groups", "source", "description"]
         labels = {"title": "", "description": "", "theme": "", "icon": ""}
         widgets = {
-            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo'}),
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo','required':''}),
             'description':forms.Textarea(attrs={'class':'form-control','rows':3,'placeholder':'Descripcion'}),
             'groups':forms.SelectMultiple(attrs={'class':'chosen-select','data-placeholder':'Permisos','multiple':''}),
-            'icon':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Icono'}),
-            'theme':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Plantilla'}),
-            'source':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Tipo'}),
-            'folder':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Ubicacion'}),
+            'icon':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Icono','required':''}),
+            'theme':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Plantilla','required':''}),
+            'source':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Tipo','required':''}),
+            'folder':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Ubicacion','required':''}),
 
         }
         error_messages = {"title": {"unique": "Ya existe un servicio con ese titulo."}}

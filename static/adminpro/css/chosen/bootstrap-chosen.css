@@ -8,7 +8,9 @@
     display: inline-block;
     font-size: 14px;
     position: relative;
-    vertical-align: middle; }
+    vertical-align: middle;
+    text-align: initial;
+}
 .chosen-container .chosen-drop {
     background: #fff;
     border: 1px solid #03a9f4;
@@ -163,7 +165,7 @@
 
 .chosen-container-multi .chosen-choices {
     background-color: #fff;
-    border: 1px solid #03a9f4;
+    border: 1px solid #e5e6e7;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
     border-bottom-right-radius: 4px;

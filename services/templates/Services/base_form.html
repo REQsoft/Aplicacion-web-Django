@@ -3,46 +3,15 @@
 <!-- chosen CSS
     ============================================ -->
 <link rel="stylesheet" href="{% static 'adminpro/css/chosen/bootstrap-chosen.css' %}">
-<!-- chosen JS
-    ============================================ -->
-<script src="{% static 'adminpro/js/chosen/chosen.jquery.js' %}"></script>
-<script src="{% static 'adminpro/js/chosen/chosen-active.js' %}"></script>
+<link rel="stylesheet" href="{% static 'adminpro/css/chosen/ImageSelect.css' %}">
 
-<!-- <link rel="stylesheet" type="text/css" href="{% static 'icon/css/lib/control/iconselect.css' %}" >
-<script type="text/javascript" src="{% static 'icon/lib/control/iconselect.js' %}"></script>
-<script type="text/javascript" src="{% static 'icon/lib/iscroll.js' %}"></script>
-
-<script>
-    
-var iconSelect;
-
-window.onload = function(){
-
-    iconSelect = new IconSelect("my-icon-select", 
-        {'selectedIconWidth':48,
-        'selectedIconHeight':48,
-        'selectedBoxPadding':1,
-        'iconsWidth':23,
-        'iconsHeight':23,
-        'boxIconSpace':1,
-        'vectoralIconNumber':4,
-        'horizontalIconNumber':4});
-
-    var icons = [];
-    {% for icon in icons %}
-        icons.push({'iconFilePath':'"{{icon.image.url}}"', 'iconValue':'"{{icon.id}}"'});    
-    {% endfor %}
-    
-    iconSelect.refresh(icons);
-
-};
-    
-</script> -->
 <div class="modal-dialog" role="document">
     {% block config %}
-        <form method="post">
-            <h2 class="modal-title">Formulario no implementado!</h2>
-        </form>
+    {% if object %}
+        <form action="{% url route object.id %}" method="post">
+    {% else %}
+        <form action="{% url route %}" method="post">
+    {% endif %}
     {% endblock %}
             {% csrf_token %}
             <div class="modal-content">
@@ -80,4 +49,9 @@ window.onload = function(){
             </div><!-- /.modal-content -->
         </form>
 </div><!-- /.modal-dialog -->
+<!-- chosen JS
+    ============================================ -->
+    <script src="{% static 'adminpro/js/chosen/chosen.jquery.js' %}" type="text/javascript"></script>
+    <script src="{% static 'adminpro/js/chosen/ImageSelect.jquery.js' %}" type="text/javascript"></script>
+    <script src="{% static 'adminpro/js/chosen/chosen-active.js' %}" type="text/javascript"></script>
 {% endblock %}

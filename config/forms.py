@@ -10,9 +10,9 @@ class FolderForm(forms.ModelForm):
         fields = ["title", "icon", "folder", "state", "groups", "description"]
         labels = {"title": "", "description": "", "groups": "", "icon": "", "folder": "", "state":""}
         widgets = {
-            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo'}),
-            'icon':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Icono'}),
-            'folder':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Ubicacion'}),
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo','required':''}),
+            'icon':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Icono','required':''}),
+            'folder':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Ubicacion','required':''}),
             'state':forms.CheckboxInput(attrs={'class':'custom-control-input','placeholder':'Estado'}),
             'groups':forms.SelectMultiple(attrs={'class':'chosen-select','data-placeholder':'Permisos','multiple':''}),
             'description':forms.Textarea(attrs={'class':'form-control','rows':3,'placeholder':'Descripcion'}),

@@ -1,5 +1,7 @@
 from django.db import models
 from main.models import Group
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 # Modelos de widgets para mostrar los servicios en la app movil
 class Icon(models.Model):
@@ -8,6 +10,11 @@ class Icon(models.Model):
 
     def __str__(self):
         return self.title
+
+@receiver(post_delete, sender=Icon)
+def icon_delete(sender, instance, **kwargs):
+    """ Borra los ficheros de los iconos que se eliminan. """
+    instance.image.delete(False)
 
 class Folder(models.Model):
     title = models.CharField(max_length=100, unique=True)
@@ -26,3 +33,16 @@ class Folder(models.Model):
         if len(self.type_name) == 0:
             self.type_name = "C" + str(self.id)
             self.save()
+ 
+class Colors(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    primary = models.CharField(max_length=10)
+    light = models.CharField(max_length=10)
+    dark = models.CharField(max_length=10)
+
+class Design(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    logo = models.ImageField(upload_to='design')
+    favicon = models.ImageField(upload_to='design')
+    colors = models.ForeignKey(Colors, on_delete="PROTECTED")
+

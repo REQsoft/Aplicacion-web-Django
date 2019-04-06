@@ -20,26 +20,60 @@
         <div class="row">
             <div class="col-md-8">
                 {{ form.title }}
+                <div class="alert alert-warning alert-success-style2 alert-st-bg1">
+                    <button type="button" class="close sucess-op" data-dismiss="alert" aria-label="Close">
+                        <span class="icon-sc-cl" aria-hidden="true">×</span>
+                    </button>
+                    <span class="adminpro-icon adminpro-inform admin-check-sucess admin-check-pro-clr1"></span>
+                    <p>{{ form.title.errors }}</p>
+                </div>
             </div>
             <div class="col-md-4">
-                <!-- <select data-placeholder="Seleccione un icono" class="chosen-select" id="id_icon">
+                <select name="icon" data-placeholder="Icono" class="chosen-select" id="id_icon" required>
+                    <option value="">Icono</option>
                     {% for icon in icons %}
-                    <option data-imagesrc="{{ icon.image.url }}" value="{{ icon.id }}">{{ icon }}</option>
+                        {% if object.icon == icon %}
+                            <option value="{{ icon.id }}" data-img-src="{{ icon.image.url }}" selected>{{ icon.title }}</option>
+                        {% else %}
+                            <option value="{{ icon.id }}" data-img-src="{{ icon.image.url }}">{{ icon.title }}</option>
+                        {% endif %}
                     {% endfor %}
-                </select> -->
-                {{ form.icon }}
+                </select>
+                <div class="error">
+                    {% if form.icon.errors %}
+                    <div class="alert alert-info alert-success-style2 alert-st-bg1">
+                        <button type="button" class="close sucess-op" data-dismiss="alert" aria-label="Close">
+                            <span class="icon-sc-cl" aria-hidden="true">×</span>
+                        </button>
+                        <span class="adminpro-icon adminpro-inform admin-check-sucess admin-check-pro-clr1"></span>
+                        <p>{{ form.icon.errors }}</p>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     <br>
     <div class="row">
         <div class="col-md-4">
-            {{ form.folder }}
+            <select name="folder" data-placeholder="Ubicación" class="chosen-select" id="id_folder" required>
+                <option value="">Ubicación</option>
+                {% for folder in folders %}
+                    {% if parent == folder %}
+                        <option value="{{ folder.id }}" selected>{{ folder.title }}</option>
+                    {% else %}
+                        <option value="{{ folder.id }}">{{ folder.title }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            {{ form.folder.errors }}
         </div>
         <div class="col-md-8">
-           {{ form.groups }}    
+            {{ form.groups }}
+            {{ form.groups.errors }}    
         </div>
     </div>
     <br>
     {{ form.description }}
+    {{ form.description.errors }}
     </div>
 {% endblock %}

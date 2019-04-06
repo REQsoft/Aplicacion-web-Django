@@ -1,15 +1,7 @@
 {% load static %}
 {% block content %}
 <div class="modal-dialog" role="document">
-    {% if object.service.kind == 'directory' %}
-        <form action="{% url 'office-delete' object.id %}" method="post">
-    {% elif object.service.kind == 'catalog' %}
-        <form action="{% url 'item-delete' object.id %}" enctype="multipart/form-data" method="post">
-    {% elif object.service.kind == 'map' %}  
-        <form action="{% url 'location-delete' object.id %}" method="post">
-    {% else %} 
-        <form action="{% url 'service-delete' object.id %}" method="post">
-    {% endif %}
+    <form action="{% url route object.id %}" method="post">
         {% csrf_token %}
         <div class="modal-content">
             <div class="modal-header header-color-modal bg-color-4">
