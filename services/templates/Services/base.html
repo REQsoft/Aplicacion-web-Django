@@ -1,6 +1,10 @@
 {% extends 'adminlte/base.html' %}
 {% load staticfiles %}
 {% block modal %}
+    <link rel="stylesheet" href="{% static 'css/waves.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/button.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'adminpro/css/buttons.css' %}" type="text/css">
+    
     <div id="modalcontainer">
         <div class="modal modal-adminpro-general default-popup-PrimaryModal fade" id="modal">
         
@@ -27,7 +31,6 @@
     </script>
 {% endblock %}
 {% block content %}
-
 
 {% endblock %}
       

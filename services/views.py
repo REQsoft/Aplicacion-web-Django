@@ -36,6 +36,28 @@ class ComponentReverseMixin(object):
         folder = self.object.folder
         return reverse( 'component-list', kwargs={'pk': folder.id})
 
+class RouteMixin(object):
+    """
+    Este mixin contiene la ruta para los formularios de edicion y eliminacion.
+    """
+    route = "ruta"
+    def get_context_data(self, *args, **kwargs):
+        context = super(RouteMixin, self).get_context_data(*args, **kwargs)
+        context['route'] = self.route
+        return context
+
+class ParentMixin(object):
+    """
+    Este mixin obtiene la carpeta madre de los componentes(carpetas y servicios).
+    """
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['parent'] = Folder.objects.get(id=self.kwargs['parent'])
+        except:
+            pass
+        return context
+
 # Servicio
 def service_configure(request,pk):
     service = get_object_or_404(Service, id=pk)
@@ -80,54 +102,59 @@ class ServiceListView(ListView):
     model = Service
     template_name = "Services/service_list.html"
 
-class ServiceCreateView(ComponentReverseMixin,CreateView):
+class ServiceCreateView(RouteMixin,ParentMixin,ComponentReverseMixin,CreateView):
     model = Service
     form_class = ServiceForm
     template_name = "Services/service_form.html"
+    route = 'service-create'
 
-class ServiceUpdateView(ComponentReverseMixin,UpdateView):
+class ServiceUpdateView(RouteMixin,ParentMixin,ComponentReverseMixin,UpdateView):
     model = Service
     form_class = ServiceForm
     template_name = "Services/service_form.html"
+    route = 'service-edit'
 
-class ServiceDeleteView(ComponentReverseMixin,DeleteView):
+class ServiceDeleteView(RouteMixin,ComponentReverseMixin,DeleteView):
     model = Service
     template_name = "Services/confirm_delete.html"
-    success_url = reverse_lazy('service-list')
+    route = 'service-delete'
 
 
 # Catalogo de objetos perdidos
-class MissingItemUpdateView(ServiceReverseMixin, UpdateView):
+class MissingItemUpdateView(RouteMixin,ServiceReverseMixin, UpdateView):
     model = MissingItem
     form_class = MissingItemForm
     template_name = "Services/catalog_form.html"
+    route = 'item-edit'
 
-class MissingItemDeleteView(ServiceReverseMixin, DeleteView):
+class MissingItemDeleteView(RouteMixin,ServiceReverseMixin, DeleteView):
     model = MissingItem
     template_name = "Services/confirm_delete.html"
-
+    route = 'item-delete'
 
 # Directorio de dependencias
-class OfficeUpdateView(ServiceReverseMixin, UpdateView):
+class OfficeUpdateView(RouteMixin,ServiceReverseMixin, UpdateView):
     model = Office
     form_class = OfficeForm
     template_name = "Services/directory_form.html"
+    route = 'office-edit'
 
-class OfficeDeleteView(ServiceReverseMixin, DeleteView):
+class OfficeDeleteView(RouteMixin,ServiceReverseMixin, DeleteView):
     model = Office
     template_name = "Services/confirm_delete.html"
-
+    route = 'office-delete'
 
 # Mapa de bloques
-class LocationUpdateView(ServiceReverseMixin, UpdateView):
+class LocationUpdateView(RouteMixin,ServiceReverseMixin, UpdateView):
     model = Location
     form_class = LocationForm
     template_name = "Services/map_form.html"
+    route = 'location-edit'
 
-class LocationDeleteView(ServiceReverseMixin, DeleteView):
+class LocationDeleteView(RouteMixin,ServiceReverseMixin, DeleteView):
     model = Location
     template_name = "Services/confirm_delete.html"
-
+    route = 'location-delete'
 
 # Consulta SQL
 class AjaxableResponseMixin:

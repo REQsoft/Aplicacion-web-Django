@@ -47,22 +47,33 @@ class FieldForm(forms.ModelForm):
 
 # Formulario para gestionar conexión.
 class ServiceForm(forms.ModelForm):
+    icon_label_message = 'Icono'
+    folder_label_message = 'Ubicacion'
+    theme_label_message = 'Plantilla'
+    source_label_message = 'Tipo'
+
     class Meta:
         model = Service
         fields = ["title", "icon", "theme", "folder", "groups", "source", "description"]
         labels = {"title": "", "description": "", "theme": "", "icon": ""}
         widgets = {
-            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo'}),
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Titulo','required':''}),
             'description':forms.Textarea(attrs={'class':'form-control','rows':3,'placeholder':'Descripcion'}),
             'groups':forms.SelectMultiple(attrs={'class':'chosen-select','data-placeholder':'Permisos','multiple':''}),
-            'icon':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Icono'}),
-            'theme':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Plantilla'}),
-            'source':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Tipo'}),
-            'folder':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Ubicacion'}),
+            'icon':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Icono','required':''}),
+            'theme':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Plantilla','required':''}),
+            'source':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Tipo','required':''}),
+            'folder':forms.Select(attrs={'class':'chosen-select','data-placeholder':'Ubicacion','required':''}),
 
         }
         error_messages = {"title": {"unique": "Ya existe un servicio con ese titulo."}}
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['icon'].empty_label = self.icon_label_message
+        self.fields['theme'].empty_label = self.theme_label_message
+        self.fields['source'].empty_label = self.source_label_message
+        self.fields['folder'].empty_label = self.folder_label_message
 
 # Formulario para gestionar artículos perdidos.
 class MissingItemForm(forms.ModelForm):

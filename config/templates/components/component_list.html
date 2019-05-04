@@ -1,35 +1,41 @@
 {% extends 'Services/base.html' %} {% load static %} {% block content %}
-<link rel="stylesheet" href="{% static 'css/waves.min.css' %}" type="text/css">
-<link rel="stylesheet" href="{% static 'css/button.css' %}" type="text/css">
-<link rel="stylesheet" href="{% static 'adminpro/css/buttons.css' %}" type="text/css">
-
+<link rel="stylesheet" href="{% static 'adminpro/css/c3.min.css' %}">
 <div class="container">
+    <br>
     <div class="row justify-content-between">
         <div class="col-md-8">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">{{ self.title }}</h3><br>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="title">
+                        <h2>{{ self.title }}</h2>
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-between">
-                <div class="col-md-4">
+            <hr>
+            <div class="row">
+                <div class="col-md-2">
                     {% if self.id != 1 %}
                     <a type="button" class="btn btn-custon-rounded-three btn-primary notika-btn-black" title="Atras" href="{% url 'component-list' self.folder.id %}">
                         <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
                     </a> 
                     {% endif %}
                 </div>
-                <div class="col-md-4 button-drop-style-one">
+                <div class="col-md-4 col-md-offset-8">
                     <a type="button" class="btn btn-custon-rounded-three btn-primary" title="Agregar Servicio" data-toggle="modal" 
-                        data-target="#modal" onclick="return get_url('{% url 'service-create' %}')">
+                        data-target="#modal" onclick="return get_url('{% url 'service-create' self.id %}')">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Servicio
                     </a>
+                    {% if self.id != 1 %}
                     <a type="button" class="btn btn-custon-rounded-three btn-primary" title="Agregar Folder" data-toggle="modal" 
-                        data-target="#modal" onclick="return get_url('{% url 'folder-create' %}')">
+                        data-target="#modal" onclick="return get_url('{% url 'folder-create' self.id %}')">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Carpeta
                     </a>
+                    {% else %}
+                    <a type="button" class="btn btn-custon-rounded-three btn-primary" title="Agregar Folder" data-toggle="modal" 
+                        data-target="#modal" onclick="return get_url('{% url 'folder-create' 1 %}')">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Carpeta
+                    </a>
+                    {% endif %}
                 </div>
             </div>
             <br>
@@ -37,26 +43,30 @@
             <table data-toggle="table" data-pagination="true" data-search="true" class="table">
                 <thead>
                     <tr>
-                        <th>Icono</th>
+                        <th class="col-md-1">Icono</th>
                         <th>Nombre</th>
-                        <th>Acciones</th>
+                        <th class="col-md-1">Estado</th>
+                        <th class="col-md-3">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for folder in folders %}
-                    <tr class="folder">
-                        <td>
+                    <tr>
+                        <td class="folder">
                             <img src="{{ folder.icon.image.url }}" height="32" width="32" alt="{{ folder.icon.title }}">
                         </td>
                         <td>
                             {{ folder.title }}
                         </td>
                         <td>
-                            <a type="button" class="btn btn-info btn-sm" title="Configurar" href="{% url 'component-list' folder.id %}"> 
+                                <button class="btn btn-white btn-xs">Active</button>
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-primary btn-sm" title="Configurar" href="{% url 'component-list' folder.id %}"> 
                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </a>
-                            <a type="button" class="btn btn-primary btn-sm" title="Editar" data-toggle="modal" 
-                                data-target="#modal" onclick="return get_url('{% url 'folder-edit' folder.id %}')">
+                            <a type="button" class="btn btn-warning btn-sm" title="Editar" data-toggle="modal" 
+                                data-target="#modal" onclick="return get_url('{% url 'folder-edit' folder.id self.id %}')">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </a>
                             <a type="button" class="btn btn-danger btn-sm" title="Eliminar" data-toggle="modal" 
@@ -67,19 +77,22 @@
                     </tr>
                     {% endfor %}
                     {% for service in services %}
-                    <tr class="service">
-                        <td>
+                    <tr>
+                        <td class="service">
                             <img src="{{ service.icon.image.url }}" height="32" width="32" alt="{{ service.icon.title }}">
                         </td>
                         <td>
                             {{ service.title }}
                         </td>
                         <td>
-                            <a type="button" class="btn btn-info btn-sm" title="Configurar" href="{% url 'service-configure' service.id %}"> 
+                            {{ service.state }}
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-primary btn-sm" title="Configurar" href="{% url 'service-configure' service.id %}"> 
                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </a>
-                            <a type="button" class="btn btn-primary btn-sm" title="Editar" data-toggle="modal" 
-                                data-target="#modal" onclick="return get_url('{% url 'service-edit' service.id %}')">
+                            <a type="button" class="btn btn-warning btn-sm" title="Editar" data-toggle="modal" 
+                                data-target="#modal" onclick="return get_url('{% url 'service-edit' service.id self.id %}')">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </a>
                             <a type="button" class="btn btn-danger btn-sm" title="Eliminar" data-toggle="modal" 
@@ -93,7 +106,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-md-offset-1">
             <div class="marvel-device iphone5c blue">
                 <div class="top-bar"></div>
                 <div class="sleep"></div>
@@ -103,16 +116,25 @@
                 <div class="speaker"></div>
                 <div class="container screen">
                     <div class="row justify-content-center">
-                        <div class="col-md-6 offset-6">
+                        <div class="col-md-8 offset-2">
+                            <div class="app-bar">
+
+                            </div>
                             {% for folder in folders %}
-                            <img src="{{ folder.icon.image.url }}" height="32" width="32" alt="{{ folder.icon.title }}">
-                            {{ folder.title }}
-                            <br>
+                            <div class="mobile-box">
+                                <a href="{% url 'component-list' folder.id %}">
+                                    <img src="{{ folder.icon.image.url }}" height="32" width="32" alt="{{ folder.icon.title }}">
+                                    {{ folder.title }}
+                                </a>
+                                <br>
+                            </div>
                             {% endfor %}
                             {% for service in services %}
-                            <img src="{{ service.icon.image.url }}" height="32" width="32" alt="{{ service.icon.title }}">
-                            {{ service.title }}
-                            <br>
+                            <div class="mobile-box">
+                                <img src="{{ service.icon.image.url }}" height="32" width="32" alt="{{ service.icon.title }}">
+                                {{ service.title }}
+                                <br>
+                            </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -122,5 +144,6 @@
             </div>
         </div>
     </div>
+    <br>
 </div>
 {% endblock %}

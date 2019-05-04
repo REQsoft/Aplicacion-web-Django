@@ -1,4 +1,4 @@
-html, body {font-family: 'Open Sans', sans-serif;font-weight:400;background: #4fb3bf;color:white;}
+html, body {font-family: 'Open Sans', sans-serif;font-weight:400;background: rgb(104, 205, 252);color:white;}
 .btn-primary{
 	background-color: #00838f;
 }
@@ -12,17 +12,63 @@ html, body {font-family: 'Open Sans', sans-serif;font-weight:400;background: #4f
 	background: #00838f;
 }
 .marvel-device .screen{
-    background: #4fb3bf;
+	background: #4fb3bf;
+	color: white;
 }
+/* .table{
+	background: #4fb3bf;
+	color: white;
+} */
 .folder{
-    background: #00838f;
+	background: #f0c260;
+	text-align: center;
 }
 .service{
-    background: #57807e;
+	background: #2abce0;
+	text-align: center;
 }
 .form-control{
 	color: black;
 }
 .modal{
 	color: black;
+}
+.title{
+	background: #4fb3bf;
+	padding-left: 20px;
+	border-radius: 20px;
+	text-align: start;
+	color: white;
+}
+
+.notika-btn-black{
+	background: #303030;
+}
+.mobile-box{
+	position:relative;
+	padding: 5px;
+	margin: 10px;
+	margin-left:0px;
+	width: 230px;
+	height: 50px;
+	border: 2px solid white; 
+}
+.app-bar{
+	position:relative;
+	padding: 5px;
+	width: 250px;
+	height: 10px;
+	border: 2px solid white; 
+}
+.drawer{
+	position:relative;
+	padding: 5px;
+	margin:0px;
+	width: 10px;
+	height: 500px;
+	border: 2px solid white; 
+}
+.error{
+	background-color: #303030;
+	color:white;
 }

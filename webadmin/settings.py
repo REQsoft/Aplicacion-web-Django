@@ -77,6 +77,7 @@ from webadmin.authentication_backend_settings import authentication_backend
 
 AUTHENTICATION_BACKENDS = [
     authentication_backend,
+    'django_auth_ldap.backend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 

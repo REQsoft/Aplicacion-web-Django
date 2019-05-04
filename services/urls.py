@@ -6,8 +6,10 @@ urlpatterns = [
     path('service/', base_service, name='base-service'),
     path('services/', ServiceListView.as_view(), name='service-list'),
     path('service/create/', ServiceCreateView.as_view(), name='service-create'),
+    path('service/<int:parent>/create/', ServiceCreateView.as_view(), name='service-create'),
     path('service/<int:pk>/', service_configure, name='service-configure'), 
-    path('service/<int:pk>/edit/', ServiceUpdateView.as_view(), name='service-edit'),   
+    path('service/<int:pk>/edit/', ServiceUpdateView.as_view(), name='service-edit'), 
+    path('service/<int:pk>/<int:parent>/edit/', ServiceUpdateView.as_view(), name='service-edit'),   
     path('service/<int:pk>/delete/', ServiceDeleteView.as_view(), name='service-delete'),
     path('service/<int:pk>/add-element/', add_element, name='add-element'), 
 
